@@ -199,10 +199,6 @@ namespace DAL.EntityModels
                     .HasMaxLength(50)
                     .HasColumnName("Customer_State");
 
-                entity.Property(e => e.CustomerType)
-                    .HasMaxLength(50)
-                    .HasColumnName("Customer_Type");
-
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.UpdatedBy)

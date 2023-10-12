@@ -12,7 +12,6 @@ namespace DAL.EntityModels
 
         public int CustomerId { get; set; }
         public string CustomerName { get; set; } = null!;
-        public string? CustomerType { get; set; }
         public string? CustomerEmail { get; set; }
         public string CustomerPhone { get; set; } = null!;
         public string CustomerAddress { get; set; } = null!;

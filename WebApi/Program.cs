@@ -19,6 +19,7 @@ builder.Services.AddDbContext<EMS_ITCContext>(item => item.UseSqlServer(config.G
 builder.Services.AddScoped<IAccountRepos,AccountRepos>();
 builder.Services.AddScoped<IInventoryRepos,InventoryRepos>();
 builder.Services.AddScoped<ICustomerRepos,CustomerRepos>();
+builder.Services.AddScoped<IVendorRepos,VendorRepos>();
 var app = builder.Build();
 
 

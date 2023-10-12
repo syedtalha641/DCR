@@ -30,7 +30,7 @@ namespace Repository
                 var newCustomer = new Customer
                 {
                     CustomerName = model.CustomerName,
-                    CustomerType = model.CustomerType,
+                    //CustomerType = model.CustomerType,
                     CustomerEmail = model.CustomerEmail,
                     CustomerPhone = model.CustomerPhone,
                     CustomerCountry = model.CustomerCountry,
@@ -50,7 +50,7 @@ namespace Repository
                 var customerViewModel = new CustomerViewModel
                 {
                     CustomerName = newCustomer.CustomerName,
-                    CustomerType = newCustomer.CustomerType,
+                    //CustomerType = newCustomer.CustomerType,
                     CustomerEmail = newCustomer.CustomerEmail,
                     CustomerPhone = newCustomer.CustomerPhone,
                     CustomerCountry = newCustomer.CustomerCountry,
@@ -100,7 +100,7 @@ namespace Repository
             {
 
                 result.CustomerName = model.CustomerName;
-                result.CustomerType = model.CustomerType;
+                //result.CustomerType = model.CustomerType;
                 result.CustomerEmail = model.CustomerEmail;
                 result.CustomerPhone = model.CustomerPhone;
                 result.CustomerCountry = model.CustomerCountry;
