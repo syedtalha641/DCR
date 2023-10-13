@@ -1,7 +1,8 @@
 using DAL.EntityModels;
 using Microsoft.EntityFrameworkCore;
 using Repository;
-
+using Repository.IRepos;
+using Repository.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +18,11 @@ var provider = builder.Services.BuildServiceProvider();
 var config = provider.GetService<IConfiguration>();
 builder.Services.AddDbContext<EMS_ITCContext>(item => item.UseSqlServer(config.GetConnectionString("DC")));
 builder.Services.AddScoped<IAccountRepos,AccountRepos>();
-builder.Services.AddScoped<IInventoryRepos,InventoryRepos>();
-builder.Services.AddScoped<ICustomerRepos,CustomerRepos>();
+builder.Services.AddScoped<IDistributorRepos, DistributorRepos>();
+builder.Services.AddScoped<IProductRepos, ProductRepos>();
+builder.Services.AddScoped<IWarehouseRepos,WarehouseRepos>();
+builder.Services.AddScoped<ICustomerRepos, CustomerRepos>();
+builder.Services.AddScoped<IBranchrepos, BranchRepos>();
 var app = builder.Build();
 
 

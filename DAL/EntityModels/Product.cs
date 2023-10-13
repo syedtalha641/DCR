@@ -16,25 +16,24 @@ namespace DAL.EntityModels
         }
 
         public int ProductId { get; set; }
-        public int ProductTypeId { get; set; }
-        public int MaterialId { get; set; }
-        public int ProductQuantity { get; set; }
-        public double ProductPrice { get; set; }
-        public string ProductSku { get; set; } = null!;
-        public string ProductCode { get; set; } = null!;
-        public string MarketName { get; set; } = null!;
-        public string Brand { get; set; } = null!;
-        public string Memory { get; set; } = null!;
-        public string Model { get; set; } = null!;
-        public string Color { get; set; } = null!;
-        public string Series { get; set; } = null!;
+        public string? ProductType { get; set; }
+        public int? MaterialId { get; set; }
+        public int? ProductQuantity { get; set; }
+        public double? ProductPrice { get; set; }
+        public string? ProductSku { get; set; }
+        public string? ProductCode { get; set; }
+        public string? MarketName { get; set; }
+        public string? Brand { get; set; }
+        public string? Memory { get; set; }
+        public string? Model { get; set; }
+        public string? Color { get; set; }
+        public string? Series { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public string? CreatedBy { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual ProductType ProductType { get; set; } = null!;
         public virtual ICollection<Imei> Imeis { get; set; }
         public virtual ICollection<ProductWarehouse> ProductWarehouses { get; set; }
         public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }

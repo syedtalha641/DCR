@@ -6,11 +6,11 @@ namespace DAL.EntityModels
     public partial class SalesOrderDetail
     {
         public int OrderDetailId { get; set; }
-        public int SalesOrderId { get; set; }
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
-        public double UnitPrice { get; set; }
-        public double SubTotal { get; set; }
+        public int? SalesOrderId { get; set; }
+        public int? ProductId { get; set; }
+        public int? Quantity { get; set; }
+        public double? UnitPrice { get; set; }
+        public double? SubTotal { get; set; }
         public string? SalesRegion1 { get; set; }
         public string? SalesRegion2 { get; set; }
         public string? SalesRegion3 { get; set; }
@@ -22,7 +22,7 @@ namespace DAL.EntityModels
         public string? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual Product Product { get; set; } = null!;
-        public virtual SalesOrder SalesOrder { get; set; } = null!;
+        public virtual Product? Product { get; set; }
+        public virtual SalesOrder? SalesOrder { get; set; }
     }
 }

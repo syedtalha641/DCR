@@ -6,9 +6,9 @@ namespace DAL.EntityModels
     public partial class Payment
     {
         public int PaymentId { get; set; }
-        public int DistributorId { get; set; }
-        public double PaymentAmount { get; set; }
-        public DateTime PaymentDate { get; set; }
+        public int? DistributorId { get; set; }
+        public double? PaymentAmount { get; set; }
+        public DateTime? PaymentDate { get; set; }
         public string? PaymentDescription { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
@@ -16,6 +16,6 @@ namespace DAL.EntityModels
         public string? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual Distributor Distributor { get; set; } = null!;
+        public virtual Distributor? Distributor { get; set; }
     }
 }

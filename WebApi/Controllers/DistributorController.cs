@@ -1,6 +1,5 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
 
@@ -8,22 +7,22 @@ namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class DistributorController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
+        private readonly IDistributorRepos _distributorRepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        public DistributorController(IDistributorRepos distributorRepos)
         {
-            _customerRepos = customerRepos;
+            _distributorRepos = distributorRepos;   
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetDistributors()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _distributorRepos.GetDistributors());
             }
             catch (Exception)
             {
@@ -34,13 +33,12 @@ namespace DCRWebApi.Controllers
 
         }
 
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<Distributor>> GetDistributor(int DistributorId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _distributorRepos.GetDistributor(DistributorId);
                 if (result == null)
                 {
                     return NotFound();
@@ -59,7 +57,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Distributor>> CreateDistributor([FromBody] DistributorViewModel model)
         {
             try
             {
@@ -68,8 +66,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _distributorRepos.AddDistributor(model);
+                return CreatedAtAction(nameof(GetDistributor), new { id = CreatedUser.DistributorName }, CreatedUser);
             }
             catch (Exception)
             {
@@ -81,7 +79,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Distributor>> UpdateCustomer(int DistributorId, [FromBody] DistributorViewModel model)
         {
             try
             {
@@ -91,11 +89,11 @@ namespace DCRWebApi.Controllers
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
-                if (updatedCustomer != null)
+                var updatedDistributor = await _distributorRepos.UpdateDistributor(DistributorId, model);
+
+                if (updatedDistributor != null)
                 {
-                    return Ok(updatedCustomer); // Return 200 OK with the updated customer
+                    return Ok(updatedDistributor); // Return 200 OK with the updated customer
                 }
                 else
                 {
@@ -111,16 +109,16 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<Distributor>> DeleteCustomer([FromBody] int DistributorId)
         {
             try
             {
-                if (CustomerId == null)
+                if (DistributorId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _distributorRepos.DeleteDistributor(DistributorId);
+                return CreatedAtAction(nameof(GetDistributor), new { id = CreatedUser.DistributorId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -128,6 +126,5 @@ namespace DCRWebApi.Controllers
                "Error in Creating!");
             }
         }
-
     }
 }

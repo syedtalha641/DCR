@@ -13,11 +13,11 @@ namespace DAL.EntityModels
         }
 
         public int DistributorId { get; set; }
-        public int ContactPersonId { get; set; }
-        public string DistributorName { get; set; } = null!;
-        public string DistributorType { get; set; } = null!;
+        public int? ContactPersonId { get; set; }
+        public string? DistributorName { get; set; }
+        public string? DistributorType { get; set; }
         public string? DistributorEmail { get; set; }
-        public string DistributorPhone { get; set; } = null!;
+        public string? DistributorPhone { get; set; }
         public string? DistributorAddress { get; set; }
         public DateTime? CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
@@ -25,7 +25,7 @@ namespace DAL.EntityModels
         public string? UpdatedBy { get; set; }
         public bool? IsActive { get; set; }
 
-        public virtual ContactPerson ContactPerson { get; set; } = null!;
+        public virtual ContactPerson? ContactPerson { get; set; }
         public virtual ICollection<DistributorImei> DistributorImeis { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<Receive> Receives { get; set; }

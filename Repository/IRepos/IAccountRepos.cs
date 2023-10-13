@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository
+namespace Repository.IRepos
 {
     public interface IAccountRepos
     {
         Task<IEnumerable<User>> GetUsers();
         Task<User> GetUser(string UserLoginId);
-        Task<User> AddUser(string UserLoginId,string UserName,string UserEmail, string UserPassword);
+        Task<User> AddUser(string UserLoginId, string UserName, string UserEmail, string UserPassword);
         Task<User> LoginUser(string UserLoginId, string UserPassword);
         Task<User> UpdateUserPassword(string UserLoginId, string UserPassword);
         Task<string> GetUserEmail(string UserLoginId);

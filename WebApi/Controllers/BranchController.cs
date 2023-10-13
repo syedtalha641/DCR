@@ -3,27 +3,28 @@ using DCR.Helper.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
+using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class BranchController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
+        private readonly IBranchrepos _branchrepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        public BranchController(IBranchrepos branchrepos)
         {
-            _customerRepos = customerRepos;
+            _branchrepos = branchrepos;
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetBranches()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _branchrepos.GetBranches());
             }
             catch (Exception)
             {
@@ -36,11 +37,11 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<Branch>> GetBranch(int BranchId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _branchrepos.GetBranch(BranchId);
                 if (result == null)
                 {
                     return NotFound();
@@ -59,7 +60,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Branch>> CreateBranch([FromBody] BranchViewModel model)
         {
             try
             {
@@ -68,8 +69,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _branchrepos.AddBranch(model);
+                return CreatedAtAction(nameof(GetBranch), new { id = CreatedUser.Name }, CreatedUser);
             }
             catch (Exception)
             {
@@ -81,7 +82,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Customer>> UpdateBranch(int BranchId, [FromBody] BranchViewModel model)
         {
             try
             {
@@ -91,15 +92,15 @@ namespace DCRWebApi.Controllers
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
-                if (updatedCustomer != null)
+                var updatedBranch = await _branchrepos.UpdateBranch(BranchId, model);
+
+                if (updatedBranch != null)
                 {
-                    return Ok(updatedCustomer); // Return 200 OK with the updated customer
+                    return Ok(updatedBranch); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound("Customer not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("Branch not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -111,16 +112,16 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<Branch>> DeleteBranch([FromBody] int BranchId)
         {
             try
             {
-                if (CustomerId == null)
+                if (BranchId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _branchrepos.DeleteBranch(BranchId);
+                return CreatedAtAction(nameof(GetBranch), new { id = CreatedUser.BranchId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -128,6 +129,5 @@ namespace DCRWebApi.Controllers
                "Error in Creating!");
             }
         }
-
     }
 }

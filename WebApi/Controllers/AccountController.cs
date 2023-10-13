@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DAL.EntityModels;
-using Repository;
 using Microsoft.AspNetCore.Authentication;
 using static System.Net.WebRequestMethods;
 using System.Diagnostics;
@@ -13,6 +12,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DCR.Helper.ViewModel;
+using Repository.IRepos;
 
 namespace WebApi.Controllers
 {
@@ -33,7 +33,7 @@ namespace WebApi.Controllers
 
 
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult> GetUsers()
         {
 
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpPost("{UserLoginId}")]
+        [HttpPost]
         public async Task<ActionResult<User>> GetUser(string UserLoginId)
         {
             try
@@ -72,7 +72,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<ActionResult<string>> GetUserEmail([FromBody] string UserLoginId)
         {
             try
@@ -145,7 +145,7 @@ namespace WebApi.Controllers
 
 
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<ActionResult<string>> UpdateUserPassword([FromBody] PasswordUpdateViewModel updateViewModel)
         {
             if (updateViewModel == null || string.IsNullOrWhiteSpace(updateViewModel.UserLoginId) || string.IsNullOrWhiteSpace(updateViewModel.UserPassword))
@@ -168,7 +168,7 @@ namespace WebApi.Controllers
 
 
 
-        [HttpDelete("")]
+        [HttpPost]
         public async Task<ActionResult<User>> DeleteUser([FromBody] string UserLoginId)
         {
             try
