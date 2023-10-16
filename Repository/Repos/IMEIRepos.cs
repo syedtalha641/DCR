@@ -31,60 +31,38 @@ namespace Repository.Repos
             try
             {
 
-                // Retrieve product information using ProductID
-                var product = await _context.Products.FirstOrDefaultAsync(p => p.ProductId == model.ProductId);
-               
-
-                if (product == null)
+                if (model.ProductId != null)
                 {
-                    // Handle the case when product is not found
-                    return null;
+                    var result = await _context.Products.FirstOrDefaultAsync(b => b.ProductId == model.ProductId);
+                    // Create a corresponding warehouse record
+
+                    var product = new Product
+                    {
+                        ProductId = result.ProductId,
+                        // Map other properties as needed
+                    };
+                    if (model.ProductId == product.ProductId)
+                    {
+
+                        // Create a new User entity
+                        var newIMEI = new Imei
+                        {
+                            ImeiNumber = model.ImeiNumber,
+                            ImeiNumber2 = model.ImeiNumber2,
+                            ImeiStatus = model.ImeiStatus,
+                            DeviceType = model.DeviceType,
+                            ActivationDate = model.ActivationDate,
+                            CreatedBy = "Admin",
+                            Product = product
+                        };
+
+                        _context.Imeis.Add(newIMEI);
+                        await _context.SaveChangesAsync();
+
+
+                    }
                 }
-
-
-
-                // Create a new User entity
-                var newIMEI = new Imei
-                {
-                    ImeiNumber = model.IMEIONE,
-                    ImeiNumber2 = model.IMEITWO,
-                    ImeiStatus = model.IMEIStatus,
-                    DeviceType = model.DeviceType,
-                    ActivationDate = model.ActivationDate,
-                    CreatedBy = "Admin",
-                    Product = product
-                };
-
-                _context.Imeis.Add(newIMEI);
-                await _context.SaveChangesAsync();
-
-
-
-                var distributorIMEI = new DistributorImei
-                {
-                    ImeiId = newIMEI.ImeiId, 
-                };
-
-                _context.DistributorImeis.Add(distributorIMEI);
-                await _context.SaveChangesAsync();
-
-
-
-
-                var imeiViewModel = new IMEIViewModel
-                {
-                    IMEIONE = newIMEI.ImeiNumber,
-                    IMEITWO = newIMEI.ImeiNumber2,
-                    IMEIStatus = newIMEI.ImeiStatus,
-                    DeviceType = newIMEI.DeviceType,
-                    ActivationDate = newIMEI.ActivationDate.Value,
-                    ProductId = model.ProductId,
-
-                };
-
-
-
-                return imeiViewModel;
+                return model;
             }
             catch (Exception)
             {
@@ -120,9 +98,9 @@ namespace Repository.Repos
             if (result != null)
             {
                 
-                result.ImeiNumber = model.IMEIONE;
-                result.ImeiNumber2 = model.IMEITWO;
-                result.ImeiStatus = model.IMEIStatus;
+                result.ImeiNumber = model.ImeiNumber;
+                result.ImeiNumber2 = model.ImeiNumber2;
+                result.ImeiStatus = model.ImeiStatus;
                 result.ActivationDate = model.ActivationDate;
                 result.DeviceType = model.DeviceType;
                 

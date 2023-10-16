@@ -29,54 +29,52 @@ namespace Repository.Repos
         {
             try
             {
-                // Create a new User entity
-                var newSaleOrder = new SalesOrder
+
+
+
+                if (model.CustomerId != null)
                 {
-                    CreateDate = model.CreateDate,
-                    ShippingDate = model.ShippingDate,
-                    Status = model.Status,
-                    Total = model.Total,
-                    CreatedBy = "Admin"
+                    var result = await _context.Customers.FirstOrDefaultAsync(b => b.CustomerId == model.CustomerId && b.IsActive == true);
+                    // Create a corresponding warehouse record
 
-                };
-
-                _context.SalesOrders.Add(newSaleOrder);
-                await _context.SaveChangesAsync();
+                    var customerid = new Customer
+                    {
+                        CustomerId = result.CustomerId,
+                        // Map other properties as needed
+                    };
 
 
-
-                var saleorderlineid = new SaleOrderLine
-                {
-                    SalesOrderId = newSaleOrder.SalesOrderId,
-                };
-
-                _context.SaleOrderLines.Add(saleorderlineid);
-                await _context.SaveChangesAsync(); 
-                
-                var saleorderdetailid = new SalesOrderDetail
-                {
-                    SalesOrderId = newSaleOrder.SalesOrderId,
-                };
-
-                _context.SalesOrderDetails.Add(saleorderdetailid);
-                await _context.SaveChangesAsync();
+                    if (model.CustomerId == customerid.CustomerId)
+                    {
 
 
+                        // Create a new User entity
+                        var newSaleOrder = new SalesOrder
+                        {
+                            CustomerId = model.CustomerId,
+                            CreateDate = model.CreateDate,
+                            ShippingDate = model.ShippingDate,
+                            Status = model.Status,
+                            Total = model.Total,
+                            CreatedBy = "Admin"
+
+                        };
+
+                        _context.SalesOrders.Add(newSaleOrder);
+                        await _context.SaveChangesAsync();
 
 
 
 
 
-                // Convert the Customer entity to CustomerViewModel
-                var saleorderViewModel = new SaleOrderViewModel
-                {
-                    CreateDate = newSaleOrder.CreateDate,
-                    ShippingDate = newSaleOrder.ShippingDate,
-                    Status = newSaleOrder.Status,
-                    Total = newSaleOrder.Total,
-                };
 
-                return saleorderViewModel;
+                    }
+                }
+
+
+             
+
+                return model;
             }
             catch (Exception)
             {

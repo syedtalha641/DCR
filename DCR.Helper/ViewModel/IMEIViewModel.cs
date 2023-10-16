@@ -8,12 +8,11 @@ namespace DCR.Helper.ViewModel
 {
     public class IMEIViewModel
     {
-        //public int IMEIId { get; set; }
-        public int ProductId { get; set; }
-        public string IMEIONE { get; set; }
-        public string IMEITWO { get; set; }
-        public string IMEIStatus { get; set; }
-        public string DeviceType { get; set; }
-        public DateTime ActivationDate { get; set; }
+        public int? ProductId { get; set; }
+        public string? ImeiNumber { get; set; }
+        public string? ImeiNumber2 { get; set; }
+        public string? ImeiStatus { get; set; }
+        public string? DeviceType { get; set; }
+        public DateTime? ActivationDate { get; set; }
     }
 }

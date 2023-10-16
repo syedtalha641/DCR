@@ -44,35 +44,8 @@ namespace Repository.Repos
 
 
 
-                var customerid = new SalesOrder
-                {
-                    CustomerId = newCustomer.CustomerId, 
-                };
 
-                _context.SalesOrders.Add(customerid);
-                await _context.SaveChangesAsync();
-
-
-
-
-
-                // Convert the Customer entity to CustomerViewModel
-                var customerViewModel = new CustomerViewModel
-                {
-                    CustomerName = newCustomer.CustomerName,
-                    //CustomerType = newCustomer.CustomerType,
-                    CustomerEmail = newCustomer.CustomerEmail,
-                    CustomerPhone = newCustomer.CustomerPhone,
-                    CustomerCountry = newCustomer.CustomerCountry,
-                    CustomerAddress = newCustomer.CustomerAddress,
-                    CustomerCity = newCustomer.CustomerCity,
-                    CustomerState = newCustomer.CustomerState,
-                    CustomerPostalCode = newCustomer.CustomerPostalCode
-                };
-
-
-
-                return customerViewModel;
+                return model;
             }
             catch (Exception)
             {

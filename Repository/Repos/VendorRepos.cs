@@ -29,53 +29,46 @@ namespace Repository.Repos
 
             try
             {
-                // Create a new User entity
-                var newVendor = new Vendor
+
+                if (model.ContactPersonId != null)
                 {
-                    VendorName = model.VendorName,
-                    VendorEmail = model.VendorEmail,
-                    VendorPhone = model.VendorPhone,
-                    VendorAddress = model.VendorAddress,
-                    VendorCity = model.VendorCity,
-                    VendorState = model.VendorState,
-                    Country = model.VendorCountry,
-                    VendorPostalCode = model.VendorPostalCode,
-                    CreatedBy = "Admin"
+                    var result = await _context.ContactPeople.FirstOrDefaultAsync(b => b.ContactPersonId == model.ContactPersonId && b.IsActive == true);
+                    // Create a corresponding warehouse record
 
-                };
-
-                _context.Vendors.Add(newVendor);
-                await _context.SaveChangesAsync();
+                    var contactperson = new ContactPerson
+                    {
+                        ContactPersonId = result.ContactPersonId,
+                        // Map other properties as needed
+                    };
 
 
+                    if (model.ContactPersonId == contactperson.ContactPersonId)
+                    {
 
-                var vendorid = new PurchaseOrder
-                {
-                    VendorId = newVendor.VendorId,
-                };
+                        // Create a new User entity
+                        var newVendor = new Vendor
+                        {
+                            ContactPersonId = model.ContactPersonId,
+                            VendorName = model.VendorName,
+                            VendorEmail = model.VendorEmail,
+                            VendorPhone = model.VendorPhone,
+                            VendorAddress = model.VendorAddress,
+                            VendorCity = model.VendorCity,
+                            VendorState = model.VendorState,
+                            Country = model.Country,
+                            VendorPostalCode = model.VendorPostalCode,
+                            CreatedBy = "Admin"
 
-                _context.PurchaseOrders.Add(vendorid);
-                await _context.SaveChangesAsync();
+                        };
 
-
-
-
-
-                var vendorViewModel = new VendorViewModel
-                {
-                    VendorName = newVendor.VendorName,
-                    VendorEmail = newVendor.VendorEmail,
-                    VendorPhone = newVendor.VendorPhone,
-                    VendorAddress = newVendor.VendorAddress,
-                    VendorCity = newVendor.VendorCity,
-                    VendorState = newVendor.VendorState,
-                    VendorCountry = newVendor.Country,
-                    VendorPostalCode = newVendor.VendorPostalCode
-                };
+                        _context.Vendors.Add(newVendor);
+                        await _context.SaveChangesAsync();
 
 
+                    }
 
-                return vendorViewModel;
+                }
+                        return model;
             }
             catch (Exception)
             {
@@ -119,7 +112,7 @@ namespace Repository.Repos
                 result.VendorAddress = model.VendorAddress;
                 result.VendorCity = model.VendorCity;
                 result.VendorState = model.VendorState;
-                result.Country = model.VendorCountry;
+                result.Country = model.Country;
                 result.VendorPostalCode = model.VendorPostalCode;
 
 
@@ -129,19 +122,8 @@ namespace Repository.Repos
                 // Save changes to the database
                 await _context.SaveChangesAsync();
 
-                //// Convert the Customer entity to CustomerViewModel
-                //var customerViewModel = new CustomerViewModel
-                //{
-                //    CustomerName = newCustomer.CustomerName,
-                //    CustomerType = newCustomer.CustomerType,
-                //    CustomerEmail = newCustomer.CustomerEmail,
-                //    CustomerPhone = newCustomer.CustomerPhone,
-                //    CustomerCountry = newCustomer.CustomerCountry,
-                //    CustomerAddress = newCustomer.CustomerAddress,
-                //    CustomerCity = newCustomer.CustomerCity,
-                //    CustomerState = newCustomer.CustomerState,
-                //    CustomerPostalCode = newCustomer.CustomerPostalCode
-                //};
+              
+             
 
                 return model;
 

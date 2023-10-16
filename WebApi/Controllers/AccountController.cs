@@ -33,7 +33,7 @@ namespace WebApi.Controllers
 
 
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult> GetUsers()
         {
 
@@ -168,7 +168,7 @@ namespace WebApi.Controllers
 
 
 
-        [HttpDelete("")]
+        [HttpPost("")]
         public async Task<ActionResult<User>> DeleteUser([FromBody] string UserLoginId)
         {
             try

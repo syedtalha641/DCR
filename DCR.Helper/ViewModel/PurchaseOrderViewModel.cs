@@ -8,7 +8,7 @@ namespace DCR.Helper.ViewModel
 {
     public class PurchaseOrderViewModel
     {
-        //public int? VendorId { get; set; }
+        public int? VendorId { get; set; }
         public string? PurchaseName { get; set; }
         public string? PurchaseQuantity { get; set; }
         public string? PurchaseDescription { get; set; }
