@@ -41,28 +41,7 @@ namespace Repository.Repos
                 await _context.SaveChangesAsync();
 
 
-
-
-                var roleid = new UserRole
-                {
-                    RoleId = newRole.RoleId,
-                };
-
-                _context.UserRoles.Add(roleid);
-                await _context.SaveChangesAsync();
-
-
-
-
-                var roleviewmodel = new RoleViewModel
-                {
-                    RoleName = newRole.RoleName,
-                    RoleDescription = newRole.RoleDescription,
-                };
-
-
-
-                return roleviewmodel;
+                return model;
             }
             catch (Exception)
             {

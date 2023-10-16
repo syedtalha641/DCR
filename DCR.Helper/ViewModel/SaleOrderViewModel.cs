@@ -8,7 +8,7 @@ namespace DCR.Helper.ViewModel
 {
     public class SaleOrderViewModel
     {
-        //public int? CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? ShippingDate { get; set; }
         public string? Status { get; set; }

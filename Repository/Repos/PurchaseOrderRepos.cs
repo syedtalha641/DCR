@@ -29,66 +29,42 @@ namespace Repository.Repos
         {
             try
             {
-                // Create a new User entity
-                var newPurchaseOrder = new PurchaseOrder
+
+                if (model.VendorId != null)
                 {
-                    PurchaseName = model.PurchaseName,
-                    PurchaseQuantity = model.PurchaseQuantity,
-                    PurchaseDescription = model.PurchaseDescription,
-                    DateOfOrder = model.DateOfOrder,
-                    DateOfDelivery = model.DateOfDelivery,
-                    Amount = model.Amount,
-                    SubTotal = model.SubTotal,
-                    Discount = model.Discount,
-                    Total = model.Total,
-                    CreatedBy = "Admin"
-                };
+                    var result = await _context.Vendors.FirstOrDefaultAsync(b => b.VendorId == model.VendorId && b.IsActive == true);
+                    // Create a corresponding warehouse record
 
-                _context.PurchaseOrders.Add(newPurchaseOrder);
-                await _context.SaveChangesAsync();
+                    var vendorid = new Vendor
+                    {
+                        VendorId = result.VendorId,
+                        // Map other properties as needed
+                    };
 
 
+                    if (model.VendorId == vendorid.VendorId)
+                    {
 
-                var purchaseorderDetailid = new PurchaseOrderDetail
-                {
-                    PurchaseId = newPurchaseOrder.PurchaseId,
-                };
+                        var newPurchaseOrder = new PurchaseOrder
+                        {
+                            VendorId = model.VendorId,
+                            PurchaseName = model.PurchaseName,
+                            PurchaseQuantity = model.PurchaseQuantity,
+                            PurchaseDescription = model.PurchaseDescription,
+                            DateOfOrder = model.DateOfOrder,
+                            DateOfDelivery = model.DateOfDelivery,
+                            Amount = model.Amount,
+                            SubTotal = model.SubTotal,
+                            Discount = model.Discount,
+                            Total = model.Total,
+                            CreatedBy = "Admin"
+                        };
 
-                _context.PurchaseOrderDetails.Add(purchaseorderDetailid);
-                await _context.SaveChangesAsync();
-
-
-
-
-                var purchaseorderLineid = new PurchaseOrderLine
-                {
-                    PurchaseId = newPurchaseOrder.PurchaseId,
-                };
-
-                _context.PurchaseOrderLines.Add(purchaseorderLineid);
-                await _context.SaveChangesAsync();
-
-
-
-
-
-                // Convert the Customer entity to CustomerViewModel
-                var purchaseorderViewModel = new PurchaseOrderViewModel
-                {
-                    PurchaseName = newPurchaseOrder.PurchaseName,
-                    PurchaseQuantity = newPurchaseOrder.PurchaseQuantity,
-                    PurchaseDescription = newPurchaseOrder.PurchaseDescription,
-                    DateOfOrder = newPurchaseOrder.DateOfOrder,
-                    DateOfDelivery = newPurchaseOrder.DateOfDelivery,
-                    Amount = newPurchaseOrder.Amount,
-                    SubTotal = newPurchaseOrder.SubTotal,
-                    Discount = newPurchaseOrder.Discount,
-                    Total = newPurchaseOrder.Total,
-                };
-
-
-
-                return purchaseorderViewModel;
+                        _context.PurchaseOrders.Add(newPurchaseOrder);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                return model;
             }
             catch (Exception)
             {

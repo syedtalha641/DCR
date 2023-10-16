@@ -69,7 +69,7 @@ namespace DCRWebApi.Controllers
                     return BadRequest();
                 }
                 var CreatedUser = await _iMEIRepos.AddIMEI(model);
-                return CreatedAtAction(nameof(GetIMEI), new { id = CreatedUser.IMEIONE }, CreatedUser);
+                return CreatedAtAction(nameof(GetIMEI), new { id = CreatedUser.ImeiNumber}, CreatedUser);
             }
             catch (Exception)
             {

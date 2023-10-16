@@ -18,7 +18,7 @@ namespace DCRWebApi.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult> GetVendors()
         {
 

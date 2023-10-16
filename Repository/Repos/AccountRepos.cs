@@ -47,27 +47,6 @@ namespace Repository.Repos
 
 
 
-                var userroleid = new UserRole
-                {
-                    UserId = newUser.UserId,
-                };
-
-                _context.UserRoles.Add(userroleid);
-                await _context.SaveChangesAsync();
-
-
-
-                var userprofileid = new UserProfile
-                {
-                    UserId = newUser.UserId,
-                };
-
-                _context.UserProfiles.Add(userprofileid);
-                await _context.SaveChangesAsync();
-
-
-
-
                 return newUser;
             }
             catch (Exception)
