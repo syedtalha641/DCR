@@ -1,6 +1,7 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Abstractions;
 using Repository.IRepos;
 using System;
 using System.Collections.Generic;
@@ -19,39 +20,48 @@ namespace Repository
         {
             _context = context;
         }
-        
+
         public async Task<WarehouseViewModel> AddWarehouse(WarehouseViewModel model)
         {
             try
             {
-                // Create a new User entity
-                var NewWarehouse = new Warehouse
+                if (model.Branchid != null)
                 {
-                    WarehouseName = model.Name,
-                    WarehouseDescription = model.Description,
-                    WarehouseType = model.Type
-                };
-                NewWarehouse.CreatedBy = "Admin";
+                    var branch = await _context.Branches.FirstOrDefaultAsync(b => b.BranchId == model.Branchid);
+                    // Create a corresponding warehouse record
 
-                _context.Warehouses.Add(NewWarehouse);
-                await _context.SaveChangesAsync();
+                    var warehouse = new Warehouse
+                    {
+                        BranchId = branch.BranchId,
+                        // Map other properties as needed
+                    };
+                    if (model.Branchid == warehouse.BranchId)
+                    {
+                        // Create a new User entity
+                        var NewWarehouse = new Warehouse
+                        {
+                            WarehouseName = model.Name,
+                            WarehouseDescription = model.Description,
+                            WarehouseType = model.Type,
+                            BranchId = model.Branchid,
+                            CreatedBy = "Admin"
+                        };
 
+                        _context.Warehouses.Add(NewWarehouse);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                    // Convert the Customer entity to CustomerViewModel
+                 
+                    return model;
 
-                // Convert the Customer entity to CustomerViewModel
-                var WarehouseViewModel = new WarehouseViewModel
-                {
-                    Name = NewWarehouse.WarehouseName,
-                    Description = NewWarehouse.WarehouseDescription,
-                    Type = NewWarehouse.WarehouseType
-                };
-
-                return WarehouseViewModel;
-            }
+                }
             catch (Exception)
             {
 
                 return null;
             }
+        
         }
 
         public async Task<Warehouse> DeleteWarehouse(int WarehouseId)

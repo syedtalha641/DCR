@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DCR.Helper\DCR.Helper.csproj" />
+    <ProjectReference Include="..\DCR.Helper\DCR.ViewModel.csproj" />
   </ItemGroup>
 
 </Project>

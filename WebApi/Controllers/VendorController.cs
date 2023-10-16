@@ -8,27 +8,23 @@ namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class VendorController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
+        private readonly IVendorRepos _vendorRepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        public VendorController(IVendorRepos vendorRepos)
         {
-            _customerRepos = customerRepos;
+            _vendorRepos = vendorRepos;
         }
 
 
-
-
-
-
-        [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        [HttpGet]
+        public async Task<ActionResult> GetVendors()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _vendorRepos.GetVendors());
             }
             catch (Exception)
             {
@@ -41,12 +37,12 @@ namespace DCRWebApi.Controllers
 
 
 
-        [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        [HttpPost("{VendorId}")]
+        public async Task<ActionResult<Vendor>> GetVendor(int VendorId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _vendorRepos.GetVendor(VendorId);
                 if (result == null)
                 {
                     return NotFound();
@@ -63,9 +59,8 @@ namespace DCRWebApi.Controllers
         }
 
 
-
-        [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        [HttpPost("")]
+        public async Task<ActionResult<Vendor>> CreateVendor([FromBody] VendorViewModel model)
         {
             try
             {
@@ -74,8 +69,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _vendorRepos.AddVendor(model);
+                return CreatedAtAction(nameof(GetVendor), new { id = CreatedUser.VendorName}, CreatedUser);
             }
             catch (Exception)
             {
@@ -86,8 +81,10 @@ namespace DCRWebApi.Controllers
         }
 
 
-        [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+
+
+        [HttpPost("")]
+        public async Task<ActionResult<Vendor>> UpdateVendor(int VendorId, [FromBody] VendorViewModel model)
         {
             try
             {
@@ -97,8 +94,8 @@ namespace DCRWebApi.Controllers
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
+                var updatedCustomer = await _vendorRepos.UpdateVendor(VendorId, model);
+
                 if (updatedCustomer != null)
                 {
                     return Ok(updatedCustomer); // Return 200 OK with the updated customer
@@ -116,17 +113,17 @@ namespace DCRWebApi.Controllers
 
 
 
-        [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        [HttpPost("")]
+        public async Task<ActionResult<Vendor>> DeleteVendor([FromBody] int VendorId)
         {
             try
             {
-                if (CustomerId == null)
+                if (VendorId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _vendorRepos.DeleteVendor(VendorId);
+                return CreatedAtAction(nameof(GetVendor), new { id = CreatedUser.VendorId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -134,6 +131,5 @@ namespace DCRWebApi.Controllers
                "Error in Creating!");
             }
         }
-
     }
 }

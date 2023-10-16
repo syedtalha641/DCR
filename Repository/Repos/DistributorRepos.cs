@@ -22,33 +22,35 @@ namespace Repository.Repos
         {
             try
             {
-                // Create a new User entity
-                var NewDistributor = new Distributor
+
+                if (model.ContactpersonId != null)
                 {
-                    DistributorName = model.DistributorName,
-                    DistributorType = model.DistributorType,
-                    DistributorEmail = model.DistributorEmail,
-                    DistributorPhone = model.DistributorPhone,
-                    DistributorAddress = model.DistributorAddress,
+                    var Contactperson = await _context.ContactPeople.FirstOrDefaultAsync(b => b.ContactPersonId == model.ContactpersonId && b.IsActive == true);
+                    // Create a corresponding warehouse record
 
-                };
-                NewDistributor.CreatedBy = "Admin";
+                    var Distributor = new Distributor
+                    {
+                        ContactPersonId = Contactperson.ContactPersonId,
+                        // Map other properties as needed
+                    };
+                    if (model.ContactpersonId == Distributor.ContactPersonId)
+                    {
+                        // Create a new User entity
+                        var NewDistributor = new Distributor
+                        {
+                            DistributorName = model.DistributorName,
+                            DistributorType = model.DistributorType,
+                            DistributorEmail = model.DistributorEmail,
+                            DistributorPhone = model.DistributorPhone,
+                            DistributorAddress = model.DistributorAddress,
+                            CreatedBy = "Admin"
+                        };
 
-                _context.Distributors.Add(NewDistributor);
-                await _context.SaveChangesAsync();
-
-
-                // Convert the Customer entity to CustomerViewModel
-                var DistributorViewModel = new DistributorViewModel
-                {
-                    DistributorName = NewDistributor.DistributorName,
-                    DistributorType = NewDistributor.DistributorType,
-                    DistributorEmail = NewDistributor.DistributorEmail,
-                    DistributorPhone = NewDistributor.DistributorEmail,
-                    DistributorAddress = NewDistributor.DistributorAddress
-                };
-
-                return DistributorViewModel;
+                        _context.Distributors.Add(NewDistributor);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                return model;
             }
             catch (Exception)
             {

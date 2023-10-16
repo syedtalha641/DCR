@@ -8,6 +8,7 @@ namespace DCR.Helper.ViewModel
 {
     public class WarehouseViewModel
     {
+        public int Branchid { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Type { get; set; }

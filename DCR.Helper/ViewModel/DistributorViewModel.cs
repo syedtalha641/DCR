@@ -8,6 +8,7 @@ namespace DCR.Helper.ViewModel
 {
     public class DistributorViewModel
     {
+        public int ContactpersonId { get; set; }
         public string DistributorName { get; set; }
 
         public string DistributorType { get; set; }

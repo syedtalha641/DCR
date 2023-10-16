@@ -34,31 +34,13 @@ namespace Repository.Repos
                     BranchCity = model.City,
                     BranchState = model.State,
                     BranchPostalCode = model.PostalCode,
-
+                    CreatedBy = "Admin"
                 };
-                newBranch.CreatedBy = "Admin";
-
+               
                 _context.Branches.Add(newBranch);
                 await _context.SaveChangesAsync();
 
-
-                // Convert the Customer entity to CustomerViewModel
-                var BranchViewModel = new BranchViewModel
-                {
-                    Name = newBranch.BranchName,
-                    Person = newBranch.BranchPerson,
-                    Email = newBranch.BranchEmail,
-                    Phone = newBranch.BranchPhone,
-                    Address = newBranch.BranchAddress,
-                    Country = newBranch.Country,
-                    City = newBranch.BranchCity,
-                    State = newBranch.BranchState,
-                    PostalCode = newBranch.BranchPostalCode
-                };
-
-
-
-                return BranchViewModel;
+                return model;
             }
             catch (Exception)
             {

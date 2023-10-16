@@ -3,32 +3,29 @@ using DCR.Helper.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
+using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class IMEIController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
+        private readonly IIMEIRepos _iMEIRepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        public IMEIController(IIMEIRepos iMEIRepos)
         {
-            _customerRepos = customerRepos;
+            _iMEIRepos = iMEIRepos;
         }
 
 
-
-
-
-
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetIMEIs()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _iMEIRepos.GetIMEIs());
             }
             catch (Exception)
             {
@@ -39,14 +36,12 @@ namespace DCRWebApi.Controllers
 
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<Imei>> GetIMEI(int IMEIId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _iMEIRepos.GetIMEI(IMEIId);
                 if (result == null)
                 {
                     return NotFound();
@@ -63,9 +58,8 @@ namespace DCRWebApi.Controllers
         }
 
 
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Imei>> CreateIMEI([FromBody] IMEIViewModel model)
         {
             try
             {
@@ -74,8 +68,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _iMEIRepos.AddIMEI(model);
+                return CreatedAtAction(nameof(GetIMEI), new { id = CreatedUser.IMEIONE }, CreatedUser);
             }
             catch (Exception)
             {
@@ -87,25 +81,25 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Imei>> UpdateImei(int IMEIId, [FromBody] IMEIViewModel model)
         {
             try
             {
                 if (model == null)
                 {
-                    return BadRequest("Invalid data. Please provide valid customer data.");
+                    return BadRequest("Invalid data. Please provide valid IMEI data.");
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
-                if (updatedCustomer != null)
+                var UpdateImei = await _iMEIRepos.UpdateIMEI(IMEIId, model);
+
+                if (UpdateImei != null)
                 {
-                    return Ok(updatedCustomer); // Return 200 OK with the updated customer
+                    return Ok(UpdateImei); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound("Customer not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("IMEI not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -117,16 +111,16 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<Imei>> DeleteIMEI([FromBody] int IMEIId)
         {
             try
             {
-                if (CustomerId == null)
+                if (IMEIId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _iMEIRepos.DeleteIMEI(IMEIId);
+                return CreatedAtAction(nameof(GetIMEI), new { id = CreatedUser.ImeiId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -134,6 +128,7 @@ namespace DCRWebApi.Controllers
                "Error in Creating!");
             }
         }
+
 
     }
 }

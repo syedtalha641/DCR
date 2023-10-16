@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCRConsumeWebApi", "DCRConsumeWebApi\DCRConsumeWebApi.csproj", "{E50E5F0C-C943-4C96-908B-69A8168B1EF3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCR.Helper", "DCR.Helper\DCR.Helper.csproj", "{A6D0E5A3-829A-4BEE-BD7F-44346E94AEB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCR.ViewModel", "DCR.Helper\DCR.ViewModel.csproj", "{A6D0E5A3-829A-4BEE-BD7F-44346E94AEB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

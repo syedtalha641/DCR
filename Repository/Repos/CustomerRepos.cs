@@ -3,11 +3,16 @@ using DCR.Helper.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repository.IRepos;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
+
+
+
 
 namespace Repository.Repos
 {
@@ -31,7 +36,7 @@ namespace Repository.Repos
                 var newCustomer = new Customer
                 {
                     CustomerName = model.CustomerName,
-                    CustomerType = model.CustomerType,
+                    //CustomerType = model.CustomerType,
                     CustomerEmail = model.CustomerEmail,
                     CustomerPhone = model.CustomerPhone,
                     CustomerCountry = model.CustomerCountry,
@@ -39,19 +44,32 @@ namespace Repository.Repos
                     CustomerCity = model.CustomerCity,
                     CustomerState = model.CustomerState,
                     CustomerPostalCode = model.CustomerPostalCode,
+                    CreatedBy = "Admin"
 
                 };
-                newCustomer.CreatedBy = "Admin";
 
                 _context.Customers.Add(newCustomer);
                 await _context.SaveChangesAsync();
+
+
+
+                var customerid = new SalesOrder
+                {
+                    CustomerId = newCustomer.CustomerId, 
+                };
+
+                _context.SalesOrders.Add(customerid);
+                await _context.SaveChangesAsync();
+
+
+
 
 
                 // Convert the Customer entity to CustomerViewModel
                 var customerViewModel = new CustomerViewModel
                 {
                     CustomerName = newCustomer.CustomerName,
-                    CustomerType = newCustomer.CustomerType,
+                    //CustomerType = newCustomer.CustomerType,
                     CustomerEmail = newCustomer.CustomerEmail,
                     CustomerPhone = newCustomer.CustomerPhone,
                     CustomerCountry = newCustomer.CustomerCountry,
@@ -101,7 +119,7 @@ namespace Repository.Repos
             {
 
                 result.CustomerName = model.CustomerName;
-                result.CustomerType = model.CustomerType;
+                //result.CustomerType = model.CustomerType;
                 result.CustomerEmail = model.CustomerEmail;
                 result.CustomerPhone = model.CustomerPhone;
                 result.CustomerCountry = model.CustomerCountry;
@@ -117,19 +135,6 @@ namespace Repository.Repos
                 // Save changes to the database
                 await _context.SaveChangesAsync();
 
-                //// Convert the Customer entity to CustomerViewModel
-                //var customerViewModel = new CustomerViewModel
-                //{
-                //    CustomerName = newCustomer.CustomerName,
-                //    CustomerType = newCustomer.CustomerType,
-                //    CustomerEmail = newCustomer.CustomerEmail,
-                //    CustomerPhone = newCustomer.CustomerPhone,
-                //    CustomerCountry = newCustomer.CustomerCountry,
-                //    CustomerAddress = newCustomer.CustomerAddress,
-                //    CustomerCity = newCustomer.CustomerCity,
-                //    CustomerState = newCustomer.CustomerState,
-                //    CustomerPostalCode = newCustomer.CustomerPostalCode
-                //};
 
                 return model;
 
