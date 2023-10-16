@@ -8,24 +8,24 @@ namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class PurchaseOrderController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
+        private readonly IPurchaseOrderRepos _purchaseOrderRepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        public PurchaseOrderController(IPurchaseOrderRepos purchaseOrderRepos)
         {
-            _customerRepos = customerRepos;
+            _purchaseOrderRepos = purchaseOrderRepos;
         }
 
 
 
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetPurchaseOrders()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _purchaseOrderRepos.GetPurchaseOrders());
             }
             catch (Exception)
             {
@@ -39,11 +39,11 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<PurchaseOrder>> GetPurchaeOrder(int PurchaseId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _purchaseOrderRepos.GetPurchaseOrder(PurchaseId);
                 if (result == null)
                 {
                     return NotFound();
@@ -62,7 +62,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<PurchaseOrder>> CreatePurchaseOrder([FromBody] PurchaseOrderViewModel model)
         {
             try
             {
@@ -71,8 +71,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _purchaseOrderRepos.AddPurchaseOrder(model);
+                return CreatedAtAction(nameof(GetPurchaeOrder), new { id = CreatedUser.PurchaseName }, CreatedUser);
             }
             catch (Exception)
             {
@@ -84,25 +84,25 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<PurchaseOrder>> UpdatePurchaseOrder(int PurchaseId, [FromBody] PurchaseOrderViewModel model)
         {
             try
             {
                 if (model == null)
                 {
-                    return BadRequest("Invalid data. Please provide valid customer data.");
+                    return BadRequest("Invalid data. Please provide valid Purchase data.");
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
-                if (updatedCustomer != null)
+                var UpdatePurchaseOrder = await _purchaseOrderRepos.UpdatePurchaseOrder(PurchaseId, model);
+
+                if (UpdatePurchaseOrder != null)
                 {
-                    return Ok(updatedCustomer); // Return 200 OK with the updated customer
+                    return Ok(UpdatePurchaseOrder); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound("Customer not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("Purchase not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -114,16 +114,16 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<PurchaseOrder>> DeletePurchaseOrder([FromBody] int PurchaseId)
         {
             try
             {
-                if (CustomerId == null)
+                if (PurchaseId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _purchaseOrderRepos.DeletePurchaseOrder(PurchaseId);
+                return CreatedAtAction(nameof(GetPurchaeOrder), new { id = CreatedUser.PurchaseId }, CreatedUser);
             }
             catch (Exception)
             {

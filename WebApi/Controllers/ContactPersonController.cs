@@ -3,29 +3,31 @@ using DCR.Helper.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
+using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class ContactPersonController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        private readonly IContactPersonRepos _contactPersonRepos;
+
+        public ContactPersonController(IContactPersonRepos contactPersonRepos)
         {
-            _customerRepos = customerRepos;
+            _contactPersonRepos = contactPersonRepos;
         }
 
 
 
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetPersons()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _contactPersonRepos.GetPersons());
             }
             catch (Exception)
             {
@@ -39,11 +41,11 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<ContactPerson>> GetPerson(int ContactPersonId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _contactPersonRepos.GetPerson(ContactPersonId);
                 if (result == null)
                 {
                     return NotFound();
@@ -62,7 +64,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<ContactPerson>> CreatePerson([FromBody] ContactPersonViewModel model)
         {
             try
             {
@@ -71,8 +73,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _contactPersonRepos.AddPerson(model);
+                return CreatedAtAction(nameof(GetPerson), new { id = CreatedUser.FirstName }, CreatedUser);
             }
             catch (Exception)
             {
@@ -84,25 +86,25 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<ContactPerson>> UpdatePerson(int ContactPersonId, [FromBody] ContactPersonViewModel model)
         {
             try
             {
                 if (model == null)
                 {
-                    return BadRequest("Invalid data. Please provide valid customer data.");
+                    return BadRequest("Invalid data. Please provide valid Person data.");
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
-                if (updatedCustomer != null)
+                var UpdatePerson = await _contactPersonRepos.UpdatePerson(ContactPersonId, model);
+
+                if (UpdatePerson != null)
                 {
-                    return Ok(updatedCustomer); // Return 200 OK with the updated customer
+                    return Ok(UpdatePerson); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound("Customer not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("Person not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -114,16 +116,16 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<ContactPerson>> DeletePerson([FromBody] int ContactPersonId)
         {
             try
             {
-                if (CustomerId == null)
+                if (ContactPersonId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _contactPersonRepos.DeletePerson(ContactPersonId);
+                return CreatedAtAction(nameof(GetPerson), new { id = CreatedUser.ContactPersonId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -131,6 +133,5 @@ namespace DCRWebApi.Controllers
                "Error in Creating!");
             }
         }
-
     }
 }

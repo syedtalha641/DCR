@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
-    <ProjectReference Include="..\DCR.Helper\DCR.Helper.csproj" />
+    <ProjectReference Include="..\DCR.Helper\DCR.ViewModel.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using DCR.Helper.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Repository.IRepos;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -9,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository
+namespace Repository.Repos
 {
     public class VendorRepos : IVendorRepos
     {
@@ -24,6 +25,8 @@ namespace Repository
 
         public async Task<VendorViewModel> AddVendor(VendorViewModel model)
         {
+
+
             try
             {
                 // Create a new User entity
@@ -37,15 +40,27 @@ namespace Repository
                     VendorState = model.VendorState,
                     Country = model.VendorCountry,
                     VendorPostalCode = model.VendorPostalCode,
+                    CreatedBy = "Admin"
 
                 };
-                newVendor.CreatedBy = "Admin";
 
                 _context.Vendors.Add(newVendor);
                 await _context.SaveChangesAsync();
 
 
-                // Convert the Customer entity to CustomerViewModel
+
+                var vendorid = new PurchaseOrder
+                {
+                    VendorId = newVendor.VendorId,
+                };
+
+                _context.PurchaseOrders.Add(vendorid);
+                await _context.SaveChangesAsync();
+
+
+
+
+
                 var vendorViewModel = new VendorViewModel
                 {
                     VendorName = newVendor.VendorName,

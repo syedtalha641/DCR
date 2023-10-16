@@ -28,7 +28,6 @@ namespace DAL.EntityModels
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
-        public virtual DbSet<ProductType> ProductTypes { get; set; } = null!;
         public virtual DbSet<ProductWarehouse> ProductWarehouses { get; set; } = null!;
         public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; } = null!;
         public virtual DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = null!;
@@ -51,8 +50,7 @@ namespace DAL.EntityModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=DESKTOP-SAKREN7;Database=EMS_ITC;Trusted_Connection=True;");
+
             }
         }
 
@@ -199,6 +197,10 @@ namespace DAL.EntityModels
                     .HasMaxLength(50)
                     .HasColumnName("Customer_State");
 
+                entity.Property(e => e.CustomerType)
+                    .HasMaxLength(50)
+                    .HasColumnName("Customer_Type");
+
                 entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.UpdatedBy)
@@ -263,7 +265,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.ContactPerson)
                     .WithMany(p => p.Distributors)
                     .HasForeignKey(d => d.ContactPersonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Distributor_ContactPerson");
             });
 
@@ -280,13 +281,11 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Distributor)
                     .WithMany(p => p.DistributorImeis)
                     .HasForeignKey(d => d.DistributorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductDistributor_Distributor");
 
                 entity.HasOne(d => d.Imei)
                     .WithMany(p => p.DistributorImeis)
                     .HasForeignKey(d => d.ImeiId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ProductDistributor_IMEI");
             });
 
@@ -384,7 +383,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Imeis)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_IMEI_Product");
             });
 
@@ -529,7 +527,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.SalePerson)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.SalePersonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_SalesPerson");
             });
 
@@ -574,7 +571,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Distributor)
                     .WithMany(p => p.Payments)
                     .HasForeignKey(d => d.DistributorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Payment_Distributor");
             });
 
@@ -619,50 +615,9 @@ namespace DAL.EntityModels
                     .HasMaxLength(50)
                     .HasColumnName("Product_SKU");
 
-                entity.Property(e => e.ProductTypeId).HasColumnName("ProductType_Id");
+                entity.Property(e => e.ProductType).HasMaxLength(50);
 
                 entity.Property(e => e.Series).HasMaxLength(50);
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(50)
-                    .HasColumnName("Updated_by");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Updated_on")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.HasOne(d => d.ProductType)
-                    .WithMany(p => p.Products)
-                    .HasForeignKey(d => d.ProductTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Product_ProductType1");
-            });
-
-            modelBuilder.Entity<ProductType>(entity =>
-            {
-                entity.ToTable("ProductType");
-
-                entity.Property(e => e.ProductTypeId).HasColumnName("ProductType_Id");
-
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .HasColumnName("Created_by");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Created_on")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.IsActive).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.ProductDescription)
-                    .HasMaxLength(50)
-                    .HasColumnName("Product_Description");
-
-                entity.Property(e => e.ProductName)
-                    .HasMaxLength(50)
-                    .HasColumnName("Product_Name");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(50)
@@ -680,42 +635,18 @@ namespace DAL.EntityModels
 
                 entity.Property(e => e.ProductWarehouseId).HasColumnName("ProductWarehouse_Id");
 
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .HasColumnName("Created_by");
-
-                entity.Property(e => e.CreatedOn)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Created_on")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.IsActive)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
                 entity.Property(e => e.ProductId).HasColumnName("Product_Id");
 
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(50)
-                    .HasColumnName("Updated_by");
-
-                entity.Property(e => e.UpdatedOn)
-                    .HasColumnType("datetime")
-                    .HasColumnName("Updated_on")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WarehouseTypeId).HasColumnName("WarehouseType_Id");
+                entity.Property(e => e.WarehouseId).HasColumnName("Warehouse_Id");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductWarehouses)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_Warehouse_Product1");
 
-                entity.HasOne(d => d.WarehouseType)
+                entity.HasOne(d => d.Warehouse)
                     .WithMany(p => p.ProductWarehouses)
-                    .HasForeignKey(d => d.WarehouseTypeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasForeignKey(d => d.WarehouseId)
                     .HasConstraintName("FK_Product_Warehouse_Warehouse");
             });
 
@@ -768,7 +699,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Vendor)
                     .WithMany(p => p.PurchaseOrders)
                     .HasForeignKey(d => d.VendorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PurchaseOrder_Vendor");
             });
 
@@ -785,13 +715,11 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.PurchaseOrderDetails)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PurchaseOrderDetail_Product");
 
                 entity.HasOne(d => d.Purchase)
                     .WithMany(p => p.PurchaseOrderDetails)
                     .HasForeignKey(d => d.PurchaseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PurchaseOrderDetail_Purchase");
             });
 
@@ -843,13 +771,11 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.PurchaseOrderLines)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderLine_Product1");
 
                 entity.HasOne(d => d.Purchase)
                     .WithMany(p => p.PurchaseOrderLines)
                     .HasForeignKey(d => d.PurchaseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderLine_PurchaseOrder1");
             });
 
@@ -894,7 +820,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Distributor)
                     .WithMany(p => p.Receives)
                     .HasForeignKey(d => d.DistributorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Receive_Distributor");
             });
 
@@ -1071,13 +996,11 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.SaleOrderLines)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SaleOrderLine_Product");
 
                 entity.HasOne(d => d.SalesOrder)
                     .WithMany(p => p.SaleOrderLines)
                     .HasForeignKey(d => d.SalesOrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SaleOrderLine_SalesOrder");
             });
 
@@ -1122,7 +1045,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.SalesOrders)
                     .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Customer");
             });
 
@@ -1174,13 +1096,11 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.SalesOrderDetails)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_Product");
 
                 entity.HasOne(d => d.SalesOrder)
                     .WithMany(p => p.SalesOrderDetails)
                     .HasForeignKey(d => d.SalesOrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_Order");
             });
 
@@ -1224,7 +1144,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.UserProfile)
                     .WithMany(p => p.SalesPeople)
                     .HasForeignKey(d => d.UserProfileId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SalesPerson_UserProfile");
             });
 
@@ -1233,10 +1152,6 @@ namespace DAL.EntityModels
                 entity.ToTable("User");
 
                 entity.Property(e => e.UserId).HasColumnName("User_Id");
-
-                entity.Property(e => e.ContactNo)
-                    .HasMaxLength(50)
-                    .HasColumnName("Contact_No");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(50)
@@ -1258,11 +1173,17 @@ namespace DAL.EntityModels
                     .HasColumnName("Updated_on")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.UserContact)
+                    .HasMaxLength(50)
+                    .HasColumnName("User_Contact");
+
                 entity.Property(e => e.UserEmail)
                     .HasMaxLength(50)
                     .HasColumnName("User_Email");
 
-                entity.Property(e => e.UserLoginId).HasMaxLength(50);
+                entity.Property(e => e.UserLoginId)
+                    .HasMaxLength(50)
+                    .HasColumnName("UserLogin_Id");
 
                 entity.Property(e => e.UserName)
                     .HasMaxLength(50)
@@ -1400,7 +1321,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.ContactPerson)
                     .WithMany(p => p.Vendors)
                     .HasForeignKey(d => d.ContactPersonId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Vendor_ContactPerson");
             });
 
@@ -1447,7 +1367,6 @@ namespace DAL.EntityModels
                 entity.HasOne(d => d.Branch)
                     .WithMany(p => p.Warehouses)
                     .HasForeignKey(d => d.BranchId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Warehouse_Branch");
             });
 

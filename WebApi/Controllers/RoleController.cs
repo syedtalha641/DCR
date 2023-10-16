@@ -3,29 +3,27 @@ using DCR.Helper.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
+using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class RoleController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
-
-        public CustomerController(ICustomerRepos customerRepos)
+        private readonly IRoleRepos _roleRepos;
+        public RoleController(IRoleRepos roleRepos)
         {
-            _customerRepos = customerRepos;
+            _roleRepos = roleRepos;
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetRoles()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _roleRepos.GetRoles());
             }
             catch (Exception)
             {
@@ -39,11 +37,11 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<Role>> GetRole(int RoleId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _roleRepos.GetRole(RoleId);
                 if (result == null)
                 {
                     return NotFound();
@@ -60,9 +58,8 @@ namespace DCRWebApi.Controllers
         }
 
 
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Role>> CreateCustomer([FromBody] RoleViewModel model)
         {
             try
             {
@@ -71,8 +68,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _roleRepos.AddRole(model);
+                return CreatedAtAction(nameof(GetRole), new { id = CreatedUser.RoleName}, CreatedUser);
             }
             catch (Exception)
             {
@@ -83,8 +80,9 @@ namespace DCRWebApi.Controllers
         }
 
 
+
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Role>> UpdateRole(int RoleId, [FromBody] RoleViewModel model)
         {
             try
             {
@@ -94,8 +92,8 @@ namespace DCRWebApi.Controllers
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
+                var updatedCustomer = await _roleRepos.UpdateRole(RoleId, model);
+
                 if (updatedCustomer != null)
                 {
                     return Ok(updatedCustomer); // Return 200 OK with the updated customer
@@ -114,16 +112,16 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<Role>> DeleteRole([FromBody] int RoleId)
         {
             try
             {
-                if (CustomerId == null)
+                if (RoleId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _roleRepos.DeleteRole(RoleId);
+                return CreatedAtAction(nameof(GetRole), new { id = CreatedUser.RoleId}, CreatedUser);
             }
             catch (Exception)
             {

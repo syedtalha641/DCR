@@ -2,7 +2,7 @@
 using DCR.Helper.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository;
+using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {

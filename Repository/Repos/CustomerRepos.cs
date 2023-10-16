@@ -2,13 +2,10 @@
 using DCR.Helper.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Repository.IRepos;
 
-namespace Repository
+
+namespace Repository.Repos
 {
     public class CustomerRepos : ICustomerRepos
     {
@@ -38,12 +35,25 @@ namespace Repository
                     CustomerCity = model.CustomerCity,
                     CustomerState = model.CustomerState,
                     CustomerPostalCode = model.CustomerPostalCode,
+                    CreatedBy = "Admin"
 
                 };
-                newCustomer.CreatedBy = "Admin";
 
                 _context.Customers.Add(newCustomer);
                 await _context.SaveChangesAsync();
+
+
+
+                var customerid = new SalesOrder
+                {
+                    CustomerId = newCustomer.CustomerId, 
+                };
+
+                _context.SalesOrders.Add(customerid);
+                await _context.SaveChangesAsync();
+
+
+
 
 
                 // Convert the Customer entity to CustomerViewModel
@@ -116,19 +126,6 @@ namespace Repository
                 // Save changes to the database
                 await _context.SaveChangesAsync();
 
-                //// Convert the Customer entity to CustomerViewModel
-                //var customerViewModel = new CustomerViewModel
-                //{
-                //    CustomerName = newCustomer.CustomerName,
-                //    CustomerType = newCustomer.CustomerType,
-                //    CustomerEmail = newCustomer.CustomerEmail,
-                //    CustomerPhone = newCustomer.CustomerPhone,
-                //    CustomerCountry = newCustomer.CustomerCountry,
-                //    CustomerAddress = newCustomer.CustomerAddress,
-                //    CustomerCity = newCustomer.CustomerCity,
-                //    CustomerState = newCustomer.CustomerState,
-                //    CustomerPostalCode = newCustomer.CustomerPostalCode
-                //};
 
                 return model;
 

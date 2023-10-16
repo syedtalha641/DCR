@@ -1,9 +1,9 @@
 ﻿using DAL.EntityModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Repository.IRepos;
 
-
-namespace Repository
+namespace Repository.Repos
 {
     public class AccountRepos : IAccountRepos
     {
@@ -16,7 +16,7 @@ namespace Repository
         {
             _context = context;
             _configuration = configuration;
-        
+
         }
 
 
@@ -45,6 +45,29 @@ namespace Repository
                 _context.Users.Add(newUser);
                 await _context.SaveChangesAsync();
 
+
+
+                var userroleid = new UserRole
+                {
+                    UserId = newUser.UserId,
+                };
+
+                _context.UserRoles.Add(userroleid);
+                await _context.SaveChangesAsync();
+
+
+
+                var userprofileid = new UserProfile
+                {
+                    UserId = newUser.UserId,
+                };
+
+                _context.UserProfiles.Add(userprofileid);
+                await _context.SaveChangesAsync();
+
+
+
+
                 return newUser;
             }
             catch (Exception)
@@ -71,7 +94,7 @@ namespace Repository
             {
                 return null;
             }
-           
+
             return result.UserEmail;
         }
 
@@ -85,7 +108,7 @@ namespace Repository
                 return null; // User not found
             }
 
-        
+
 
             // Retrieve the stored hashed password and salt from the database
             string storedHashedPassword = result.UserPassword;

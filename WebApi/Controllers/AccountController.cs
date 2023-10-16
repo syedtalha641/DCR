@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using DAL.EntityModels;
-using Repository;
 using Microsoft.AspNetCore.Authentication;
 using static System.Net.WebRequestMethods;
 using System.Diagnostics;
@@ -13,6 +12,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DCR.Helper.ViewModel;
+using Repository.IRepos;
 
 namespace WebApi.Controllers
 {
