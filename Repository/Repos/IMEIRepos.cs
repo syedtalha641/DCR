@@ -81,7 +81,7 @@ namespace Repository.Repos
 
         public async Task<Imei> GetIMEI(int IMEIId)
         {
-            return await _context.Imeis.FirstOrDefaultAsync(a => a.ImeiId == IMEIId);
+            return await _context.Imeis.FirstOrDefaultAsync(a => a.ImeiId == IMEIId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Imei>> GetIMEIs()

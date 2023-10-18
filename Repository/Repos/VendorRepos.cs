@@ -92,7 +92,7 @@ namespace Repository.Repos
 
         public async Task<Vendor> GetVendor(int VendorId)
         {
-            return await _context.Vendors.FirstOrDefaultAsync(a => a.VendorId == VendorId);
+            return await _context.Vendors.FirstOrDefaultAsync(a => a.VendorId == VendorId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Vendor>> GetVendors()

@@ -67,7 +67,7 @@ namespace Repository.Repos
 
         public async Task<Retailer> GetRetailer(int RetailerId)
         {
-            return await _context.Retailers.FirstOrDefaultAsync(a => a.RetailerId == RetailerId);
+            return await _context.Retailers.FirstOrDefaultAsync(a => a.RetailerId == RetailerId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Retailer>> GetRetailers()

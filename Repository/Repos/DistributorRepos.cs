@@ -73,7 +73,7 @@ namespace Repository.Repos
 
         public async Task<Distributor> GetDistributor(int DistributorId)
         {
-            return await _context.Distributors.FirstOrDefaultAsync(a => a.DistributorId == DistributorId);
+            return await _context.Distributors.FirstOrDefaultAsync(a => a.DistributorId == DistributorId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Distributor>> GetDistributors()

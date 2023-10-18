@@ -80,7 +80,7 @@ namespace Repository.Repos
 
         public async  Task<Inventory> GetInventory(int InventoryId)
         {
-            return await _context.Inventories.FirstOrDefaultAsync(a => a.InventoryId == InventoryId);
+            return await _context.Inventories.FirstOrDefaultAsync(a => a.InventoryId == InventoryId && a.IsActive == true);
         }
 
         public async Task<InventoryViewModel> UpdateInventory(int InventoryId, InventoryViewModel model)

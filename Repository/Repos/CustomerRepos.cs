@@ -82,7 +82,7 @@ namespace Repository.Repos
 
         public async Task<Customer> GetCustomer(int CustomerId)
         {
-            return await _context.Customers.FirstOrDefaultAsync(a => a.CustomerId == CustomerId);
+            return await _context.Customers.FirstOrDefaultAsync(a => a.CustomerId == CustomerId && a.IsActive == true);
         }
 
         public async Task<CustomerViewModel> UpdateCustomer(int CustomerId, CustomerViewModel model)

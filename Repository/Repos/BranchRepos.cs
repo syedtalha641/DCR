@@ -64,7 +64,7 @@ namespace Repository.Repos
 
         public async Task<Branch> GetBranch(int BranchId)
         {
-            return await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId);
+            return await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Branch>> GetBranches()

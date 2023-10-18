@@ -77,7 +77,7 @@ namespace Repository
 
         public async Task<Warehouse> GetWarehouse(int WarehouseId)
         {
-            return await _context.Warehouses.FirstOrDefaultAsync(a => a.WarehouseId == WarehouseId);
+            return await _context.Warehouses.FirstOrDefaultAsync(a => a.WarehouseId == WarehouseId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Warehouse>> GetWarehouses()

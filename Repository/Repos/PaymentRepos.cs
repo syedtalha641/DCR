@@ -64,7 +64,7 @@ namespace Repository.Repos
 
         public async Task<Payment> GetPayment(int Paymentid)
         {
-           return await _context.Payments.FirstOrDefaultAsync(a => a.PaymentId == Paymentid);
+           return await _context.Payments.FirstOrDefaultAsync(a => a.PaymentId == Paymentid && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Payment>> GetPayments()

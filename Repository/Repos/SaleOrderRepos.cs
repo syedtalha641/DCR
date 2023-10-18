@@ -97,7 +97,7 @@ namespace Repository.Repos
 
         public async Task<SalesOrder> GetSaleOrder(int SaleOrderId)
         {
-            return await _context.SalesOrders.FirstOrDefaultAsync(a => a.SalesOrderId == SaleOrderId);
+            return await _context.SalesOrders.FirstOrDefaultAsync(a => a.SalesOrderId == SaleOrderId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<SalesOrder>> GetSaleOrders()

@@ -105,7 +105,7 @@ namespace Repository.Repos
 
         public async Task<ContactPerson> GetPerson(int ContactPersonId)
         {
-            return await _context.ContactPeople.FirstOrDefaultAsync(a => a.ContactPersonId == ContactPersonId);
+            return await _context.ContactPeople.FirstOrDefaultAsync(a => a.ContactPersonId == ContactPersonId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<ContactPerson>> GetPersons()

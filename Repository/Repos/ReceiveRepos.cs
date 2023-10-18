@@ -73,7 +73,7 @@ namespace Repository.Repos
 
         public async Task<Receive> GetReceive(int ReceiveId)
         {
-            return await _context.Receives.FirstOrDefaultAsync(a => a.ReceiveId == ReceiveId);
+            return await _context.Receives.FirstOrDefaultAsync(a => a.ReceiveId == ReceiveId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Receive>> GetReceives()

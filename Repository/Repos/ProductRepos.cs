@@ -46,24 +46,9 @@ namespace Repository.Repos
                 await _context.SaveChangesAsync();
 
 
-                // Convert the Customer entity to CustomerViewModel
-                var ProductViewModel = new ProductViewModel
-                {
-                    Type = NewProduct.ProductType,
-                    Quantity = NewProduct.ProductQuantity,
-                    Price = ((float)NewProduct.ProductPrice),
-                    SKU = NewProduct.ProductSku,
-                    Code = NewProduct.ProductCode,
-                    MarketName = NewProduct.MarketName,
-                    Brand = NewProduct.Brand,
-                    Memory = NewProduct.Memory,
-                    Model = NewProduct.Model,
-                    Color = NewProduct.Color,
-                    Series = NewProduct.Series
+              
 
-                };
-
-                return ProductViewModel;
+                return model;
             }
             catch (Exception)
             {
@@ -86,7 +71,7 @@ namespace Repository.Repos
 
     public async Task<Product> GetProduct(int ProductId)
     {
-            return await _context.Products.FirstOrDefaultAsync(a => a.ProductId == ProductId);
+            return await _context.Products.FirstOrDefaultAsync(a => a.ProductId == ProductId && a.IsActive == true);
         }
 
     public async Task<IEnumerable<Product>> GetProducts()
