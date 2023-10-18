@@ -1,2 +1,0 @@
-# DCR
-DCR for Inovi
