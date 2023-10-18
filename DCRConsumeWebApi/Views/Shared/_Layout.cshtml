@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -10,245 +11,146 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
     <link href="~/css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+
+    <script src="~/js/kit.fontawesome.js"></script>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/sidebarstyle.css" rel="stylesheet" />
+    <script src="~/js/jquery-3.1.1.min.js"></script>
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 
 
 
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="index.html">Inovi Solutions</a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
-                class="fas fa-bars"></i></button>
-        <!-- Navbar Search-->
-        <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-            <div class="input-group">
-                <input class="form-control" type="text" placeholder="Search for..." aria-label="Search for..."
-                    aria-describedby="btnNavbarSearch" />
-                <button class="btn btn-primary" id="btnNavbarSearch" type="button"><i
-                        class="fas fa-search"></i></button>
-            </div>
-        </form>
-        <form method="post" asp-action="Logout" asp-controller="Account">
-            <button class="text-white bg-dark border-0" type="submit">Logout</button>
-        </form>
 
-
-
-
-@*         <!-- Navbar-->
-        <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item" href="#!">Settings</a></li>
-                    <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                    <li>
-                        <hr class="dropdown-divider" />
-                    </li>
-                    <li><a class="dropdown-item" href="login.html">Logout</a></li>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <aside id="sidebar">
+            <div class="h-100">
+                <div class="sidebar-logo">
+                    <a href="dashboard.html">INOVI SOLUTIONS</a>
+                </div>
+                <ul id="sideBarMenus" class="sidebar-nav">
                 </ul>
-            </li>
-        </ul>  *@
-    </nav>
-    <div id="layoutSidenav">
-        <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                <div class="sb-sidenav-menu">
-                    <div class="nav">
-                        <!-- <div class="sb-sidenav-menu-heading">Core</div> -->
-                        <a class="nav-link" href="index.html">
-                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                            Dashboard
-                        </a>
-                        <!-- <div class="sb-sidenav-menu-heading">Interface</div> -->
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                            <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                            Basic Data
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="data-import.html">Import Record</a>
-                                <a class="nav-link" href="data-export.html">Export Record</a>
-                            </nav>
-                        </div>
+            </div>
+        </aside>
 
+        <!-- Main Component -->
+        <div class="main">
+            <nav class="navbar navbar-expand px-3 border-bottom">
+                <!-- Button for sidebar toggle -->
+                <button class="btn" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                        <!-- Model and Price -->
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePrice"
-                            aria-expanded="false" aria-controls="collapsePrice">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-tag"></i></div>
-                            Model & Price
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapsePrice" aria-labelledby="headingPrice"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="customer-price.html">Customer Price</a>
-
-                            </nav>
-                        </div>
-
-
-
-                        <!-- Account -->
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseAccount" aria-expanded="false" aria-controls="collapseAccount">
-                            <div class="sb-nav-link-icon"><i class="fas fa-user"></i></div>
-                            Account
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-
-                        <div class="collapse" id="collapseAccount" aria-labelledby="headingAccount"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="warehouse.html">Warehouse</a>
-                                <a class="nav-link" href="customer-permission.html">Customer Permission</a>
-                            </nav>
-                        </div>
-
-                        <!-- Purchase -->
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapsePurchase" aria-expanded="false" aria-controls="collapsePurchase">
-                            <div class="sb-nav-link-icon"><i class="fa fa-shopping-cart"></i></div>
-                            Purchase
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapsePurchase" aria-labelledby="headingPurchase"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="distributor-receive.html">Distributor Receive</a>
-                                <a class="nav-link" href="inbound-order.html">Inbound |Order</a>
-                            </nav>
-                        </div>
-
-                        <!-- Sales -->
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSales"
-                            aria-expanded="false" aria-controls="collapseSales">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-scale-balanced"></i></div>
-                            Sales
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseSales" aria-labelledby="headingSales"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="delivery-order.html">Delivery Order</a>
-                            </nav>
-                        </div>
-
-
-
-                        <!-- Inventory -->
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseInventory" aria-expanded="false" aria-controls="collapseInventory">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-check"></i></div>
-                            Inventory
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseInventory" aria-labelledby="headingInventory"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="customer-inventory-query.html">Customer Inventory Query</a>
-                                <a class="nav-link" href="inventory-initialization.html">Inventory Initialization</a>
-                                <a class="nav-link" href="imei-inventory-query-new.html">IMEI Inventory Query New</a>
-                                <a class="nav-link" href="customer-transfer.html">Customer Transfer</a>
-                                <a class="nav-link" href="inventory-losses-check.html">Inventory Losses Check</a>
-                            </nav>
-                        </div>
-
-                        <!-- IMEI Query -->
-
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseImeiquery" aria-expanded="false" aria-controls="collapseImeiquery">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-qrcode"></i></div>
-                            IMEI Query
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="collapseImeiquery" aria-labelledby="headingImeiquery"
-                            data-bs-parent="#sidenavAccordion">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="imei-query.html">IMEI Query</a>
-                            </nav>
-                        </div>
+                <div id="navRightMenus">
+                    <ul class="navbar-nav">
+                        <li class="dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">Settings</a></li>
+                                <li>
+                                    <hr class="dropdown-divider" />
+                                </li>
+                                <li><a class="dropdown-item" href="/Account/Login">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
 
             </nav>
-        </div>
-    @*     <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid px-4">
-                    <h1 class="mt-4">Dashboard</h1>
-                    <ol class="breadcrumb mb-4">
-                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <p class="mb-0">
-                                This page is an example of using Dashboard. By removing the
-                                <code>.sb-nav-fixed</code>
-                                class from the
-                                <code>body</code>
-                                , the top navigation and side navigation will become static on scroll. Scroll down
-                                this
-                                page to see an example.
-                            </p>
-                        </div>
-                    </div>
-                    <div style="height: 100vh"></div>
-                    <div class="card mb-4">
-                        <div class="card-body">When scrolling, the navigation stays at the top of the page. This is
-                            the
-                            end of the static navigation demo.</div>
-                    </div>
-                </div>
-            </main>
-
-        </div> *@
-
-    </div>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
 
+            <div class="container">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+
+            <script>
+                $(document).ready(function () {
+                    $.ajax({
+                        "url": "/Home/Dashboard",
+                        type: "POST",
+                        contentType: "application/json", // Set content type to JSON
+                        success: function (resp) {
+                            resp = JSON.parse(resp);
+                            let tempMenu = ``;
+                            for (var i = 0; i < resp.length; i++) {
+                                if (!resp[i].hasChildren && resp[i].parentId == null) {
+                                    tempMenu += `
+                                                                                                    <li class="sid-item">
+                                <a href="${resp[i].navigationUrl}" class="sidebar-link"><i class="${resp[i].iconClass} pe-2"></i>
+                                                                                                                        ${resp[i].title}
+                                                                                                        </a>
+                                                                                                    </li>`;
+                                }
+                                else if (resp[i].hasChildren && resp[i].parentId == null) {
+                                    tempMenu += `
+                                                                                                    <li class="sidebar-item">
+                                <a href="${resp[i].navigationUrl}" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#pages-${resp[i].id}"
+                                                                                                    aria-expanded="false" aria-controls="pages-${resp[i].id}">
+                                                                                                    <i class="${resp[i].iconClass} pe-2""></i>
+                                                                                                                    ${resp[i].title}
+                                                                                                    </a>
+                                                                                                    <ul id="pages-${resp[i].id}" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">`;
+                                    for (let index = 0; index < resp.length; index++) {
+                                        // console.log(index);
+                                        if (!resp[index].hasChildren && resp[index].parentId == resp[i].id) {
+                                            tempMenu += `
+                                                                                                                <li class="sidebar-item nest-item">
+                                                <a href="${resp[index].navigationUrl}" class="sidebar-link">${resp[index].title}</a>
+                                                                                                                </li>`;
+                                        }
+
+                                    }
+                                    tempMenu += `</ul></li>`;
+                                }
+                            }
+                            $('#sideBarMenus').html(tempMenu);
+                        }
+                    });
+                })
+
+
+
+
+                const toggler = document.querySelector(".btn");
+                toggler.addEventListener("click", function () {
+                    document.querySelector("#sidebar").classList.toggle("collapsed");
+                });
+
+
+
+
+            </script>
 
 
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    <script src="~/js/scripts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="~/assets/demo/chart-area-demo.js"></script>
-    <script src="~/assets/demo/chart-bar-demo.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
-        crossorigin="anonymous"></script>
-    <script src="~/js/datatables-simple-demo.js"></script>
-  
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+                    crossorigin="anonymous"></script>
+            <script src="~/js/scripts.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+            <script src="~/assets/demo/chart-area-demo.js"></script>
+            <script src="~/assets/demo/chart-bar-demo.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
+                    crossorigin="anonymous"></script>
+            <script src="~/js/datatables-simple-demo.js"></script>
 
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            @await RenderSectionAsync("Scripts", required: false)
 
-
+            @await Component.InvokeAsync("NToastNotify")
 
 </body>
 </html>

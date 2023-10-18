@@ -82,12 +82,12 @@ namespace Repository.Repos
 
         public async Task<Retailer> GetRetailer(int RetailerId)
         {
-            return await _context.Retailers.FirstOrDefaultAsync(a => a.RetailerId == RetailerId);
+            return await _context.Retailers.FirstOrDefaultAsync(a => a.RetailerId == RetailerId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Retailer>> GetRetailers()
         {
-            return await _context.Retailers.ToListAsync();
+            return await _context.Retailers.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<RetailerViewModel> UpdateRetailer(int RetailerId, RetailerViewModel model)

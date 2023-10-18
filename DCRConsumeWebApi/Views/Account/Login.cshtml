@@ -1,4 +1,6 @@
-﻿@model DCR.Helper.ViewModel.CombinedViewModel
+﻿
+
+@model DCR.Helper.ViewModel.CombinedViewModel
 @{
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
 }
@@ -6,196 +8,128 @@
 
 
 
-<div id="layoutAuthentication">
-    <div id="layoutAuthentication_content">
-        <main>
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-lg-5">
-                        <div class="card shadow-lg border-0 rounded-lg mt-5">
-                            <div class="card-header">
-                                <h3 class="text-center font-weight-light my-4">Login</h3>
+<section>
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5 text-center">
+
+                        <h3 class="mb-4" style="font-size: 40px;">Sign In</h3>
+                        <hr class="my-4">
+                        <form asp-action="Login" method="post">
+                            <div class="form-outline mb-4">
+                                <label class="float-start">Username</label>
+                                <input asp-for="LoginViewModel.UserLoginId" value="PK01" type="text" class="form-control" placeholder="username">
                             </div>
-                            <div class="card-body">
-                                <form asp-action="Login" method="post">
-                                    <div class="form-floating mb-3 form-group">
-                                        <input asp-for="LoginViewModel.UserLoginId" class="form-control" id="inputEmail" type="text"
-                                               placeholder="PK1234" />
-                                        <label class="float-start" asp-for="LoginViewModel.UserLoginId">Login Id</label>
-                                    </div>
-                                    <div class="form-floating mb-3 form-group">
-                                        <input asp-for="LoginViewModel.UserPassword" class="form-control" id="inputPassword" type="password"
-                                               placeholder="Password" />
-                                        <label class="float-start" asp-for="LoginViewModel.UserPassword">Password</label>
-                                    </div>
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" id="rememberMeCheckbox" type="checkbox"
-                                               value="" />
-                                        <label class="form-check-label" for="inputRememberPassword">
-                                            Remember Me
+
+                            <div class="form-outline mb-4">
+                                <label class="float-start">Password</label>
+                                <input asp-for="LoginViewModel.UserPassword" value="101010" type="password" class="form-control" placeholder="password">
+                            </div>
+
+                            <!-- Checkbox -->
+                            <div class="row">
+                                <div class="col-md-8 d-flex">
+                                    <div class="form-check mb-4">
+                                        <input class="form-check-input" type="checkbox" value=""
+                                               id="form1Example3" />
+                                        <label class="" for="form1Example3">
+                                            Remember me
                                         </label>
                                     </div>
-                                    <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                        <a href="#exampleModal" class="link-primary" data-toggle="modal">
-                                            Forgot Password?
-                                        </a>
-
-                                        <button type="submit" class="btn btn-primary float-right">Login</button>
-
-                                    </div>
-                                </form>
-
-                                <!--------------------------------------------- Modal ------------------------------------------->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">
-                                                    Reset Your Password
-                                                </h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-
-                                            <!------------------------ SendOTP Section-------------------------->
-
-
-                                            <div class="modal-body">
-                                                <form asp-action="SendOTP" method="post">
-                                                    <div class="input-group mb-3 form-group">
-                                                        <span class="float-start input-group-text px-4" id="inputGroup-sizing-sm">Login Id</span>
-                                                        <input asp-for="LoginViewModel.UserLoginId" type="text" class="form-control" placeholder="Login Id" required>
-                                                        <button class="btn btn-dark p-2" id="send-timer-btn" onclick="disableButtonWithTimer()" type="submit">Send</button>
-                                                    </div>
-                                                    <div class="input-group form-group input-group-sm mb-3">
-                                                        <span class="input-group-text float-start" id="inputGroup-sizing-sm"> Verification Code </span>
-                                                        <input id="OTP-Input" asp-for="OTPViewModel.OTP" type="text" class="form-control" placeholder="123456">
-                                                        <button class="btn btn-dark" id="verify-OTP-btn" asp-action="VerifyOTP" type="submit">Verify</button>
-
-                                                    </div>
-                                                </form>
-
-
-                                                <!----------------------- NewPassword/CPassword Section-------------------------->
-
-                                                <form asp-action="MatchPassword" method="post">
-                                                    <div id="NewPassword-Form">
-                                                        <div class="input-group input-group-sm mb-3">
-                                                            <span class="float-start input-group-text pr-4" id="inputGroup-sizing-sm">&nbsp&nbsp&nbsp&nbsp&nbsp Password &nbsp&nbsp</span>
-                                                            <input id="password" asp-for="LoginViewModel.UserPassword" type="password" class="form-control">
-
-                                                        </div>
-
-                                                        <div class="input-group input-group-sm mb-3">
-                                                            <span class="float-start input-group-text" id="inputGroup-sizing-sm">
-                                                                Confirm Password
-                                                            </span>
-                                                            <input id="confirmPassword" asp-for="LoginViewModel.ConfirmPassword" type="password" class="form-control">
-                                                        </div>
-                                                        <div class="small" id="showErrorcpwd"></div>
-                                                    </div>
-                                                    <input id="CPass-btn" class="float-start btn btn-primary" type="submit" value="Submit">
-
-                                                </form>
-                                            </div>
-
-
-                                        </div>
-                                    </div>
                                 </div>
-
-
-
+                                <div class="col-md-4">
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                </div>
                             </div>
 
+                        </form>
+
+                        <hr class="my-4">
+
+
+                        <div class="justify-content-between mt-4 mb-0">
+                            <a href="#exampleModal" class="link-primary" data-toggle="modal">
+                                Forgot Password?
+                            </a>
                         </div>
+
+                            <!----------------- Modal -------------------->
+
+                            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">
+                                                Reset Your
+                                                Password
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <form asp-action="SendOTP" method="post">
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text col-md-4">Username</span>
+                                                    <input asp-for="LoginViewModel.UserLoginId" type="text" class="form-control" id="inputLogin"
+                                                           placeholder="username" required>
+                                                    <button type="submit" class="btn btn-dark"
+                                                            id="sendBtn">
+                                                        Send
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            <form asp-action="VerifyOTP" method="post">
+                                                <div class="input-group input-group-sm mb-3" id="verifyOTP">
+                                                    <span class="input-group-text col-md-4">
+                                                        Verification
+                                                        Code
+                                                    </span>
+                                                    <input asp-for="OTPViewModel.OTP" type="text" class="form-control"
+                                                           placeholder="7654321">
+                                                    <button type="button" id="verifyBtn"
+                                                            class="btn btn-dark">
+                                                        Verify
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            <form asp-action="MatchPassword" method="post">
+                                                <div id="Cpassword">
+                                                    <div class="input-group input-group-sm mb-3">
+                                                        <span class="input-group-text col-md-4">Password</span>
+                                                        <input asp-for="LoginViewModel.UserPassword" type="password" class="form-control"
+                                                               id="password" required>
+                                                    </div>
+                                                    <div class="input-group input-group-sm mb-3">
+                                                        <span class="input-group-text col-md-4">
+                                                            Confirm
+                                                            Password
+                                                        </span>
+                                                        <input asp-for="LoginViewModel.ConfirmPassword" type="password" class="form-control"
+                                                               id="confirmPassword" required>
+                                                    </div>
+                                                    <div id="showErrorcpwd"></div>
+                                                </div>
+                                                <input id="submitBtn" class="btn btn-primary" type="button"
+                                                       value="Submit">
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
-
-</div>
-
-<script>
-    $('#exampleModal').on('shown.bs.modal', function () {
-        $('#myInput').trigger('focus')
-    })
-
-    function disableButtonWithTimer() {
-        displayOtp();
-        var button = document.getElementById("send-timer-btn");
-
-        var originalText = button.innerHTML;
-
-        var countdown = 30; // Countdown time in seconds
-
-        button.disabled = true;
-
-        var countdownInterval = setInterval(function () {
-            countdown--;
-            if (countdown <= 0) {
-                button.innerHTML = "Resend";
-                button.disabled = false;
-                clearInterval(countdownInterval);
-            } else {
-                button.innerHTML = ' ' + countdown + 's';
-            }
-        }, 1000); // Update every 1 second (1000 milliseconds)
-    }
-
-    // document.getElementById("timer").addEventListener("click", disableButtonWithTimer);
-
-    function displayText() {
-        var text = document.getElementById("NewPassword-Form");
-        text.style.display = "block";
-    }
-
-
-    function displayOtp() {
-        var text = document.getElementById("verify-OTP-btn");
-        var btnBlock = document.getElementById("button-hide")
-        btnBlock.style.display = "block";
-        text.style.display = "block";
-    }
-
-    // Confirm Password Validation
-
-    $(document).ready(function () {
-        $("#confirmPassword").keyup(function () {
-            var pwd = $("#password").val();
-            var cpwd = $("#confirmPassword").val();
-            var errorElement = $("#showErrorcpwd");
-
-            if (cpwd !== pwd) {
-                errorElement.html("Passwords do not match");
-                errorElement.css("color", "red");
-                return false;
-            } else {
-                errorElement.html("");
-                return true;
-            }
-        });
-    });
-
-
-
-
-
-</script>
-
-
-
-
-
-
-
-
-
-
+</section>
 
 
 

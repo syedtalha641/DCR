@@ -25,6 +25,7 @@ namespace DAL.EntityModels
         public virtual DbSet<Imei> Imeis { get; set; } = null!;
         public virtual DbSet<InboundOrder> InboundOrders { get; set; } = null!;
         public virtual DbSet<Inventory> Inventories { get; set; } = null!;
+        public virtual DbSet<MenuList> MenuLists { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<Payment> Payments { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
@@ -50,7 +51,8 @@ namespace DAL.EntityModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=DESKTOP-SAKREN7;Database=EMS_ITC;Trusted_Connection=True;");
             }
         }
 
@@ -452,6 +454,51 @@ namespace DAL.EntityModels
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Inventory_Product");
+            });
+
+            modelBuilder.Entity<MenuList>(entity =>
+            {
+                entity.ToTable("Menu_List");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(50)
+                    .HasColumnName("Created_by");
+
+                entity.Property(e => e.CreatedOn)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Created_on")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Description)
+                    .HasMaxLength(50)
+                    .HasColumnName("description");
+
+                entity.Property(e => e.HasChildren).HasColumnName("has_children");
+
+                entity.Property(e => e.IconClass).HasColumnName("icon_class");
+
+                entity.Property(e => e.IsActive).HasColumnName("is_active");
+
+                entity.Property(e => e.NavigationUrl).HasColumnName("navigation_url");
+
+                entity.Property(e => e.ParentId).HasColumnName("parent_id");
+
+                entity.Property(e => e.SortOrder).HasColumnName("sort_order");
+
+                entity.Property(e => e.Title)
+                    .HasMaxLength(50)
+                    .HasColumnName("title");
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(50)
+                    .HasColumnName("Updated_by");
+
+                entity.Property(e => e.UpdatedOn)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Updated_on")
+                    .HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<Order>(entity =>

@@ -8,6 +8,8 @@ namespace DCR.ViewModel.ViewModel
 {
     public class SaleOrderLineViewModel
     {
+        public int? SalesOrderId { get; set; }
+        public int? ProductId { get; set; }
         public int? Quantity { get; set; }
         public string? Description { get; set; }
         public double? UnitPrice { get; set; }

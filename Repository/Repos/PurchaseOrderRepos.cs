@@ -87,12 +87,12 @@ namespace Repository.Repos
 
         public async Task<PurchaseOrder> GetPurchaseOrder(int PurchaseId)
         {
-            return await _context.PurchaseOrders.FirstOrDefaultAsync(a => a.PurchaseId == PurchaseId);
+            return await _context.PurchaseOrders.FirstOrDefaultAsync(a => a.PurchaseId == PurchaseId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<PurchaseOrder>> GetPurchaseOrders()
         {
-            return await _context.PurchaseOrders.ToListAsync();
+            return await _context.PurchaseOrders.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<PurchaseOrderViewModel> UpdatePurchaseOrder(int PurchaseId, PurchaseOrderViewModel model)

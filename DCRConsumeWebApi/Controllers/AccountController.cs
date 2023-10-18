@@ -116,8 +116,6 @@ namespace DCRConsumeWebApi.Controllers
         {
             try
             {
-
-
                 string data = JsonConvert.SerializeObject(combinedModel.LoginViewModel.UserLoginId);
                 StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/GetUserEmail", content);
@@ -126,8 +124,6 @@ namespace DCRConsumeWebApi.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
-
-
 
 
                     if (!string.IsNullOrEmpty(jsonResponse))
@@ -155,7 +151,7 @@ namespace DCRConsumeWebApi.Controllers
                         {
                             await smtp.SendMailAsync(mailMessage);
                             // Success Toast
-                            _toastNotification.AddSuccessToastMessage("OTP Send Successfully");
+                            _toastNotification.AddSuccessToastMessage("OTP Send Successfully To Your Email");
                         }
                         catch (Exception ex)
                         {

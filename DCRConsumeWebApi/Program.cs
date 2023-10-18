@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using NToastNotify;
 using System.Text;
@@ -16,6 +15,8 @@ builder.Services.AddRazorPages().AddNToastNotifyNoty(new NotyOptions
     ProgressBar = true,
     Timeout = 5000
 });
+
+
 
 // Add JWT authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -60,7 +61,7 @@ app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseNToastNotify();
 app.UseRouting();
 
 app.UseAuthorization();

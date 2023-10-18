@@ -63,7 +63,7 @@ namespace Repository.Repos
 
         public async Task<User> GetUser(string UserLoginId)
         {
-            return await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId);
+            return await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId && a.IsActive == true);
         }
 
         public async Task<string> GetUserEmail(string UserLoginId)

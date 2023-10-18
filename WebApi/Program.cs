@@ -25,6 +25,9 @@ builder.Services.AddScoped<IContactPersonRepos,ContactPersonRepos>();
 builder.Services.AddScoped<IIMEIRepos,IMEIRepos>();
 builder.Services.AddScoped<ISaleOrderRepos,SaleOrderRepos>();
 builder.Services.AddScoped<IPurchaseOrderRepos,PurchaseOrderRepos>();
+builder.Services.AddScoped<IMenuListRepos,MenuListRepos>();
+builder.Services.AddScoped<ISaleOrderLineRepos,SaleOrderLineRepos>();
+builder.Services.AddScoped<IUserProfileRepos,UserProfileRepos>();
 var app = builder.Build();
 
 

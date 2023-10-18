@@ -68,12 +68,12 @@ namespace Repository.Repos
         }
         public async Task<IEnumerable<Customer>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            return await _context.Customers.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<Customer> GetCustomer(int CustomerId)
         {
-            return await _context.Customers.FirstOrDefaultAsync(a => a.CustomerId == CustomerId);
+            return await _context.Customers.FirstOrDefaultAsync(a => a.CustomerId == CustomerId && a.IsActive == true);
         }
 
         public async Task<CustomerViewModel> UpdateCustomer(int CustomerId, CustomerViewModel model)

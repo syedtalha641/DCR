@@ -53,7 +53,7 @@ namespace Repository.Repos
                             DeviceType = model.DeviceType,
                             ActivationDate = model.ActivationDate,
                             CreatedBy = "Admin",
-                            Product = product
+                           
                         };
 
                         _context.Imeis.Add(newIMEI);
@@ -84,12 +84,12 @@ namespace Repository.Repos
 
         public async Task<Imei> GetIMEI(int IMEIId)
         {
-            return await _context.Imeis.FirstOrDefaultAsync(a => a.ImeiId == IMEIId);
+            return await _context.Imeis.FirstOrDefaultAsync(a => a.ImeiId == IMEIId && a.IsActive == true);
         }
 
         public async Task<IEnumerable<Imei>> GetIMEIs()
         {
-            return await _context.Imeis.ToListAsync();
+            return await _context.Imeis.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<IMEIViewModel> UpdateIMEI(int IMEIId, IMEIViewModel model)
