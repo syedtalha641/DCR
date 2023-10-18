@@ -8,6 +8,7 @@ namespace Repository.Repos
     public class AccountRepos : IAccountRepos
     {
         private readonly EMS_ITCContext _context;
+        //private readonly EMS_ITCContext _context;
 
         private readonly IConfiguration _configuration;
 
