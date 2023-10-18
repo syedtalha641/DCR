@@ -69,7 +69,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<Branch>> GetBranches()
         {
-            return await _context.Branches.ToListAsync();
+            return await _context.Branches.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<BranchViewModel> UpdateBranch(int BranchId, BranchViewModel model)

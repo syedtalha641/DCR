@@ -71,7 +71,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<Role>> GetRoles()
         {
-            return await _context.Roles.ToListAsync();
+            return await _context.Roles.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<RoleViewModel> UpdateRole(int RoleId, RoleViewModel model)

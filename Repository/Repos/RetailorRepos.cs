@@ -44,22 +44,7 @@ namespace Repository.Repos
                 _context.Retailers.Add(newRetailer);
                 await _context.SaveChangesAsync();
 
-
-                var retailerViewModel = new RetailerViewModel
-                {
-                     RetailerName = newRetailer.RetailerName,
-                    RetailerAddress = newRetailer.Address,
-                    RetailerPhone = newRetailer.PhoneNumber,
-                    RetailerCountry = newRetailer.Address,
-                    RetailerCity = newRetailer.City,
-                    RetailerState = newRetailer.State,
-                    RetailerSaleRegion = newRetailer.SalesRegion,
-                    PostalCode = newRetailer.PostalCode,
-                };
-
-
-
-                return retailerViewModel;
+                return model;
             }
             catch (Exception)
             {
@@ -87,7 +72,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<Retailer>> GetRetailers()
         {
-            return await _context.Retailers.ToListAsync();
+            return await _context.Retailers.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<RetailerViewModel> UpdateRetailer(int RetailerId, RetailerViewModel model)

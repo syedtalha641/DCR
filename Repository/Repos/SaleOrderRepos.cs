@@ -102,7 +102,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<SalesOrder>> GetSaleOrders()
         {
-            return await _context.SalesOrders.ToListAsync();
+            return await _context.SalesOrders.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<SaleOrderViewModel> UpdateSaleOrder(int SaleOrderId, SaleOrderViewModel model)

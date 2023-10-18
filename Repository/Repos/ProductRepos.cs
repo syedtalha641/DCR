@@ -91,7 +91,7 @@ namespace Repository.Repos
 
     public async Task<IEnumerable<Product>> GetProducts()
     {
-            return await _context.Products.ToListAsync();
+            return await _context.Products.Where(x => x.IsActive == true).ToListAsync();
         }
 
     public async Task<ProductViewModel> UpdateProduct(int ProductId, ProductViewModel model)

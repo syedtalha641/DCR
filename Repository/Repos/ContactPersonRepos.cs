@@ -110,7 +110,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<ContactPerson>> GetPersons()
         {
-            return await _context.ContactPeople.ToListAsync();
+            return await _context.ContactPeople.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<ContactPersonViewModel> UpdatePerson(int ContactPersonId, ContactPersonViewModel model)

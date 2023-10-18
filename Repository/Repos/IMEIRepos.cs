@@ -3,11 +3,7 @@ using DCR.Helper.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -53,57 +49,17 @@ namespace Repository.Repos
                             DeviceType = model.DeviceType,
                             ActivationDate = model.ActivationDate,
                             CreatedBy = "Admin",
-                            Product = product
                         };
 
                         _context.Imeis.Add(newIMEI);
                         await _context.SaveChangesAsync();
-
-
                     }
                 }
-<<<<<<< HEAD
 
-                // Create a new User entity
-                var newIMEI = new Imei
-                {
-                    ImeiNumber = model.IMEIONE,
-                    ImeiNumber2 = model.IMEITWO,
-                    ImeiStatus = model.IMEIStatus,
-                    DeviceType = model.DeviceType,
-                    ActivationDate = model.ActivationDate,
-                    CreatedBy = "Admin",
-                    Product = product
-                };
-
-                _context.Imeis.Add(newIMEI);
-                await _context.SaveChangesAsync();
-
-
-
-                var distributorIMEI = new DistributorImei
-                {
-                    ImeiId = newIMEI.ImeiId, 
-                };
-
-                _context.DistributorImeis.Add(distributorIMEI);
-                await _context.SaveChangesAsync();
-
-                var imeiViewModel = new IMEIViewModel
-                {
-                    IMEIONE = newIMEI.ImeiNumber,
-                    IMEITWO = newIMEI.ImeiNumber2,
-                    IMEIStatus = newIMEI.ImeiStatus,
-                    DeviceType = newIMEI.DeviceType,
-                    ActivationDate = newIMEI.ActivationDate.Value,
-                    ProductId = model.ProductId,
-
-                };
-
-                return imeiViewModel;
-=======
+             
                 return model;
->>>>>>> 07e0e049c3a37cfc7e4cf3e57e3b521ec847b56c
+
+
             }
             catch (Exception)
             {
@@ -130,7 +86,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<Imei>> GetIMEIs()
         {
-            return await _context.Imeis.ToListAsync();
+            return await _context.Imeis.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<IMEIViewModel> UpdateIMEI(int IMEIId, IMEIViewModel model)

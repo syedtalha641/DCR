@@ -27,7 +27,7 @@ namespace Repository
             {
                 if (model.Branchid != null)
                 {
-                    var branch = await _context.Branches.FirstOrDefaultAsync(b => b.BranchId == model.Branchid);
+                    var branch = await _context.Branches.FirstOrDefaultAsync(b => b.BranchId == model.Branchid && b.IsActive == true);
                     // Create a corresponding warehouse record
 
                     var warehouse = new Warehouse
@@ -51,7 +51,6 @@ namespace Repository
                         await _context.SaveChangesAsync();
                     }
                 }
-                    // Convert the Customer entity to CustomerViewModel
                  
                     return model;
 
@@ -83,7 +82,7 @@ namespace Repository
 
         public async Task<IEnumerable<Warehouse>> GetWarehouses()
         {
-            return await _context.Warehouses.ToListAsync();
+            return await _context.Warehouses.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<WarehouseViewModel> UpdateWarehouse(int WarehouseId, WarehouseViewModel model)

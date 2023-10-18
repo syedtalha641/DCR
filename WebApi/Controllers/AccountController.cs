@@ -168,11 +168,8 @@ namespace WebApi.Controllers
 
 
 
-<<<<<<< HEAD
         [HttpPost]
-=======
-        [HttpPost("")]
->>>>>>> 07e0e049c3a37cfc7e4cf3e57e3b521ec847b56c
+
         public async Task<ActionResult<User>> DeleteUser([FromBody] string UserLoginId)
         {
             try

@@ -59,7 +59,6 @@ namespace Repository.Repos
                             Total = model.Total,
                             CreatedBy = "Admin"
                         };
-
                         _context.PurchaseOrders.Add(newPurchaseOrder);
                         await _context.SaveChangesAsync();
                     }
@@ -92,7 +91,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<PurchaseOrder>> GetPurchaseOrders()
         {
-            return await _context.PurchaseOrders.ToListAsync();
+            return await _context.PurchaseOrders.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<PurchaseOrderViewModel> UpdatePurchaseOrder(int PurchaseId, PurchaseOrderViewModel model)

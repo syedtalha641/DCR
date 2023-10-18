@@ -1,14 +1,14 @@
 using DAL.EntityModels;
 using Microsoft.EntityFrameworkCore;
-
 using Repository;
-
 using Repository.IRepos;
 using Repository.Repos;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -22,6 +22,7 @@ builder.Services.AddDbContext<EMS_ITCContext>(item => item.UseSqlServer(config.G
 builder.Services.AddScoped<IAccountRepos,AccountRepos>();
 builder.Services.AddScoped<IDistributorRepos, DistributorRepos>();
 builder.Services.AddScoped<IProductRepos, ProductRepos>();
+builder.Services.AddScoped<IPaymentRepos, PaymentRepos>();
 builder.Services.AddScoped<IWarehouseRepos,WarehouseRepos>();
 builder.Services.AddScoped<ICustomerRepos, CustomerRepos>();
 builder.Services.AddScoped<IBranchrepos, BranchRepos>();
@@ -33,6 +34,11 @@ builder.Services.AddScoped<IContactPersonRepos,ContactPersonRepos>();
 builder.Services.AddScoped<IIMEIRepos,IMEIRepos>();
 builder.Services.AddScoped<ISaleOrderRepos,SaleOrderRepos>();
 builder.Services.AddScoped<IPurchaseOrderRepos,PurchaseOrderRepos>();
+builder.Services.AddScoped<IReceiveRepos, ReceiveRepos>();
+builder.Services.AddScoped<ISalesOrderDetail, SalesOrderDetailRepos>();
+builder.Services.AddScoped<IPurchaseOrderline, PurchaseOrderLineRepos>();
+builder.Services.AddScoped<IPurchaseOrderDetailRepos, PurchaseOrderDetailRepos>();
+
 
 var app = builder.Build();
 
@@ -50,6 +56,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 
 app.MapControllers();
 

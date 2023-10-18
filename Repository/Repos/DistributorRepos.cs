@@ -78,7 +78,7 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<Distributor>> GetDistributors()
         {
-            return await _context.Distributors.ToListAsync();
+            return await _context.Distributors.Where(x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<DistributorViewModel> UpdateDistributor(int DistributorId, DistributorViewModel model)
@@ -107,7 +107,7 @@ namespace Repository.Repos
             }
             else
             {
-                // User not found
+                //  not found
                 return null;
             }
         }
