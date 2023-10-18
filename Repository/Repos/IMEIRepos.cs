@@ -3,11 +3,7 @@ using DCR.Helper.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -53,16 +49,17 @@ namespace Repository.Repos
                             DeviceType = model.DeviceType,
                             ActivationDate = model.ActivationDate,
                             CreatedBy = "Admin",
-                           
                         };
 
                         _context.Imeis.Add(newIMEI);
                         await _context.SaveChangesAsync();
-
-
                     }
                 }
+
+             
                 return model;
+
+
             }
             catch (Exception)
             {
@@ -84,7 +81,7 @@ namespace Repository.Repos
 
         public async Task<Imei> GetIMEI(int IMEIId)
         {
-            return await _context.Imeis.FirstOrDefaultAsync(a => a.ImeiId == IMEIId && a.IsActive == true);
+            return await _context.Imeis.FirstOrDefaultAsync(a => a.ImeiId == IMEIId);
         }
 
         public async Task<IEnumerable<Imei>> GetIMEIs()

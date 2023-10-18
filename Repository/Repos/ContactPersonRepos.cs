@@ -45,7 +45,44 @@ namespace Repository.Repos
                 _context.ContactPeople.Add(newPerson);
                 await _context.SaveChangesAsync();
 
-                return model;
+
+
+            
+
+
+                var personid = new Vendor
+                {
+                    ContactPersonId = newPerson.ContactPersonId,
+                };
+
+                _context.Vendors.Add(personid);
+                await _context.SaveChangesAsync();
+
+
+                var persondistributorid = new Distributor
+                {
+                    ContactPersonId = newPerson.ContactPersonId,
+                };
+
+                _context.Distributors.Add(persondistributorid);
+                await _context.SaveChangesAsync();
+
+
+
+
+
+
+                var contactPersonViewModel = new ContactPersonViewModel
+                {
+                    FirstName = newPerson.FirstName,
+                    LastName = newPerson.LastName,
+                    Title = newPerson.Title,
+                    Contact = newPerson.Contact,
+                };
+
+
+
+                return contactPersonViewModel;
             }
             catch (Exception)
             {
@@ -68,7 +105,7 @@ namespace Repository.Repos
 
         public async Task<ContactPerson> GetPerson(int ContactPersonId)
         {
-            return await _context.ContactPeople.FirstOrDefaultAsync(a => a.ContactPersonId == ContactPersonId && a.IsActive == true);
+            return await _context.ContactPeople.FirstOrDefaultAsync(a => a.ContactPersonId == ContactPersonId);
         }
 
         public async Task<IEnumerable<ContactPerson>> GetPersons()

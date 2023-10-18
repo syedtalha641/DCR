@@ -30,7 +30,7 @@ namespace Repository.Repos
             try
             {
 
-                if (model.ContactPersonId != null)
+                if (model.ContactPersonId!= null)
                 {
                     var result = await _context.ContactPeople.FirstOrDefaultAsync(b => b.ContactPersonId == model.ContactPersonId && b.IsActive == true);
                     // Create a corresponding warehouse record
@@ -92,7 +92,7 @@ namespace Repository.Repos
 
         public async Task<Vendor> GetVendor(int VendorId)
         {
-            return await _context.Vendors.FirstOrDefaultAsync(a => a.VendorId == VendorId && a.IsActive == true);
+            return await _context.Vendors.FirstOrDefaultAsync(a => a.VendorId == VendorId);
         }
 
         public async Task<IEnumerable<Vendor>> GetVendors()

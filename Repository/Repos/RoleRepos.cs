@@ -66,7 +66,7 @@ namespace Repository.Repos
 
         public async Task<Role> GetRole(int RoleId)
         {
-            return await _context.Roles.FirstOrDefaultAsync(a => a.RoleId == RoleId && a.IsActive == true);
+            return await _context.Roles.FirstOrDefaultAsync(a => a.RoleId == RoleId);
         }
 
         public async Task<IEnumerable<Role>> GetRoles()

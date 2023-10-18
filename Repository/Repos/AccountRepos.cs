@@ -58,12 +58,12 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Where( x => x.IsActive == true).ToListAsync();
         }
 
         public async Task<User> GetUser(string UserLoginId)
         {
-            return await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId && a.IsActive == true);
+            return await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId);
         }
 
         public async Task<string> GetUserEmail(string UserLoginId)

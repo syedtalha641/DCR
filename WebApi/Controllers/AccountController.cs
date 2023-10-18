@@ -50,7 +50,7 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpPost("{UserLoginId}")]
+        [HttpPost]
         public async Task<ActionResult<User>> GetUser(string UserLoginId)
         {
             try
@@ -72,7 +72,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<ActionResult<string>> GetUserEmail([FromBody] string UserLoginId)
         {
             try
@@ -145,7 +145,7 @@ namespace WebApi.Controllers
 
 
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<ActionResult<string>> UpdateUserPassword([FromBody] PasswordUpdateViewModel updateViewModel)
         {
             if (updateViewModel == null || string.IsNullOrWhiteSpace(updateViewModel.UserLoginId) || string.IsNullOrWhiteSpace(updateViewModel.UserPassword))
@@ -168,7 +168,8 @@ namespace WebApi.Controllers
 
 
 
-        [HttpPost("")]
+        [HttpPost]
+
         public async Task<ActionResult<User>> DeleteUser([FromBody] string UserLoginId)
         {
             try

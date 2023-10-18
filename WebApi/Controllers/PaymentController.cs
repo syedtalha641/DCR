@@ -1,6 +1,5 @@
 ﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+using DCR.ViewModel.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
 
@@ -8,27 +7,22 @@ namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class PaymentController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
+        private readonly IPaymentRepos _paymentRepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        public PaymentController(IPaymentRepos paymentRepos)
         {
-            _customerRepos = customerRepos;
+            _paymentRepos = paymentRepos;
         }
 
-
-
-
-
-
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetPayments()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _paymentRepos.GetPayments());
             }
             catch (Exception)
             {
@@ -39,14 +33,12 @@ namespace DCRWebApi.Controllers
 
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<Payment>> GetPayment(int PaymentId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _paymentRepos.GetPayment(PaymentId);
                 if (result == null)
                 {
                     return NotFound();
@@ -65,7 +57,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Payment>> CreateInventory([FromBody] PaymentViewModel model)
         {
             try
             {
@@ -74,8 +66,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _paymentRepos.AddPayment(model);
+                return CreatedAtAction(nameof(GetPayment), new { id = CreatedUser.DistributorId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -87,7 +79,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<Payment>> UpdatePayment(int PaymentId, [FromBody] PaymentViewModel model)
         {
             try
             {
@@ -97,15 +89,15 @@ namespace DCRWebApi.Controllers
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
-                if (updatedCustomer != null)
+                var updatedPayment = await _paymentRepos.UpdatePayment(PaymentId, model);
+
+                if (updatedPayment != null)
                 {
-                    return Ok(updatedCustomer); // Return 200 OK with the updated customer
+                    return Ok(updatedPayment); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound("Customer not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("!Not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -114,19 +106,17 @@ namespace DCRWebApi.Controllers
             }
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<Payment>> DeletePayment([FromBody] int PaymentId)
         {
             try
             {
-                if (CustomerId == null)
+                if (PaymentId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _paymentRepos.DeletePayment(PaymentId);
+                return CreatedAtAction(nameof(GetPayment), new { id = CreatedUser.DistributorId }, CreatedUser);
             }
             catch (Exception)
             {

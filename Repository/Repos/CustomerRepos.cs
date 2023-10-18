@@ -4,6 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repository.IRepos;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+
+
 
 namespace Repository.Repos
 {
@@ -73,7 +82,7 @@ namespace Repository.Repos
 
         public async Task<Customer> GetCustomer(int CustomerId)
         {
-            return await _context.Customers.FirstOrDefaultAsync(a => a.CustomerId == CustomerId && a.IsActive == true);
+            return await _context.Customers.FirstOrDefaultAsync(a => a.CustomerId == CustomerId);
         }
 
         public async Task<CustomerViewModel> UpdateCustomer(int CustomerId, CustomerViewModel model)

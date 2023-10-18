@@ -1,34 +1,30 @@
 ﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+using DCR.ViewModel.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
+using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class PurchaseOrderDetailController : ControllerBase
     {
-        private readonly ICustomerRepos _customerRepos;
+        private readonly IPurchaseOrderDetailRepos _purchaseOrderDetailRepos;
 
-        public CustomerController(ICustomerRepos customerRepos)
+        public PurchaseOrderDetailController(IPurchaseOrderDetailRepos purchaseOrderDetailRepos)
         {
-            _customerRepos = customerRepos;
+            _purchaseOrderDetailRepos = purchaseOrderDetailRepos;
         }
 
-
-
-
-
-
         [HttpPost]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetPurchaseOrderDetails()
         {
 
             try
             {
-                return Ok(await _customerRepos.GetCustomers());
+                return Ok(await _purchaseOrderDetailRepos.GetPurchaseOrderDetails());
             }
             catch (Exception)
             {
@@ -39,14 +35,12 @@ namespace DCRWebApi.Controllers
 
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<PurchaseOrderDetail>> GetPurchaseOrderDetail(int PurchaseOrderDetailId)
         {
             try
             {
-                var result = await _customerRepos.GetCustomer(CustomerId);
+                var result = await _purchaseOrderDetailRepos.GetPurchaseOrderDetail(PurchaseOrderDetailId);
                 if (result == null)
                 {
                     return NotFound();
@@ -62,10 +56,8 @@ namespace DCRWebApi.Controllers
 
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<PurchaseOrderDetail>> CreatePurchaseOrderDetail([FromBody] PurchaseOrderDetailViewModel model)
         {
             try
             {
@@ -74,8 +66,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.AddCustomer(model);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerName }, CreatedUser);
+                var CreatedUser = await _purchaseOrderDetailRepos.AddPurchaseOrderDetail(model);
+                return CreatedAtAction(nameof(GetPurchaseOrderDetail), new { id = CreatedUser.ProductId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -87,7 +79,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<PurchaseOrderDetail>> UpdatePurchaseOrderDetail(int PurchaseOrderDetailId, [FromBody] PurchaseOrderDetailViewModel model)
         {
             try
             {
@@ -97,15 +89,15 @@ namespace DCRWebApi.Controllers
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedCustomer = await _customerRepos.UpdateCustomer(CustomerId, model);
-                
-                if (updatedCustomer != null)
+                var updatedPurchaseOrderDetail = await _purchaseOrderDetailRepos.UpdatePurchaseOrderDetail(PurchaseOrderDetailId, model);
+
+                if (updatedPurchaseOrderDetail != null)
                 {
-                    return Ok(updatedCustomer); // Return 200 OK with the updated customer
+                    return Ok(updatedPurchaseOrderDetail); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound("Customer not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("!Not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -114,19 +106,17 @@ namespace DCRWebApi.Controllers
             }
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<PurchaseOrderDetail>> DeletePayment([FromBody] int PurchaseOrderDetailId)
         {
             try
             {
-                if (CustomerId == null)
+                if (PurchaseOrderDetailId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedUser = await _purchaseOrderDetailRepos.DeletePurchaseOrderDetail(PurchaseOrderDetailId);
+                return CreatedAtAction(nameof(GetPurchaseOrderDetail), new { id = CreatedUser.ProductId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -134,6 +124,5 @@ namespace DCRWebApi.Controllers
                "Error in Creating!");
             }
         }
-
     }
 }
