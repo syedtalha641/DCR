@@ -19,8 +19,8 @@
                         <hr class="my-4">
                         <form asp-action="Login" method="post">
                             <div class="form-outline mb-4">
-                                <label class="float-start">Username</label>
-                                <input asp-for="LoginViewModel.UserLoginId" value="PK01" type="text" class="form-control" placeholder="username">
+                                <label class="float-start">LoginId</label>
+                                <input asp-for="LoginViewModel.UserLoginId" value="PK01" type="text" class="form-control" placeholder="PK1234">
                             </div>
 
                             <div class="form-outline mb-4">
@@ -75,9 +75,9 @@
                                         <div class="modal-body">
                                             <form asp-action="SendOTP" method="post">
                                                 <div class="input-group mb-3">
-                                                    <span class="input-group-text col-md-4">Username</span>
+                                                    <span class="input-group-text col-md-4">LoginId</span>
                                                     <input asp-for="LoginViewModel.UserLoginId" type="text" class="form-control" id="inputLogin"
-                                                           placeholder="username" required>
+                                                           placeholder="PK1234" required>
                                                     <button type="submit" class="btn btn-dark"
                                                             id="sendBtn">
                                                         Send
@@ -91,7 +91,7 @@
                                                         Code
                                                     </span>
                                                     <input asp-for="OTPViewModel.OTP" type="text" class="form-control"
-                                                           placeholder="7654321">
+                                                           placeholder="14321">
                                                     <button type="button" id="verifyBtn"
                                                             class="btn btn-dark">
                                                         Verify

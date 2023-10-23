@@ -43,6 +43,7 @@ namespace Repository.Repos
                         // Create a new User entity
                         var newIMEI = new Imei
                         {
+                            ProductId= model.ProductId,
                             ImeiNumber = model.ImeiNumber,
                             ImeiNumber2 = model.ImeiNumber2,
                             ImeiStatus = model.ImeiStatus,

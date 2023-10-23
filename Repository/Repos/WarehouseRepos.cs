@@ -25,9 +25,9 @@ namespace Repository
         {
             try
             {
-                if (model.Branchid != null)
+                if (model.BranchId != null)
                 {
-                    var branch = await _context.Branches.FirstOrDefaultAsync(b => b.BranchId == model.Branchid && b.IsActive == true);
+                    var branch = await _context.Branches.FirstOrDefaultAsync(b => b.BranchId == model.BranchId && b.IsActive == true);
                     // Create a corresponding warehouse record
 
                     var warehouse = new Warehouse
@@ -35,15 +35,15 @@ namespace Repository
                         BranchId = branch.BranchId,
                         // Map other properties as needed
                     };
-                    if (model.Branchid == warehouse.BranchId)
+                    if (model.BranchId == warehouse.BranchId)
                     {
                         // Create a new User entity
                         var NewWarehouse = new Warehouse
                         {
+                            BranchId = model.BranchId,
                             WarehouseName = model.Name,
                             WarehouseDescription = model.Description,
                             WarehouseType = model.Type,
-                            BranchId = model.Branchid,
                             CreatedBy = "Admin"
                         };
 
