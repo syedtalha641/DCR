@@ -33,6 +33,7 @@ namespace Repository.Repos
 
                         var newPurchaseOrderDetail = new PurchaseOrderDetail
                         {
+                            ProductId = model.ProductId,
                             Quantity = model.Quantity,
                             UnitPrice = model.UnitPrice,
                              Total = model.Total,

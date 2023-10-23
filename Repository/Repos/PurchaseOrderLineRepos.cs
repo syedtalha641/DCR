@@ -12,7 +12,7 @@ namespace Repository.Repos
 
         public PurchaseOrderLineRepos(EMS_ITCContext context)
         {
-          _context = context;
+            _context = context;
         }
         public async Task<PurchaseOrderLineViewModel> AddPurchaseOrderLine(PurchaseOrderLineViewModel model)
         {
@@ -36,6 +36,7 @@ namespace Repository.Repos
 
                         var newPurchaseOrderLine = new PurchaseOrderLine
                         {
+                            PurchaseId = model.PurchaseId,
                             OrderLineDescription = model.OrderLineDescription,
                             OrderLineQuantity = model.OrderLineQuantity,
                             OrderLineUnitPrice = model.OrderLineUnitPrice,

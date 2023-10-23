@@ -38,6 +38,7 @@ namespace Repository.Repos
                         // Create a new User entity
                         var NewDistributor = new Distributor
                         {
+                            ContactPersonId = model.ContactpersonId,
                             DistributorName = model.DistributorName,
                             DistributorType = model.DistributorType,
                             DistributorEmail = model.DistributorEmail,

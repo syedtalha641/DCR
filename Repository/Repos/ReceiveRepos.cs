@@ -39,6 +39,7 @@ namespace Repository.Repos
                         // Create a new User entity
                         var NewReceive = new Receive
                         {
+                            DistributorId=model.DistributorId,
                            ReceiveDate = model.ReceiveDate,
                           ReceiptNumber  = model.ReceiptNumber,
                             Status = model.Status,

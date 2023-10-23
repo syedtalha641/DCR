@@ -39,6 +39,7 @@ namespace Repository.Repos
                         // Create a new User entity
                         var NewInventory = new Inventory
                         {
+                            ProductId = product.ProductId,
                             TotalInventory = model.TotalInventory,
                             ActiveInventory = model.ActiveInventory,
                             InActiveInventory = model.InActiveInventory,
@@ -75,10 +76,10 @@ namespace Repository.Repos
 
         public async Task<IEnumerable<Inventory>> GetInventories()
         {
-        return await _context.Inventories.Where(x => x.IsActive == true).ToListAsync();
-    }
+            return await _context.Inventories.Where(x => x.IsActive == true).ToListAsync();
+        }
 
-        public async  Task<Inventory> GetInventory(int InventoryId)
+        public async Task<Inventory> GetInventory(int InventoryId)
         {
             return await _context.Inventories.FirstOrDefaultAsync(a => a.InventoryId == InventoryId && a.IsActive == true);
         }
