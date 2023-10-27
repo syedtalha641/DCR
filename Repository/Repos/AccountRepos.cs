@@ -9,18 +9,12 @@ namespace Repository.Repos
     {
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
-
-
-        public AccountRepos(EMS_ITCContext context, IConfiguration configuration)
+        public AccountRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
-
         }
 
-
-        public async Task<User> AddUser(string UserLoginId, string UserName, string UserEmail, string UserPassword)
+        public async Task<User> AddUser(string UserLoginId, string UserName, string UserEmail, string UserPassword, string ConfirmPassword)
         {
             try
             {
@@ -32,22 +26,27 @@ namespace Repository.Repos
                     UserEmail = UserEmail
                 };
 
-                string password = UserPassword; // Get the user's input password
-                string salt = BCrypt.Net.BCrypt.GenerateSalt();
-                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
+                if (UserPassword == ConfirmPassword)
+                {
+                    string password = UserPassword; // Get the user's input password
+                    string salt = BCrypt.Net.BCrypt.GenerateSalt();
+                    string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
 
-                newUser.UserPassword = hashedPassword; // Store the hashed password in the user entity
-                newUser.CreatedBy = "Admin";
-                newUser.Salt = salt;
-                newUser.IsActive = true;
+                    newUser.UserPassword = hashedPassword; // Store the hashed password in the user entity
+                    newUser.CreatedBy = "Admin";
+                    newUser.Salt = salt;
+                    newUser.IsActive = true;
 
-                // Add the new user entity to the context and save changes
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
+                    // Add the new user entity to the context and save changes
+                    _context.Users.Add(newUser);
+                    await _context.SaveChangesAsync();
 
-
-
-                return newUser;
+                    return newUser;
+                }
+                else
+                {
+                    return null;
+                }
             }
             catch (Exception)
             {
@@ -75,6 +74,16 @@ namespace Repository.Repos
             }
 
             return result.UserEmail;
+        }
+        public async Task<string> GetUserPhoneNumber(string UserLoginId)
+        {
+            var result = await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId);
+            if (result == null)
+            {
+                return null;
+            }
+
+            return result.UserContact;
         }
 
         public async Task<User> LoginUser(string UserLoginId, string UserPassword)

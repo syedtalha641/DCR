@@ -1,22 +1,15 @@
-﻿using DCRConsumeWebApi.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
-using Microsoft.AspNetCore.Http;
-using System.Text.Json.Serialization;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using DCR.Helper.ViewModel;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Newtonsoft.Json.Linq;
-using System.Reflection.Metadata;
+
 using NToastNotify;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace DCRConsumeWebApi.Controllers
 {
@@ -26,26 +19,30 @@ namespace DCRConsumeWebApi.Controllers
         Uri baseAddress = new Uri("https://localhost:7169/api");
         private readonly HttpClient _httpClient;
         private readonly IToastNotification _toastNotification;
+        private readonly IConfiguration _configuration;
+        private readonly string TwilioAccountSid ;
+        private readonly string TwilioAuthToken;
+        private readonly string TwilioPhoneNumber;
 
-        public AccountController(IToastNotification toastNotification)
+        public AccountController(IToastNotification toastNotification, IConfiguration configuration)
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = baseAddress;
             _toastNotification = toastNotification;
+            _configuration = configuration;
         }
 
         //// Success Toast
         //_toastNotification.AddSuccessToastMessage("Woo hoo - it works!");
 
-         // Info Toast
+        // Info Toast
         //    _toastNotification.AddInfoToastMessage("Here is some information.");
 
-         // Error Toast
+        // Error Toast
         //    _toastNotification.AddErrorToastMessage("Woops an error occured.");
 
-         // Warning Toast
+        // Warning Toast
         //    _toastNotification.AddWarningToastMessage("Here is a simple warning!");
-
 
 
 
@@ -120,14 +117,40 @@ namespace DCRConsumeWebApi.Controllers
                 StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/GetUserEmail", content);
 
-            
-                if (response.IsSuccessStatusCode)
+                string data2 = JsonConvert.SerializeObject(combinedModel.LoginViewModel.UserLoginId);
+                StringContent content2 = new StringContent(data2, Encoding.UTF8, "application/json");
+                HttpResponseMessage response2 = await _httpClient.PostAsync(_httpClient.BaseAddress + "/account/GetUserPhoneNumber", content2);
+
+
+                if (response.IsSuccessStatusCode || response2.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
+                    string jsonResponse2 = await response2.Content.ReadAsStringAsync();
 
-
-                    if (!string.IsNullOrEmpty(jsonResponse))
+                    if (!string.IsNullOrEmpty(jsonResponse) || !string.IsNullOrEmpty(jsonResponse2))
                     {
+                        var Sid = _configuration.GetSection(TwilioAccountSid);
+                        var Token = _configuration.GetSection(TwilioAuthToken);
+                        var Number = _configuration.GetSection(TwilioPhoneNumber);
+
+                        TwilioClient.Init(Sid.Value, Token.Value);
+                        string otp = combinedModel.OTPViewModel.RandomCode;
+
+                        try
+                        {
+                            var message = await MessageResource.CreateAsync(
+                                to: new PhoneNumber(jsonResponse2),
+                                from: new PhoneNumber(Number.Value),
+                                body: $"Your OTP is: {otp}");
+                            // Store OTP in session
+                            HttpContext.Session.SetString("OTP", combinedModel.OTPViewModel.RandomCode);
+                        }
+                        catch (Exception)
+                        {
+                            // Handle exceptions here
+                            return null;
+                        }
+
                         combinedModel.OTPViewModel.To = jsonResponse;
                         combinedModel.OTPViewModel.From = "malikdaniyal681@gmail.com";
                         combinedModel.OTPViewModel.Password = "bzbw ense qpcr ticq";
@@ -145,7 +168,6 @@ namespace DCRConsumeWebApi.Controllers
                         smtp.Port = 587;
                         smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                         smtp.Credentials = new NetworkCredential(combinedModel.OTPViewModel.From, combinedModel.OTPViewModel.Password);
-
 
                         try
                         {
@@ -186,11 +208,6 @@ namespace DCRConsumeWebApi.Controllers
 
             return View("Login");
         }
-
-
-
-
-
 
 
         [HttpPost]
