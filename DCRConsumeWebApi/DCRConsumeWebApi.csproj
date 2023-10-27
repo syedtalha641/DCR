@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\JSON\**" />
+    <Content Remove="wwwroot\JSON\**" />
+    <EmbeddedResource Remove="wwwroot\JSON\**" />
+    <None Remove="wwwroot\JSON\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="wwwroot\js\datatables-simple-demo.js" />
     <None Include="wwwroot\js\scripts.js" />
     <None Include="wwwroot\js\site.js" />
@@ -14,6 +21,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.22" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.23" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.23">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NToastNotify" Version="7.0.0" />

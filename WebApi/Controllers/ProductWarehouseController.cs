@@ -1,5 +1,4 @@
 ﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
 using DCR.ViewModel.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,23 +9,22 @@ namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ReceiveController : ControllerBase
+    public class ProductWarehouseController : ControllerBase
     {
+        private readonly IProductWarehouseRepos _productWarehouseRepos;
 
-        private readonly IReceiveRepos _receiveRepos;
-
-        public ReceiveController(IReceiveRepos receiveRepos)
+        public ProductWarehouseController(IProductWarehouseRepos productWarehouseRepos)
         {
-            _receiveRepos = receiveRepos;
+            _productWarehouseRepos = productWarehouseRepos;
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetReceives()
+        public async Task<ActionResult> GetProductWarehouses()
         {
 
             try
             {
-                return Ok(await _receiveRepos.GetReceives());
+                return Ok(await _productWarehouseRepos.GetProductWarehouses());
             }
             catch (Exception)
             {
@@ -37,12 +35,13 @@ namespace DCRWebApi.Controllers
 
         }
 
+
         [HttpPost]
-        public async Task<ActionResult<Receive>> GetReceive(int ReceiveId)
+        public async Task<ActionResult<ProductWarehouse>> GetProductWarehouse(int ProductWarehouseId)
         {
             try
             {
-                var result = await _receiveRepos.GetReceive(ReceiveId);
+                var result = await _productWarehouseRepos.GetProductWarehouse(ProductWarehouseId);
                 if (result == null)
                 {
                     return NotFound();
@@ -59,9 +58,8 @@ namespace DCRWebApi.Controllers
         }
 
 
-
         [HttpPost]
-        public async Task<ActionResult<Receive>> CreateReceive([FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<ProductWarehouse>> CreateProductWarehouse([FromBody] ProductWarehouseViewModel model)
         {
             try
             {
@@ -70,8 +68,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _receiveRepos.AddReceive(model);
-                return CreatedAtAction(nameof(GetReceive), new { id = CreatedUser.DistributorId }, CreatedUser);
+                var CreatedUser = await _productWarehouseRepos.AddProductWarehouse(model);
+                return CreatedAtAction(nameof(GetProductWarehouse), new { id = CreatedUser.ProductId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -83,25 +81,25 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Receive>> UpdateReceive(int ReceiveId, [FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<ProductWarehouse>> UpdateProductWarehouse(int ProductWarehouseId, [FromBody] ProductWarehouseViewModel model)
         {
             try
             {
                 if (model == null)
                 {
-                    return BadRequest("Invalid data. Please provide valid Recieve data.");
+                    return BadRequest("Invalid data. Please provide valid Product Warehouse data.");
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedReceive = await _receiveRepos.UpdateReceive(ReceiveId, model);
+                var UpdateProductWarehouse = await _productWarehouseRepos.UpdateProductWarehouse(ProductWarehouseId, model);
 
-                if (updatedReceive != null)
+                if (UpdateProductWarehouse != null)
                 {
-                    return Ok(updatedReceive); // Return 200 OK with the updated customer
+                    return Ok(UpdateProductWarehouse); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound(" not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("Product Warehouse not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -113,16 +111,16 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Receive>> DeleteReceive([FromBody] int ReceiveId)
+        public async Task<ActionResult<ProductWarehouse>> DeleteProductWarehouse([FromBody] int ProductWarehouseId)
         {
             try
             {
-                if (ReceiveId == null)
+                if (ProductWarehouseId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _receiveRepos.DeleteReceive(ReceiveId);
-                return CreatedAtAction(nameof(GetReceive), new { id = CreatedUser.ReceiveId }, CreatedUser);
+                var CreatedUser = await _productWarehouseRepos.DeleteProductWarehouse(ProductWarehouseId);
+                return CreatedAtAction(nameof(GetProductWarehouse), new { id = CreatedUser.ProductWarehouseId}, CreatedUser);
             }
             catch (Exception)
             {

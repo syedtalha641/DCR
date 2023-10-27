@@ -1,5 +1,4 @@
 ﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
 using DCR.ViewModel.ViewModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,23 +9,22 @@ namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ReceiveController : ControllerBase
+    public class DistributorIMEIController : ControllerBase
     {
+        private readonly IDistributorIMEIRepos _distributorIMEIRepos ;
 
-        private readonly IReceiveRepos _receiveRepos;
-
-        public ReceiveController(IReceiveRepos receiveRepos)
+        public DistributorIMEIController(IDistributorIMEIRepos distributorIMEIRepos)
         {
-            _receiveRepos = receiveRepos;
+            _distributorIMEIRepos = distributorIMEIRepos ;
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetReceives()
+        public async Task<ActionResult> GetDistributorIMEIS()
         {
 
             try
             {
-                return Ok(await _receiveRepos.GetReceives());
+                return Ok(await _distributorIMEIRepos.GetDistributorImeis());
             }
             catch (Exception)
             {
@@ -37,12 +35,13 @@ namespace DCRWebApi.Controllers
 
         }
 
+
         [HttpPost]
-        public async Task<ActionResult<Receive>> GetReceive(int ReceiveId)
+        public async Task<ActionResult<DistributorImei>> GetDistributorIMEI(int DistributorImeiId)
         {
             try
             {
-                var result = await _receiveRepos.GetReceive(ReceiveId);
+                var result = await _distributorIMEIRepos.GetDistributorImei(DistributorImeiId);
                 if (result == null)
                 {
                     return NotFound();
@@ -59,9 +58,8 @@ namespace DCRWebApi.Controllers
         }
 
 
-
         [HttpPost]
-        public async Task<ActionResult<Receive>> CreateReceive([FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<DistributorImei>> CreateDistributorIMEI([FromBody] DistibutorIMEIViewModel model)
         {
             try
             {
@@ -70,8 +68,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _receiveRepos.AddReceive(model);
-                return CreatedAtAction(nameof(GetReceive), new { id = CreatedUser.DistributorId }, CreatedUser);
+                var CreatedUser = await _distributorIMEIRepos.AddDistributorImei(model);
+                return CreatedAtAction(nameof(GetDistributorIMEI), new { id = CreatedUser.DistributorId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -82,22 +80,23 @@ namespace DCRWebApi.Controllers
         }
 
 
+
         [HttpPost]
-        public async Task<ActionResult<Receive>> UpdateReceive(int ReceiveId, [FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<DistributorImei>> UpdateDistributorIMEI(int DistributorImeiId, [FromBody] DistibutorIMEIViewModel model)
         {
             try
             {
                 if (model == null)
                 {
-                    return BadRequest("Invalid data. Please provide valid Recieve data.");
+                    return BadRequest("Invalid data. Please provide Distributor IMEI data.");
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedReceive = await _receiveRepos.UpdateReceive(ReceiveId, model);
+                var UpdateDistributorIMEI = await _distributorIMEIRepos.UpdateDistributorImei(DistributorImeiId, model);
 
-                if (updatedReceive != null)
+                if (UpdateDistributorIMEI != null)
                 {
-                    return Ok(updatedReceive); // Return 200 OK with the updated customer
+                    return Ok(UpdateDistributorIMEI); // Return 200 OK with the updated customer
                 }
                 else
                 {
@@ -111,18 +110,17 @@ namespace DCRWebApi.Controllers
         }
 
 
-
         [HttpPost]
-        public async Task<ActionResult<Receive>> DeleteReceive([FromBody] int ReceiveId)
+        public async Task<ActionResult<DistributorImei>> DeleteDistributorIMEI([FromBody] int DistributorImeiId)
         {
             try
             {
-                if (ReceiveId == null)
+                if (DistributorImeiId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _receiveRepos.DeleteReceive(ReceiveId);
-                return CreatedAtAction(nameof(GetReceive), new { id = CreatedUser.ReceiveId }, CreatedUser);
+                var CreatedDistributorIMEI = await _distributorIMEIRepos.DeleteDistributorImei(DistributorImeiId);
+                return CreatedAtAction(nameof(GetDistributorIMEI), new { id = CreatedDistributorIMEI.DistributorImeiId }, CreatedDistributorIMEI);
             }
             catch (Exception)
             {

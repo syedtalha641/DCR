@@ -4,6 +4,7 @@ using Repository;
 using Repository.IRepos;
 using Repository.Repos;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -39,6 +40,9 @@ builder.Services.AddScoped<ISalesOrderDetail,SalesOrderDetailRepos>();
 builder.Services.AddScoped<IUserProfileRepos,UserProfileRepos>();
 builder.Services.AddScoped<IVendorRepos,VendorRepos>();
 builder.Services.AddScoped<IWarehouseRepos,WarehouseRepos>();
+builder.Services.AddScoped<IDistributorIMEIRepos,DistributorImeiRepos>();
+builder.Services.AddScoped<IUserRolesRepos,UserRoleRepos>();
+builder.Services.AddScoped<IProductWarehouseRepos,ProductWarehouseRepos>();
 var app = builder.Build();
 
 
