@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using DAL.EntityModels;
 using Microsoft.AspNetCore.Authentication;
 using static System.Net.WebRequestMethods;
@@ -13,11 +12,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using DCR.Helper.ViewModel;
 using Repository.IRepos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+
     public class AccountController : ControllerBase
     {
         private readonly IAccountRepos _accountRepos;
@@ -30,9 +31,6 @@ namespace WebApi.Controllers
             _accountRepos = accountRepos;
             _authenticationService = authenticationService;
         }
-
-
-
 
         [HttpPost]
         public async Task<ActionResult> GetUsers()
@@ -72,7 +70,6 @@ namespace WebApi.Controllers
 
         }
 
-
         [HttpPost]
         public async Task<ActionResult<string>> GetUserEmail([FromBody] string UserLoginId)
         {
@@ -87,10 +84,31 @@ namespace WebApi.Controllers
                             "Error in Retreiving!");
             }
         }
+        [HttpPost]
+        public async Task<ActionResult<string>> GetUserPhoneNumber([FromBody] string UserLoginId)
+        {
+            try
+            {
+                var result = await _accountRepos.GetUserPhoneNumber(UserLoginId);
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound("User not found");
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in Retreiving!");
+            }
+        }
+
 
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateUser(string UserLoginId, string UserName, string UserEmail, string UserPassword)
+        public async Task<ActionResult<string>> CreateUser([FromBody] LoginViewModel model )
         {
             try
             {
@@ -111,7 +129,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPost("")]
+        [HttpPost]
         public async Task<ActionResult<User>> LoginUser([FromBody] PasswordUpdateViewModel model)
         {
 
@@ -165,8 +183,6 @@ namespace WebApi.Controllers
                 return NotFound("User not found.");
             }
         }
-
-
 
 
         [HttpPost]

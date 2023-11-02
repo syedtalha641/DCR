@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/WebApi/appsettings.json
+/WebApi/Program.cs
+/WebApi/DCRWebApi.csproj
+/DAL/EntityModels/EMS_ITCContext.cs
