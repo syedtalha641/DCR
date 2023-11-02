@@ -31,21 +31,32 @@ namespace DCRConsumeWebApi.Controllers
         public async Task<JsonResult> Dashboard(MenuListViewModel model)
         {
             string data = JsonConvert.SerializeObject(model);
-            StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+            //StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/MenuList/GetMenuLists", content);
+            //HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/MenuList/GetMenuLists", content);
 
-        
-                // Handle successful response
-                var responseContent = await response.Content.ReadAsStringAsync();
 
-                // Deserialize the JSON content into a list
-                List<MenuListViewModel> menuItems = JsonConvert.DeserializeObject<List<MenuListViewModel>>(responseContent);
+            // Handle successful response
+            //var responseContent = await response.Content.ReadAsStringAsync();
 
-                return Json(responseContent);
-          
+            // Deserialize the JSON content into a list
+            string responseContent = await consumeapi(data, "/MenuList/GetMenuLists");
+
+            List<MenuListViewModel> menuItems = JsonConvert.DeserializeObject<List<MenuListViewModel>>(responseContent);
+
+            return Json(responseContent);
+
         }
 
+
+        private async Task<string> consumeapi(string body = "", string apiPath = "")
+        {
+            StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + apiPath, content);
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            return responseContent;
+        }
 
 
     }

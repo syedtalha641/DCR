@@ -5,11 +5,11 @@ using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using DCR.Helper.ViewModel;
-
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Newtonsoft.Json.Linq;
+using System.Reflection.Metadata;
 using NToastNotify;
-using Twilio;
-using Twilio.Rest.Api.V2010.Account;
-using Twilio.Types;
 
 namespace DCRConsumeWebApi.Controllers
 {
@@ -57,8 +57,8 @@ namespace DCRConsumeWebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(CombinedViewModel model)
         {
-                try
-                {
+            try
+            {
 
                 // Create an object with user login ID and new password
                 var LoginModel = new PasswordUpdateViewModel
@@ -71,38 +71,117 @@ namespace DCRConsumeWebApi.Controllers
 
 
 
-                    string data = JsonConvert.SerializeObject(LoginModel);
-                    StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                string data = JsonConvert.SerializeObject(LoginModel);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
-                    HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/LoginUser", content);
+                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/LoginUser", content);
 
-                    if (response.IsSuccessStatusCode)
-                     {
-                        
-                          // Redirect to the dashboard
-                        return RedirectToAction("Dashboard", "Home");
-                     }
-                    
-
-                
-                    else if (!response.IsSuccessStatusCode)
-                    {
-                        // Handle specific Bad Request response
-                        string responseContent = await response.Content.ReadAsStringAsync();
-                        TempData["errorMessage"] = responseContent;
-                        return View();
-                    }
-                    
-                }
-                catch (Exception ex)
+                if (response.IsSuccessStatusCode)
                 {
-                    TempData["errorMessage"] = ex.Message;
+                    // Redirect to the dashboard
+                    return RedirectToAction("Dashboard", "Home");
+                }
+
+                else if (!response.IsSuccessStatusCode)
+                {
+                    // Handle specific Bad Request response
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    TempData["errorMessage"] = responseContent;
                     return View();
                 }
-            
+
+            }
+            catch (Exception ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+                return View();
+            }
+
             return View();
 
         }
+
+
+
+        [HttpPost]
+        public async Task<JsonResult> JSONSendOTP(CombinedViewModel combinedModel)
+        {
+            JSONRsponse resp = new JSONRsponse();
+            try
+            {
+                string data = JsonConvert.SerializeObject(combinedModel.LoginViewModel.UserLoginId);
+                StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/GetUserEmail", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+
+                    if (!string.IsNullOrEmpty(jsonResponse))
+                    {
+                        combinedModel.OTPViewModel = new OTPViewModel();
+                        combinedModel.OTPViewModel.To = jsonResponse;
+                        combinedModel.OTPViewModel.From = "malikdaniyal681@gmail.com";
+                        combinedModel.OTPViewModel.Password = "bzbw ense qpcr ticq";
+                        combinedModel.OTPViewModel.RandomCode = (new Random()).Next(999999).ToString();
+                        combinedModel.OTPViewModel.MessageBody = "You Are Hacked Please Stay Clam:" + combinedModel.OTPViewModel.RandomCode;
+
+                        MailMessage mailMessage = new MailMessage();
+                        mailMessage.To.Add(combinedModel.OTPViewModel.To);
+                        mailMessage.From = new MailAddress(combinedModel.OTPViewModel.From);
+                        mailMessage.Body = combinedModel.OTPViewModel.MessageBody;
+                        mailMessage.Subject = "Password Resetting Code";
+
+                        SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+                        smtp.EnableSsl = true;
+                        smtp.Port = 587;
+                        smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                        smtp.Credentials = new NetworkCredential(combinedModel.OTPViewModel.From, combinedModel.OTPViewModel.Password);
+
+                        try
+                        {
+                            await smtp.SendMailAsync(mailMessage);
+                            resp.response = true;
+                            resp.erorMessage = "OTP Sent Successfully";
+
+                            // Store OTP in session
+                            HttpContext.Session.SetString("OTP", combinedModel.OTPViewModel.RandomCode);
+
+                            // Store UserLoginId in session
+                            HttpContext.Session.SetString("UserLoginId", combinedModel.LoginViewModel.UserLoginId);
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception(ex.Message);
+
+                        }
+                    }
+                    else
+                    {
+                        resp.response = false;
+                        resp.erorMessage = "Invalid Login ID";
+
+                    }
+                }
+                else
+                {
+                    resp.hasError = true;
+                    resp.erorMessage = "Please Enter LoginId";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                resp.hasError = true;
+                resp.erorMessage = ex.Message;
+
+            }
+
+
+            return Json(resp);
+        }
+
+
 
 
 
@@ -117,12 +196,8 @@ namespace DCRConsumeWebApi.Controllers
                 StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/GetUserEmail", content);
 
-                string data2 = JsonConvert.SerializeObject(combinedModel.LoginViewModel.UserLoginId);
-                StringContent content2 = new StringContent(data2, Encoding.UTF8, "application/json");
-                HttpResponseMessage response2 = await _httpClient.PostAsync(_httpClient.BaseAddress + "/account/GetUserPhoneNumber", content2);
-
-
-                if (response.IsSuccessStatusCode || response2.IsSuccessStatusCode)
+            
+                if (response.IsSuccessStatusCode)
                 {
                     string jsonResponse = await response.Content.ReadAsStringAsync();
                     string jsonResponse2 = await response2.Content.ReadAsStringAsync();
@@ -227,11 +302,109 @@ namespace DCRConsumeWebApi.Controllers
                 _toastNotification.AddErrorToastMessage("OTP Did Not Matched");
             }
 
-            return View("login");
+            return View("Login");
+        } 
+        
+
+
+
+        
+        
+        [HttpPost]
+        public async Task<JsonResult> JSONVerifyOTP(CombinedViewModel model)
+        {
+            JSONRsponse resp = new JSONRsponse();
+            try
+            {
+                string storedOTP = HttpContext.Session.GetString("OTP");
+
+                if (storedOTP == model.OTPViewModel.OTP)
+                {
+                    resp.response = storedOTP;
+                }
+                else
+                {
+                    resp.hasError = true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                resp.hasError = true;
+                resp.erorMessage = ex.Message;
+            }
+            return Json(resp);
         }
 
 
 
+
+        [HttpPost]
+        public async Task<JsonResult> JsonMatchPassword(CombinedViewModel combinedModel)
+        {
+
+            JSONRsponse resp = new JSONRsponse();
+
+            try
+            {
+                if (combinedModel.LoginViewModel.UserPassword == combinedModel.LoginViewModel.ConfirmPassword)
+                {
+                    string storedUserLoginId = HttpContext.Session.GetString("UserLoginId");
+                    if (!string.IsNullOrEmpty(storedUserLoginId))
+                    {
+                        // Create an object with user login ID and new password
+                        var UpdateModel = new PasswordUpdateViewModel
+                        {
+
+                            UserLoginId = storedUserLoginId,
+                            UserPassword = combinedModel.LoginViewModel.UserPassword
+
+                        };
+
+                        // Serialize the object to JSON
+                        string data = JsonConvert.SerializeObject(UpdateModel);
+                        StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
+
+
+                        // Send a POST request to UpdateUserPassword API
+                        HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/UpdateUserPassword", content);
+
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            string responseContent = await response.Content.ReadAsStringAsync();
+                            int statusCode = (int)response.StatusCode;
+
+                            // Log or debug the response content and status code for troubleshooting
+                            Console.WriteLine($"Response Status Code: {statusCode}");
+                            Console.WriteLine($"Response Content: {responseContent}");
+                        }
+
+
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            resp.response = true;
+                        }
+                        else
+                        {
+                            resp.erorMessage = "Password Not Matched";
+                        }
+                    }
+                }
+                else
+                {
+                    resp.hasError = true;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                resp.hasError = true;
+                resp.erorMessage = ex.Message;
+            }
+
+            return Json(resp);
+        }
 
 
 
@@ -253,7 +426,7 @@ namespace DCRConsumeWebApi.Controllers
                         UserPassword = combinedModel.LoginViewModel.UserPassword
 
                     };
-                   
+
                     // Serialize the object to JSON
                     string data = JsonConvert.SerializeObject(UpdateModel);
                     StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
@@ -278,7 +451,7 @@ namespace DCRConsumeWebApi.Controllers
                     {
                         // Success Toast
                         //_toastNotification.AddSuccessToastMessage("Password Updated Successfully");
-                         return RedirectToAction("Dashboard", "Home");
+                        return RedirectToAction("Dashboard", "Home");
                     }
                     else
                     {
@@ -297,14 +470,15 @@ namespace DCRConsumeWebApi.Controllers
 
 
 
+   
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            // Sign out the user
-            //await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            // Redirect to a page after logout (you can customize this URL)
+          
             return RedirectToAction("Login", "Account");
         }
 

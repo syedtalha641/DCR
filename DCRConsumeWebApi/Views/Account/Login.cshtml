@@ -1,12 +1,11 @@
-﻿
-
-@model DCR.Helper.ViewModel.CombinedViewModel
+﻿@model DCR.Helper.ViewModel.CombinedViewModel
 @{
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
 }
 
 
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
 <section>
     <div class="container py-5 h-100">
@@ -19,16 +18,13 @@
                         <hr class="my-4">
                         <form asp-action="Login" method="post">
                             <div class="form-outline mb-4">
-                                <label class="float-start">LoginId</label>
-                                <input asp-for="LoginViewModel.UserLoginId" value="PK01" type="text" class="form-control" placeholder="PK1234">
+                                <label class="float-start">Username</label>
+                                <input asp-for="LoginViewModel.UserLoginId" value="PK01" type="text" class="form-control" placeholder="username">
                             </div>
-
                             <div class="form-outline mb-4">
                                 <label class="float-start">Password</label>
                                 <input asp-for="LoginViewModel.UserPassword" value="101010" type="password" class="form-control" placeholder="password">
                             </div>
-
-                            <!-- Checkbox -->
                             <div class="row">
                                 <div class="col-md-8 d-flex">
                                     <div class="form-check mb-4">
@@ -43,6 +39,7 @@
                                     <button type="submit" class="btn btn-primary">Login</button>
                                 </div>
                             </div>
+
 
                         </form>
 
@@ -63,13 +60,15 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title">
-                                                Reset Your Password
+                                                Reset Your
+                                                Password
                                             </h5>
                                             <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
+
                                         <div class="modal-body">
                                             <form asp-action="SendOTP" method="post">
                                                 <div class="input-group mb-3">
@@ -119,15 +118,182 @@
                                         </div>
                                     </div>
 
+
                                 </div>
                             </div>
-                        
+                        </div>
+
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
+
+
+
 </section>
+
+
+
+
+<script>
+
+    // ---------------- SEND OTP ----------------
+
+
+    function SendOTPfunction() {
+        var req = {
+            "LoginViewModel": {
+                "UserLoginId": $("#inputLogin").val()
+            }
+        }
+
+        $.ajax({
+            "url": "/Account/JSONSendOTP",
+            "type": "post",
+            "data": req,
+            "success": function (resp) {
+                if (resp.hasError) {
+                    toastr.error("Please Enter LoginId");
+                }
+                else {
+                    if (resp.response) {
+                        startCountdown(10, function () {
+                            // Callback function when countdown ends
+                            $('#sendbtn').attr("disabled", false);
+                            $('#sendbtn').text("Resend");
+                        });
+
+                        toastr.success("OTP Sent Successfully To Your Email");
+                        $('#verifyOTP').show();
+
+                    } else {
+                        // Invalid login ID
+                        toastr.error("Invalid Login ID");
+                    }
+
+                }
+            }
+        })
+    }
+
+    function startCountdown(duration, callback) {
+        var timer = duration;
+        var countdown = setInterval(function () {
+            if (timer <= 0) {
+                clearInterval(countdown);
+                if (typeof callback === "function") {
+                    callback(); // Call the callback function
+                }
+            } else {
+                // Update the countdown display
+                $('#sendbtn').attr("disabled", true);
+                $('#sendbtn').text(timer);
+
+                timer--;
+            }
+        }, 1000); // Update the countdown every 1 second
+    }
+
+    $('#sendbtn').on('click', function () {
+        SendOTPfunction();
+    });
+
+
+
+
+    // ---------------- VERIFY OTP ----------------
+
+
+
+    function VerifyOTPfunction() {
+        var req = {
+            "OTPViewModel": {
+                "OTP": $("#OTPInput").val()
+            }
+        }
+
+
+        $.ajax({
+            "url": "/Account/JSONVerifyOTP",
+            "type": "post",
+            "data": req,
+            "success": function (resp) {
+                if (resp.hasError) {
+                    toastr.error("Please Enter OTP");
+                    $('#Cpassword').hide();
+                    $('#submitBtn').hide();
+                }
+                else {
+                    if (resp.response) {
+                        // OTP Matched
+                        toastr.success("OTP Matched");
+                        $('#Cpassword').show();
+                    } else {
+                        // OTP Did Not Match
+                        toastr.error("OTP Did Not Match");
+                        $('#Cpassword').hide();
+                        $('#submitBtn').hide();
+
+                    }
+                }
+            }
+        })
+    }
+
+    $('#verifyBtn').on('click', function () {
+        VerifyOTPfunction();
+    });
+
+
+
+
+
+
+    // ---------------- UPDATE PASSWORD ----------------
+
+    function PasswordUpdatefunction() {
+        var req = {
+            "LoginViewModel": {
+                "UserPassword": $("#passwordinput").val(),
+                "ConfirmPassword": $("#confirmPasswordinput").val()
+            }
+        }
+
+
+        $.ajax({
+            "url": "/Account/JsonMatchPassword",
+            "type": "post",
+            "data": req,
+            "success": function (resp) {
+                if (resp.hasError) {
+                    toastr.error("Please Enter the Password");
+                }
+                else {
+
+                    window.location.href = "/Home/Dashboard";
+                }
+            }
+
+        })
+    }
+
+    $('#submitBtn').on('click', function () {
+        PasswordUpdatefunction()
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
 
 
 

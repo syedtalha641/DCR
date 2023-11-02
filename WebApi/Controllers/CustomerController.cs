@@ -19,9 +19,6 @@ namespace DCRWebApi.Controllers
 
 
 
-
-
-
         [HttpPost]
         public async Task<ActionResult> GetCustomers()
         {

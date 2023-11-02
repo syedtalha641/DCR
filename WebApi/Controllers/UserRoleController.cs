@@ -10,23 +10,23 @@ namespace DCRWebApi.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ReceiveController : ControllerBase
+    public class UserRoleController : ControllerBase
     {
+        private readonly IUserRolesRepos _userRolesRepos;
 
-        private readonly IReceiveRepos _receiveRepos;
-
-        public ReceiveController(IReceiveRepos receiveRepos)
+        public UserRoleController(IUserRolesRepos userRolesRepos)
         {
-            _receiveRepos = receiveRepos;
+            _userRolesRepos = userRolesRepos;
         }
 
+
         [HttpPost]
-        public async Task<ActionResult> GetReceives()
+        public async Task<ActionResult> GetUserRoles()
         {
 
             try
             {
-                return Ok(await _receiveRepos.GetReceives());
+                return Ok(await _userRolesRepos.GetUserRoles());
             }
             catch (Exception)
             {
@@ -37,12 +37,13 @@ namespace DCRWebApi.Controllers
 
         }
 
+
         [HttpPost]
-        public async Task<ActionResult<Receive>> GetReceive(int ReceiveId)
+        public async Task<ActionResult<UserRole>> GetUserRole(int UserRoleId)
         {
             try
             {
-                var result = await _receiveRepos.GetReceive(ReceiveId);
+                var result = await _userRolesRepos.GetUserRole(UserRoleId);
                 if (result == null)
                 {
                     return NotFound();
@@ -58,10 +59,8 @@ namespace DCRWebApi.Controllers
 
         }
 
-
-
         [HttpPost]
-        public async Task<ActionResult<Receive>> CreateReceive([FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<UserRole>> CreateUserRole([FromBody] UserRoleViewModel model)
         {
             try
             {
@@ -70,8 +69,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _receiveRepos.AddReceive(model);
-                return CreatedAtAction(nameof(GetReceive), new { id = CreatedUser.DistributorId }, CreatedUser);
+                var CreatedUser = await _userRolesRepos.AddUserRole(model);
+                return CreatedAtAction(nameof(GetUserRole), new { id = CreatedUser.UserId }, CreatedUser);
             }
             catch (Exception)
             {
@@ -83,25 +82,25 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Receive>> UpdateReceive(int ReceiveId, [FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<UserRole>> UpdateUserRole(int UserRoleId, [FromBody] UserRoleViewModel model)
         {
             try
             {
                 if (model == null)
                 {
-                    return BadRequest("Invalid data. Please provide valid Recieve data.");
+                    return BadRequest("Invalid data. Please provide valid User Role data.");
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedReceive = await _receiveRepos.UpdateReceive(ReceiveId, model);
+                var UpdateUserRole = await _userRolesRepos.UpdateUserRole(UserRoleId, model);
 
-                if (updatedReceive != null)
+                if (UpdateUserRole != null)
                 {
-                    return Ok(updatedReceive); // Return 200 OK with the updated customer
+                    return Ok(UpdateUserRole); // Return 200 OK with the updated customer
                 }
                 else
                 {
-                    return NotFound(" not found"); // Return 404 Not Found if the customer doesn't exist
+                    return NotFound("User Role not found"); // Return 404 Not Found if the customer doesn't exist
                 }
             }
             catch (Exception ex)
@@ -111,18 +110,17 @@ namespace DCRWebApi.Controllers
         }
 
 
-
         [HttpPost]
-        public async Task<ActionResult<Receive>> DeleteReceive([FromBody] int ReceiveId)
+        public async Task<ActionResult<UserRole>> DeleteUserRole([FromBody] int UserRoleId)
         {
             try
             {
-                if (ReceiveId == null)
+                if (UserRoleId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _receiveRepos.DeleteReceive(ReceiveId);
-                return CreatedAtAction(nameof(GetReceive), new { id = CreatedUser.ReceiveId }, CreatedUser);
+                var CreatedUser = await _userRolesRepos.DeleteUserRole(UserRoleId);
+                return CreatedAtAction(nameof(GetUserRole), new { id = CreatedUser.UserRoleId}, CreatedUser);
             }
             catch (Exception)
             {
@@ -130,6 +128,5 @@ namespace DCRWebApi.Controllers
                "Error in Creating!");
             }
         }
-
     }
 }
