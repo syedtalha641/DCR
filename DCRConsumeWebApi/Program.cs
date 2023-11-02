@@ -17,6 +17,8 @@ builder.Services.AddRazorPages().AddNToastNotifyNoty(new NotyOptions
 });
 
 
+ 
+
 
 // Add JWT authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

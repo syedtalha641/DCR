@@ -7,7 +7,7 @@
 
 
 
-<table class="table" id="customertablehead">
+<table class="table">
     <thead>
         <tr>
             <th scope="col">Customer Name</th>
@@ -19,7 +19,6 @@
             <th scope="col">State</th>
             <th scope="col">Country</th>
             <th scope="col">Postal Code</th>
-            
         </tr>
     </thead>
     <tbody id="customerTableBody">
@@ -100,4 +99,41 @@
     // });
 
 
+
+
+    //  $(document).ready(function () {
+    //     $.ajax({
+    //         url: "/Customer/GetCustomers",
+    //         type: "POST",
+    //         contentType: "application/json",
+    //         success: function (data) {
+    //             var keys = Object.keys(data[0]);
+    //             var html = "<table class='table'><thread><tr>";
+
+    //             for (var key in keys) {
+    //                 html += "<th>" + keys[key] + "</th>";
+    //             }
+    //             html += "</tr></thread><tbody>";
+
+    //             for (var res in result) {
+    //                 html += "<tr>";
+    //                 var values = Object.values(data[res]);
+    //                 for (var val in values) {
+    //                     html += "<td>" + values[val] + "</td>";
+    //                 }
+    //                 html += "</tr>";
+    //             }
+    //             html += "</tbody></table>";
+    //             $("#table").append(html);
+    //         },
+    //         error: function (err) {
+    //             console.log("Error:", err);
+    //         }
+    //     });
+    // });
+
+
+
 </script>
+
+

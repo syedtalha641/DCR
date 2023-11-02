@@ -27,11 +27,11 @@ namespace Repository.Repos
                 // Create a new User entity
                 var NewProduct = new Product
                 {
-                    ProductType = model.Type,
-                    ProductQuantity = model.Quantity,
-                    ProductPrice = model.Price,
-                    ProductSku = model.SKU,
-                    ProductCode = model.Code,
+                    ProductType = model.ProductType,
+                    ProductQuantity = model.ProductQuantity,
+                    ProductPrice = model.ProductPrice,
+                    ProductSku = model.ProductSku,
+                    ProductCode = model.ProductCode,
                     MarketName = model.MarketName,
                     Brand = model.Brand,
                     Memory = model.Memory,
@@ -85,11 +85,11 @@ namespace Repository.Repos
             if (result != null)
             {
 
-                result.ProductType = model.Type;
-                result.ProductQuantity = model.Quantity;
-                result.ProductPrice = model.Price;
-                result.ProductSku = model.SKU;
-                result.ProductCode = model.Code;
+                result.ProductType = model.ProductType;
+                result.ProductQuantity = model.ProductQuantity;
+                result.ProductPrice = model.ProductPrice;
+                result.ProductSku = model.ProductSku;
+                result.ProductCode = model.ProductCode;
                 result.MarketName = model.MarketName;
                 result.Brand = model.Brand;
                 result.Memory = model.Memory;

@@ -1,25 +1,16 @@
 ﻿using DCR.ViewModel.ViewModel;
-using DCRConsumeWebApi.Models;
+using DCRHelper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using NToastNotify;
-using System.Diagnostics;
-using System.Text;
+
 
 namespace DCRConsumeWebApi.Controllers
 {
     public class HomeController : Controller
     {
-        Uri baseAddress = new Uri("https://localhost:7169/api");
-        private readonly HttpClient _httpClient;
-        private readonly IToastNotification _toastNotification;
+        ApiCall apiCall = new ApiCall();
 
-        public HomeController(IToastNotification toastNotification)
-        {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = baseAddress;
-            _toastNotification = toastNotification;
-        }
+
 
         [HttpGet]
         public IActionResult Dashboard()
@@ -30,33 +21,38 @@ namespace DCRConsumeWebApi.Controllers
         [HttpPost]
         public async Task<JsonResult> Dashboard(MenuListViewModel model)
         {
+            //string data = JsonConvert.SerializeObject(model);
+
+            //string responseContent = await apiCall.consumeapi(data, "/MenuList/GetMenuLists");
+
+            //return Json(responseContent);
+
+
             string data = JsonConvert.SerializeObject(model);
-            //StringContent content = new StringContent(data, Encoding.UTF8, "application/json");
 
-            //HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/MenuList/GetMenuLists", content);
+            // Check if the data is already stored in the session
+            if (HttpContext.Session.GetString("MenuListData") != null)
+            {
+                // If data is found in the session, use that data
+                string storedData = HttpContext.Session.GetString("MenuListData");
+                return Json(storedData);
+            }
 
+            // If data is not found in the session, make an API call and save the response in the session
+            string responseContent = await apiCall.consumeapi(data,"/MenuList/GetMenuLists");
 
-            // Handle successful response
-            //var responseContent = await response.Content.ReadAsStringAsync();
-
-            // Deserialize the JSON content into a list
-            string responseContent = await consumeapi(data, "/MenuList/GetMenuLists");
-
-            List<MenuListViewModel> menuItems = JsonConvert.DeserializeObject<List<MenuListViewModel>>(responseContent);
+            // Save the data in the session
+            HttpContext.Session.SetString("MenuListData", responseContent);
 
             return Json(responseContent);
 
+
         }
 
 
-        private async Task<string> consumeapi(string body = "", string apiPath = "")
-        {
-            StringContent content = new StringContent(body, Encoding.UTF8, "application/json");
-            HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + apiPath, content);
+       
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return responseContent;
-        }
+
 
 
     }

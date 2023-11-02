@@ -13,11 +13,28 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
 
 
-    <script src="~/js/kit.fontawesome.js"></script>
+
     <link href="~/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/sidebarstyle.css" rel="stylesheet" />
+    <script src="~/js/kit.fontawesome.js"></script>
     <script src="~/js/jquery-3.1.1.min.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/xlsx.full.min.js"></script>
+    <script src="~/js/jquery-3.6.0.min.js"></script>
+    <script src="~/js/jquery-datatables.min.js"></script>
+    <script src="~/js/bootstrap.min-4.js"></script>
+    <script src="~/js/datatables.button.min.js"></script>
+    <link href="~/css/bootstrap.min-4.css" rel="stylesheet" />
+    <link href="~/css/bootstrap.min-5.css" rel="stylesheet" />
+    <link href="~/css/datatables.min.css" rel="stylesheet" />
+    <link href="~/css/databtables.bootstrap.buttons.min.css" rel="stylesheet" />
+    <link href="~/css/sidebarstyle.css" rel="stylesheet" />
+    <link href="~/css/datatablestyle.css" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+
 
 </head>
 
@@ -132,13 +149,6 @@
 
 
 
-
-
-
-
-      
-
-
     </script>
 
 
@@ -153,15 +163,22 @@
     <script src="~/assets/demo/chart-bar-demo.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
             crossorigin="anonymous"></script>
-    <script src="~/js/datatables-simple-demo.js"></script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+ 
+    @* <script src="~/js/datatablescript.js"></script> 
+    <script src="~/js/datatables.bootstrap.buttons.js"></script> *@
+    <script src="~/js/bootstrap.bundle.min-5.js"></script>
+
+
+
+    <script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+
+
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
-    @await Component.InvokeAsync("NToastNotify")
 
 </body>
 </html>

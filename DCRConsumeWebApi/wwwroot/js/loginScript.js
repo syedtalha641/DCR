@@ -5,26 +5,25 @@ $(document).ready(function () {
 });
 
 
-
-//$(document).ready(function () {
-//    $('#sendbtn').click(function () {
-//        var button = document.getelementbyid("sendbtn");
-//        var originaltext = button.innerhtml;
-//        var countdown = 10; // countdown time in seconds
-//        $('#verifyOTP').show();
-//        button.disabled = true;
-//        var countdowninterval = setinterval(function () {
-//            countdown--;
-//            if (countdown <= 0) {
-//                button.innerhtml = "resend";
-//                button.disabled = false;
-//                clearinterval(countdowninterval);
-//            } else {
-//                button.innerhtml = ' ' + countdown + 's';
-//            }
-//        }, 1000); // update every 1 second (1000 milliseconds)
-//    });
-//});
+$(document).ready(function () {
+    $('#sendBtn').click(function () {
+        var button = document.getElementById("sendBtn");
+        var originalText = button.innerHTML;
+        var countdown = 10; // Countdown time in seconds
+        $('#verifyOTP').show();
+        button.disabled = true;
+        var countdownInterval = setInterval(function () {
+            countdown--;
+            if (countdown <= 0) {
+                button.innerHTML = "Resend";
+                button.disabled = false;
+                clearInterval(countdownInterval);
+            } else {
+                button.innerHTML = ' ' + countdown + 's';
+            }
+        }, 1000); // Update every 1 second (1000 milliseconds)
+    });
+});
 
 $(document).ready(function () {
     $('#verifyBtn').click(function () {
@@ -52,7 +51,3 @@ $(document).ready(function () {
         }
     });
 });
-
-
-
-

@@ -4,12 +4,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>46f5563d-59a8-4ae0-99ca-a1cec6976b29</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Ajax\**" />
     <Compile Remove="wwwroot\JSON\**" />
+    <Content Remove="Ajax\**" />
     <Content Remove="wwwroot\JSON\**" />
+    <EmbeddedResource Remove="Ajax\**" />
     <EmbeddedResource Remove="wwwroot\JSON\**" />
+    <None Remove="Ajax\**" />
     <None Remove="wwwroot\JSON\**" />
   </ItemGroup>
 

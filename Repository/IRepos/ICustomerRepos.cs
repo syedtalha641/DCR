@@ -17,6 +17,5 @@ namespace Repository.IRepos
         Task<Customer> DeleteCustomer(int CustomerId);
 
 
-
     }
 }
