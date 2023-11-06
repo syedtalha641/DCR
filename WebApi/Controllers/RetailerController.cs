@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -39,7 +36,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Retailer>> GetRetailer(int RetailerId)
+        public async Task<ActionResult<object>> GetRetailer(int RetailerId)
         {
             try
             {
@@ -61,7 +58,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Retailer>> CreateRetailer([FromBody] RetailerViewModel model)
+        public async Task<ActionResult<object>> CreateRetailer([FromBody] RetailerViewModel model)
         {
             try
             {
@@ -83,7 +80,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Retailer>> UpdateRetailer(int RetailerId, [FromBody] RetailerViewModel model)
+        public async Task<ActionResult<object>> UpdateRetailer(int RetailerId, [FromBody] RetailerViewModel model)
         {
             try
             {
@@ -112,7 +109,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Retailer>> DeleteRetailer([FromBody] int RetailerId)
+        public async Task<ActionResult<object>> DeleteRetailer([FromBody] int RetailerId)
         {
             try
             {
@@ -120,8 +117,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _retailorRepos.DeleteRetailer(RetailerId);
-                return CreatedAtAction(nameof(GetRetailer), new { id = CreatedUser.RetailerId}, CreatedUser);
+                var CreatedRetailer = await _retailorRepos.DeleteRetailer(RetailerId);
+                return StatusCode(StatusCodes.Status201Created, CreatedRetailer);
+
             }
             catch (Exception)
             {

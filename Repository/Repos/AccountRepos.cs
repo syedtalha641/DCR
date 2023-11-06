@@ -1,7 +1,6 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
 
 namespace Repository.Repos
 {
@@ -14,7 +13,7 @@ namespace Repository.Repos
             _context = context;
         }
 
-        public async Task<User> AddUser(string UserLoginId, string UserName, string UserEmail, string UserPassword, string ConfirmPassword)
+        public async Task<object> AddUser(string UserLoginId, string UserName, string UserEmail, string UserPassword, string ConfirmPassword)
         {
             try
             {
@@ -55,12 +54,12 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<object> GetUsers()
         {
             return await _context.Users.Where( x => x.IsActive == true).ToListAsync();
         }
 
-        public async Task<User> GetUser(string UserLoginId)
+        public async Task<object> GetUser(string UserLoginId)
         {
             return await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId);
         }
@@ -86,7 +85,7 @@ namespace Repository.Repos
             return result.UserContact;
         }
 
-        public async Task<User> LoginUser(string UserLoginId, string UserPassword)
+        public async Task<object> LoginUser(string UserLoginId, string UserPassword)
         {
 
             var result = await _context.Users.SingleOrDefaultAsync(u => u.UserLoginId == UserLoginId);
@@ -117,7 +116,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<User> UpdateUserPassword(string UserLoginId, string UserPassword)
+        public async Task<object> UpdateUserPassword(string UserLoginId, string UserPassword)
         {
             try
             {
@@ -152,7 +151,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<User> DeleteUser(string UserLoginId)
+        public async Task<object> DeleteUser(string UserLoginId)
         {
             var result = await _context.Users.Where(a => a.UserLoginId == UserLoginId).FirstOrDefaultAsync();
             if (result != null)

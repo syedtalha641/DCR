@@ -1,12 +1,8 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -57,7 +53,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<ProductWarehouse> DeleteProductWarehouse(int ProductWarehouseId)
+        public async Task<object> DeleteProductWarehouse(int ProductWarehouseId)
         {
             var result = await _context.ProductWarehouses.Where(a => a.ProductWarehouseId == ProductWarehouseId).FirstOrDefaultAsync();
             if (result != null)
@@ -69,12 +65,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<ProductWarehouse> GetProductWarehouse(int ProductWarehouseId)
+        public async Task<object> GetProductWarehouse(int ProductWarehouseId)
         {
             return await _context.ProductWarehouses.FirstOrDefaultAsync(a => a.ProductWarehouseId == ProductWarehouseId);
         }
 
-        public async Task<IEnumerable<ProductWarehouse>> GetProductWarehouses()
+        public async Task<IEnumerable<object>> GetProductWarehouses()
         {
             return await _context.ProductWarehouses.ToListAsync();
         }

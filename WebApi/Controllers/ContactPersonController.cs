@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -41,7 +38,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ContactPerson>> GetPerson(int ContactPersonId)
+        public async Task<ActionResult<object>> GetPerson(int ContactPersonId)
         {
             try
             {
@@ -64,7 +61,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ContactPerson>> CreatePerson([FromBody] ContactPersonViewModel model)
+        public async Task<ActionResult<object>> CreatePerson([FromBody] ContactPersonViewModel model)
         {
             try
             {
@@ -86,7 +83,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ContactPerson>> UpdatePerson(int ContactPersonId, [FromBody] ContactPersonViewModel model)
+        public async Task<ActionResult<object>> UpdatePerson(int ContactPersonId, [FromBody] ContactPersonViewModel model)
         {
             try
             {
@@ -116,7 +113,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ContactPerson>> DeletePerson([FromBody] int ContactPersonId)
+        public async Task<ActionResult<object>> DeletePerson([FromBody] int ContactPersonId)
         {
             try
             {
@@ -124,8 +121,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _contactPersonRepos.DeletePerson(ContactPersonId);
-                return CreatedAtAction(nameof(GetPerson), new { id = CreatedUser.ContactPersonId }, CreatedUser);
+                var CreatedPerson = await _contactPersonRepos.DeletePerson(ContactPersonId);
+                return StatusCode(StatusCodes.Status201Created, CreatedPerson);
             }
             catch (Exception)
             {

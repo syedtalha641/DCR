@@ -1,10 +1,8 @@
 ﻿using DCR.Helper.ViewModel;
-using DCR.ViewModel.ViewModel;
 using DCRHelper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using NToastNotify;
-using System.Text;
+
 
 namespace DCRConsumeWebApi.Controllers
 {

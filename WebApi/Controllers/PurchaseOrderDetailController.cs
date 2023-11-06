@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -36,7 +33,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderDetail>> GetPurchaseOrderDetail(int PurchaseOrderDetailId)
+        public async Task<ActionResult<object>> GetPurchaseOrderDetail(int PurchaseOrderDetailId)
         {
             try
             {
@@ -57,7 +54,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderDetail>> CreatePurchaseOrderDetail([FromBody] PurchaseOrderDetailViewModel model)
+        public async Task<ActionResult<object>> CreatePurchaseOrderDetail([FromBody] PurchaseOrderDetailViewModel model)
         {
             try
             {
@@ -79,7 +76,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderDetail>> UpdatePurchaseOrderDetail(int PurchaseOrderDetailId, [FromBody] PurchaseOrderDetailViewModel model)
+        public async Task<ActionResult<object>> UpdatePurchaseOrderDetail(int PurchaseOrderDetailId, [FromBody] PurchaseOrderDetailViewModel model)
         {
             try
             {
@@ -107,7 +104,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderDetail>> DeletePayment([FromBody] int PurchaseOrderDetailId)
+        public async Task<ActionResult<object>> DeletePayment([FromBody] int PurchaseOrderDetailId)
         {
             try
             {
@@ -115,8 +112,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _purchaseOrderDetailRepos.DeletePurchaseOrderDetail(PurchaseOrderDetailId);
-                return CreatedAtAction(nameof(GetPurchaseOrderDetail), new { id = CreatedUser.ProductId }, CreatedUser);
+                var CreatedPurchaseOrderDetail = await _purchaseOrderDetailRepos.DeletePurchaseOrderDetail(PurchaseOrderDetailId);
+                return StatusCode(StatusCodes.Status201Created, CreatedPurchaseOrderDetail);
+
             }
             catch (Exception)
             {

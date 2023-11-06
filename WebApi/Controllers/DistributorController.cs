@@ -1,7 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {
@@ -32,9 +31,9 @@ namespace DCRWebApi.Controllers
             }
 
         }
-
+        
         [HttpPost]
-        public async Task<ActionResult<Distributor>> GetDistributor(int DistributorId)
+        public async Task<ActionResult<object>> GetDistributor(int DistributorId)
         {
             try
             {
@@ -57,7 +56,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Distributor>> CreateDistributor([FromBody] DistributorViewModel model)
+        public async Task<ActionResult<object>> CreateDistributor([FromBody] DistributorViewModel model)
         {
             try
             {
@@ -79,7 +78,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Distributor>> UpdateCustomer(int DistributorId, [FromBody] DistributorViewModel model)
+        public async Task<ActionResult<object>> UpdateCustomer(int DistributorId, [FromBody] DistributorViewModel model)
         {
             try
             {
@@ -109,7 +108,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Distributor>> DeleteCustomer([FromBody] int DistributorId)
+        public async Task<ActionResult<object>> DeleteCustomer([FromBody] int DistributorId)
         {
             try
             {
@@ -117,8 +116,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _distributorRepos.DeleteDistributor(DistributorId);
-                return CreatedAtAction(nameof(GetDistributor), new { id = CreatedUser.DistributorId }, CreatedUser);
+                var CreatedDistributor = await _distributorRepos.DeleteDistributor(DistributorId);
+                return StatusCode(StatusCodes.Status201Created, CreatedDistributor);
+
             }
             catch (Exception)
             {

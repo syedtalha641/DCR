@@ -11,7 +11,7 @@
                 <div class="button">
                     <button type="button" data-toggle="modal" data-target="#exampleModalCenter"
                             class="btn btn-primary btn-sm">
-                        <i class="fa-solid fa-plus"></i> Add
+                        <i class="fa-solid fa-plus"></i> Add Product
                     </button>
                 </div>
                 @Html.Partial("_ProductModel")
@@ -87,7 +87,7 @@
                 { data: "series", "name": "Series" },
                 {
                     data: "productId", render: function (data, type, row, meta) {
-                        return "<button class='btn btn-primary'><i class='fa fa-edit'></i></button>" +
+                        return "<button class='btn btn-primary' id='btnEdit'><i class='fa fa-edit'></i></button>" +
                             "<button class='btn btn-danger'><i class='fa fa-trash'></i></button>"
                     }
 
@@ -102,6 +102,30 @@
             ]
         });
     });
+
+
+
+
+
+
+    function PartialView() {
+        $.ajax({
+            url: '/Product/PartialView',
+            type: 'POST',
+            data: 'json',
+            success: function (resp) {
+                console.log(resp)
+            },
+            error: function () {
+                alert('Data Not Found');
+            }
+        });
+    }
+
+
+        $('#btnEdit').on('click', function () {
+            PartialView();
+        });
 
 
 

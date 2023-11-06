@@ -1,13 +1,7 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository.Repos
 {
@@ -15,15 +9,12 @@ namespace Repository.Repos
     {
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
 
-        public SaleOrderLineRepos(EMS_ITCContext context, IConfiguration configuration)
+        public SaleOrderLineRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
+
         }
-
-
 
         public async Task<SaleOrderLineViewModel> AddSaleOrderLine(SaleOrderLineViewModel model)
         {
@@ -86,7 +77,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<SaleOrderLine> DeleteSaleOrderline(int SaleOrderLineId)
+        public async Task<object> DeleteSaleOrderline(int SaleOrderLineId)
         {
 
             var result = await _context.SaleOrderLines.Where(a => a.SalesOrderLineId == SaleOrderLineId).FirstOrDefaultAsync();
@@ -99,12 +90,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<SaleOrderLine> GetSaleOrderLine(int SaleOrderLineId)
+        public async Task<object> GetSaleOrderLine(int SaleOrderLineId)
         {
             return await _context.SaleOrderLines.FirstOrDefaultAsync(a => a.SalesOrderLineId == SaleOrderLineId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<SaleOrderLine>> GetSaleOrderLines()
+        public async Task<IEnumerable<object>> GetSaleOrderLines()
         {
             return await _context.SaleOrderLines.Where(x => x.IsActive == true).ToListAsync();
         }
@@ -131,8 +122,6 @@ namespace Repository.Repos
 
 
                 return model;
-
-
             }
             else
             {

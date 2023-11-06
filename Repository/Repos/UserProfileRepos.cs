@@ -1,13 +1,8 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository.Repos
 {
@@ -15,13 +10,11 @@ namespace Repository.Repos
     {
 
         private readonly EMS_ITCContext _context;
-
-        private readonly IConfiguration _configuration;
+        
 
         public UserProfileRepos(EMS_ITCContext context, IConfiguration configuration)
         {
             _context = context;
-            _configuration = configuration;
         }
 
 
@@ -72,7 +65,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<UserProfile> DeleteUserProfile(int UserProfileId)
+        public async Task<object> DeleteUserProfile(int UserProfileId)
         {
             var result = await _context.UserProfiles.Where(a => a.UserProfileId == UserProfileId).FirstOrDefaultAsync();
             if (result != null)
@@ -84,12 +77,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<UserProfile> GetUserProfile(int UserProfileId)
+        public async Task<object> GetUserProfile(int UserProfileId)
         {
             return await _context.UserProfiles.FirstOrDefaultAsync(a => a.UserProfileId == UserProfileId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<UserProfile>> GetUserprofiles()
+        public async Task<IEnumerable<object>> GetUserprofiles()
         {
             return await _context.UserProfiles.Where(x => x.IsActive == true).ToListAsync();
         }

@@ -1,13 +1,8 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -16,12 +11,9 @@ namespace Repository.Repos
 
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
-
-        public PurchaseOrderRepos(EMS_ITCContext context, IConfiguration configuration)
+        public PurchaseOrderRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
 
@@ -72,7 +64,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<PurchaseOrder> DeletePurchaseOrder(int PurchaseId)
+        public async Task<object> DeletePurchaseOrder(int PurchaseId)
         {
             var result = await _context.PurchaseOrders.Where(a => a.PurchaseId == PurchaseId).FirstOrDefaultAsync();
             if (result != null)
@@ -84,12 +76,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<PurchaseOrder> GetPurchaseOrder(int PurchaseId)
+        public async Task<object> GetPurchaseOrder(int PurchaseId)
         {
             return await _context.PurchaseOrders.FirstOrDefaultAsync(a => a.PurchaseId == PurchaseId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<PurchaseOrder>> GetPurchaseOrders()
+        public async Task<IEnumerable<object>> GetPurchaseOrders()
         {
             return await _context.PurchaseOrders.Where(x => x.IsActive == true).ToListAsync();
         }

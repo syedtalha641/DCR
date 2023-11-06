@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -37,7 +34,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ProductWarehouse>> GetProductWarehouse(int ProductWarehouseId)
+        public async Task<ActionResult<object>> GetProductWarehouse(int ProductWarehouseId)
         {
             try
             {
@@ -59,7 +56,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ProductWarehouse>> CreateProductWarehouse([FromBody] ProductWarehouseViewModel model)
+        public async Task<ActionResult<object>> CreateProductWarehouse([FromBody] ProductWarehouseViewModel model)
         {
             try
             {
@@ -81,7 +78,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ProductWarehouse>> UpdateProductWarehouse(int ProductWarehouseId, [FromBody] ProductWarehouseViewModel model)
+        public async Task<ActionResult<object>> UpdateProductWarehouse(int ProductWarehouseId, [FromBody] ProductWarehouseViewModel model)
         {
             try
             {
@@ -111,7 +108,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<ProductWarehouse>> DeleteProductWarehouse([FromBody] int ProductWarehouseId)
+        public async Task<ActionResult<object>> DeleteProductWarehouse([FromBody] int ProductWarehouseId)
         {
             try
             {
@@ -119,8 +116,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _productWarehouseRepos.DeleteProductWarehouse(ProductWarehouseId);
-                return CreatedAtAction(nameof(GetProductWarehouse), new { id = CreatedUser.ProductWarehouseId}, CreatedUser);
+                var CreatedProductWarehouse = await _productWarehouseRepos.DeleteProductWarehouse(ProductWarehouseId);
+                return StatusCode(StatusCodes.Status201Created, CreatedProductWarehouse);
+
             }
             catch (Exception)
             {

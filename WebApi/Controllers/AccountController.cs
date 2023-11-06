@@ -1,18 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DAL.EntityModels;
 using Microsoft.AspNetCore.Authentication;
-using static System.Net.WebRequestMethods;
-using System.Diagnostics;
-using System.Drawing;
-using Twilio.Http;
-using Twilio.Jwt.AccessToken;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using DCR.Helper.ViewModel;
-using Repository.IRepos;
-using Microsoft.AspNetCore.Authorization;
+using DCR.ViewModel.IRepos;
 
 namespace WebApi.Controllers
 {
@@ -23,13 +12,9 @@ namespace WebApi.Controllers
     {
         private readonly IAccountRepos _accountRepos;
 
-        private readonly IAuthenticationService _authenticationService;
-
-        public AccountController(IAccountRepos accountRepos, IAuthenticationService authenticationService)
+        public AccountController(IAccountRepos accountRepos)
         {
-            //temp
             _accountRepos = accountRepos;
-            _authenticationService = authenticationService;
         }
 
         [HttpPost]
@@ -50,7 +35,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<User>> GetUser(string UserLoginId)
+        public async Task<ActionResult<object>> GetUser([FromBody] string UserLoginId)
         {
             try
             {
@@ -117,8 +102,8 @@ namespace WebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _accountRepos.AddUser(UserLoginId, UserName, UserEmail, UserPassword);
-                return CreatedAtAction(nameof(GetUsers), new { id = CreatedUser.UserId }, CreatedUser);
+                var CreatedUser = await _accountRepos.AddUser(model.UserLoginId, model.UserName, model.UserEmail,model.UserPassword,model.ConfirmPassword);
+                return StatusCode(StatusCodes.Status201Created, CreatedUser);
             }
             catch (Exception)
             {
@@ -130,7 +115,7 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<User>> LoginUser([FromBody] PasswordUpdateViewModel model)
+        public async Task<ActionResult<object>> LoginUser([FromBody] PasswordUpdateViewModel model)
         {
 
             try
@@ -187,7 +172,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<User>> DeleteUser([FromBody] string UserLoginId)
+        public async Task<ActionResult<object>> DeleteUser([FromBody] string UserLoginId)
         {
             try
             {

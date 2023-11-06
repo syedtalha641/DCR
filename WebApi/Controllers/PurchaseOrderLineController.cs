@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -36,7 +33,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderLine>> GetPurchaseOrderLine(int PurchaseOrderLineId)
+        public async Task<ActionResult<object>> GetPurchaseOrderLine(int PurchaseOrderLineId)
         {
             try
             {
@@ -57,7 +54,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderLine>> CreatePurchaseOrderLine([FromBody] PurchaseOrderLineViewModel model)
+        public async Task<ActionResult<object>> CreatePurchaseOrderLine([FromBody] PurchaseOrderLineViewModel model)
         {
             try
             {
@@ -79,7 +76,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderLine>> UpdatePurchaseOrderLine(int PurchaseOrderLineId, [FromBody] PurchaseOrderLineViewModel model)
+        public async Task<ActionResult<object>> UpdatePurchaseOrderLine(int PurchaseOrderLineId, [FromBody] PurchaseOrderLineViewModel model)
         {
             try
             {
@@ -107,7 +104,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrderLine>> DeletePurchaseOrderLine([FromBody] int PurchaseOrderLineId)
+        public async Task<ActionResult<object>> DeletePurchaseOrderLine([FromBody] int PurchaseOrderLineId)
         {
             try
             {
@@ -115,8 +112,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _purchaseOrderline.DeletePurchaseOrderLine(PurchaseOrderLineId);
-                return CreatedAtAction(nameof(GetPurchaseOrderLine), new { id = CreatedUser.ProductId }, CreatedUser);
+                var CreatedPurchaseOrderLine = await _purchaseOrderline.DeletePurchaseOrderLine(PurchaseOrderLineId);
+                return StatusCode(StatusCodes.Status201Created, CreatedPurchaseOrderLine);
+
             }
             catch (Exception)
             {

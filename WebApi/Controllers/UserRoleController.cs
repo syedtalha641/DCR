@@ -1,10 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -39,7 +35,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<UserRole>> GetUserRole(int UserRoleId)
+        public async Task<ActionResult<object>> GetUserRole(int UserRoleId)
         {
             try
             {
@@ -60,7 +56,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<UserRole>> CreateUserRole([FromBody] UserRoleViewModel model)
+        public async Task<ActionResult<object>> CreateUserRole([FromBody] UserRoleViewModel model)
         {
             try
             {
@@ -82,7 +78,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<UserRole>> UpdateUserRole(int UserRoleId, [FromBody] UserRoleViewModel model)
+        public async Task<ActionResult<object>> UpdateUserRole(int UserRoleId, [FromBody] UserRoleViewModel model)
         {
             try
             {
@@ -111,7 +107,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<UserRole>> DeleteUserRole([FromBody] int UserRoleId)
+        public async Task<ActionResult<object>> DeleteUserRole([FromBody] int UserRoleId)
         {
             try
             {
@@ -119,8 +115,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _userRolesRepos.DeleteUserRole(UserRoleId);
-                return CreatedAtAction(nameof(GetUserRole), new { id = CreatedUser.UserRoleId}, CreatedUser);
+                var CreatedUserRole = await _userRolesRepos.DeleteUserRole(UserRoleId);
+                return StatusCode(StatusCodes.Status201Created, CreatedUserRole);
+
             }
             catch (Exception)
             {

@@ -1,25 +1,16 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository.Repos
 {
     public class VendorRepos : IVendorRepos
     {
         private readonly EMS_ITCContext _context;
-        private readonly IConfiguration _configuration;
-        public VendorRepos(EMS_ITCContext context, IConfiguration configuration)
+        public VendorRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
 
@@ -77,7 +68,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Vendor> DeleteVendor(int VendorId)
+        public async Task<object> DeleteVendor(int VendorId)
         {
 
             var result = await _context.Vendors.Where(a => a.VendorId == VendorId).FirstOrDefaultAsync();
@@ -90,12 +81,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<Vendor> GetVendor(int VendorId)
+        public async Task<object> GetVendor(int VendorId)
         {
             return await _context.Vendors.FirstOrDefaultAsync(a => a.VendorId == VendorId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Vendor>> GetVendors()
+        public async Task<IEnumerable<object>> GetVendors()
         {
             return await _context.Vendors.Where(x => x.IsActive == true).ToListAsync();
         }

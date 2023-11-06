@@ -1,8 +1,6 @@
-﻿using DAL.EntityModels;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {
@@ -35,7 +33,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrderDetail>> GetSalesOrderDetail(int SalesOrderDetailId)
+        public async Task<ActionResult<object>> GetSalesOrderDetail(int SalesOrderDetailId)
         {
             try
             {
@@ -56,7 +54,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrderDetail>> CreateSalesOrderDetail([FromBody] SalesOrderDetailViewModel model)
+        public async Task<ActionResult<object>> CreateSalesOrderDetail([FromBody] SalesOrderDetailViewModel model)
         {
             try
             {
@@ -78,7 +76,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrderDetail>> UpdateSalesOrderDetail(int SalesOrderDetailId, [FromBody] SalesOrderDetailViewModel model)
+        public async Task<ActionResult<object>> UpdateSalesOrderDetail(int SalesOrderDetailId, [FromBody] SalesOrderDetailViewModel model)
         {
             try
             {
@@ -106,7 +104,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrderDetail>> DeletePayment([FromBody] int SalesOrderDetailId)
+        public async Task<ActionResult<object>> DeletePayment([FromBody] int SalesOrderDetailId)
         {
             try
             {
@@ -114,8 +112,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _saleOrderRepos.DeleteSalesOrderDetail(SalesOrderDetailId);
-                return CreatedAtAction(nameof(GetSalesOrderDetail), new { id = CreatedUser.ProductId }, CreatedUser);
+                var CreatedSalesOrderDetail = await _saleOrderRepos.DeleteSalesOrderDetail(SalesOrderDetailId);
+                return StatusCode(StatusCodes.Status201Created, CreatedSalesOrderDetail);
+
             }
             catch (Exception)
             {

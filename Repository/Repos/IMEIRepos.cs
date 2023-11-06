@@ -1,8 +1,8 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
+
 
 
 namespace Repository.Repos
@@ -12,15 +12,10 @@ namespace Repository.Repos
 
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
-
-        public IMEIRepos(EMS_ITCContext context, IConfiguration configuration)
+        public IMEIRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
-
-
 
         public async Task<IMEIViewModel> AddIMEI(IMEIViewModel model)
         {
@@ -68,7 +63,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Imei> DeleteIMEI(int IMEIId)
+        public async Task<object> DeleteIMEI(int IMEIId)
         {
             var result = await _context.Imeis.Where(a => a.ImeiId == IMEIId).FirstOrDefaultAsync();
             if (result != null)
@@ -80,12 +75,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<Imei> GetIMEI(int IMEIId)
+        public async Task<object> GetIMEI(int IMEIId)
         {
             return await _context.Imeis.FirstOrDefaultAsync(a => a.ImeiId == IMEIId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Imei>> GetIMEIs()
+        public async Task<IEnumerable<object>> GetIMEIs()
         {
             return await _context.Imeis.Where(x => x.IsActive == true).ToListAsync();
         }

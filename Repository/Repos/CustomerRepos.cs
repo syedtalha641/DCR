@@ -1,18 +1,7 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-
-
 
 namespace Repository.Repos
 {
@@ -20,19 +9,16 @@ namespace Repository.Repos
     {
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
 
-        public CustomerRepos(EMS_ITCContext context, IConfiguration configuration)
+        public CustomerRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         public async Task<CustomerViewModel> AddCustomer(CustomerViewModel model)
         {
             try
             {
-                // Create a new User entity
                 var newCustomer = new Customer
                 {
                     CustomerName = model.CustomerName,
@@ -45,25 +31,19 @@ namespace Repository.Repos
                     CustomerState = model.CustomerState,
                     CustomerPostalCode = model.CustomerPostalCode,
                     CreatedBy = "Admin"
-
                 };
-
                 _context.Customers.Add(newCustomer);
                 await _context.SaveChangesAsync();
-
-
-
 
                 return model;
             }
             catch (Exception)
             {
-
                 return null;
             }
         }
 
-        public async Task<Customer> DeleteCustomer(int CustomerId)
+        public async Task<object> DeleteCustomer(int CustomerId)
         {
 
             var result = await _context.Customers.Where(a => a.CustomerId == CustomerId).FirstOrDefaultAsync();
@@ -75,12 +55,12 @@ namespace Repository.Repos
             }
             return null;
         }
-        public async Task<IEnumerable<Customer>> GetCustomers()
+        public async Task<object> GetCustomers()
         {
             return await _context.Customers.Where(x => x.IsActive == true).ToListAsync();
         }
 
-        public async Task<Customer> GetCustomer(int CustomerId)
+        public async Task<object> GetCustomer(int CustomerId)
         {
             return await _context.Customers.FirstOrDefaultAsync(a => a.CustomerId == CustomerId && a.IsActive == true);
         }
@@ -110,8 +90,6 @@ namespace Repository.Repos
 
 
                 return model;
-
-
             }
             else
             {

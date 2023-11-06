@@ -1,9 +1,7 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
+
 
 namespace DCRWebApi.Controllers
 {
@@ -37,7 +35,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Imei>> GetIMEI(int IMEIId)
+        public async Task<ActionResult<object>> GetIMEI(int IMEIId)
         {
             try
             {
@@ -59,7 +57,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Imei>> CreateIMEI([FromBody] IMEIViewModel model)
+        public async Task<ActionResult<object>> CreateIMEI([FromBody] IMEIViewModel model)
         {
             try
             {
@@ -81,7 +79,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Imei>> UpdateImei(int IMEIId, [FromBody] IMEIViewModel model)
+        public async Task<ActionResult<object>> UpdateImei(int IMEIId, [FromBody] IMEIViewModel model)
         {
             try
             {
@@ -111,7 +109,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Imei>> DeleteIMEI([FromBody] int IMEIId)
+        public async Task<ActionResult<object>> DeleteIMEI([FromBody] int IMEIId)
         {
             try
             {
@@ -119,8 +117,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _iMEIRepos.DeleteIMEI(IMEIId);
-                return CreatedAtAction(nameof(GetIMEI), new { id = CreatedUser.ImeiId }, CreatedUser);
+                var CreatedIMEI = await _iMEIRepos.DeleteIMEI(IMEIId);
+                return StatusCode(StatusCodes.Status201Created, CreatedIMEI);
             }
             catch (Exception)
             {

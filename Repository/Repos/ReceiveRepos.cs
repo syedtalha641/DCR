@@ -1,12 +1,7 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository.Repos
 {
@@ -60,7 +55,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Receive> DeleteReceive(int ReceiveId)
+        public async Task<object> DeleteReceive(int ReceiveId)
         {
             var result = await _context.Receives.Where(a => a.ReceiveId == ReceiveId).FirstOrDefaultAsync();
             if (result != null)
@@ -72,12 +67,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<Receive> GetReceive(int ReceiveId)
+        public async Task<object> GetReceive(int ReceiveId)
         {
             return await _context.Receives.FirstOrDefaultAsync(a => a.ReceiveId == ReceiveId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Receive>> GetReceives()
+        public async Task<IEnumerable<object>> GetReceives()
         {
             return await _context.Receives.Where(x => x.IsActive == true).ToListAsync();
         }
@@ -98,7 +93,6 @@ namespace Repository.Repos
                 await _context.SaveChangesAsync();
 
                 return model;
-
 
             }
             else

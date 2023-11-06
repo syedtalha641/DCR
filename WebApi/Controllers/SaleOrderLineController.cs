@@ -1,10 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -40,7 +36,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SaleOrderLine>> GetSaleOrderLine(int SaleOrderLineId)
+        public async Task<ActionResult<object>> GetSaleOrderLine(int SaleOrderLineId)
         {
             try
             {
@@ -63,7 +59,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SaleOrderLine>> CreateSaleOrderLine([FromBody] SaleOrderLineViewModel model)
+        public async Task<ActionResult<object>> CreateSaleOrderLine([FromBody] SaleOrderLineViewModel model)
         {
             try
             {
@@ -85,7 +81,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SaleOrderLine>> UpdateSaleOrderLine(int SaleOrderLineId, [FromBody] SaleOrderLineViewModel model)
+        public async Task<ActionResult<object>> UpdateSaleOrderLine(int SaleOrderLineId, [FromBody] SaleOrderLineViewModel model)
         {
             try
             {
@@ -115,7 +111,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SaleOrderLine>> DeleteSaleOrderLine([FromBody] int SaleOrderLineId)
+        public async Task<ActionResult<object>> DeleteSaleOrderLine([FromBody] int SaleOrderLineId)
         {
             try
             {
@@ -123,8 +119,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _saleOrderLineRepos.DeleteSaleOrderline(SaleOrderLineId);
-                return CreatedAtAction(nameof(GetSaleOrderLine), new { id = CreatedUser.SalesOrderLineId}, CreatedUser);
+                var CreatedSaleOrderLine = await _saleOrderLineRepos.DeleteSaleOrderline(SaleOrderLineId);
+                return StatusCode(StatusCodes.Status201Created, CreatedSaleOrderLine);
+
             }
             catch (Exception)
             {

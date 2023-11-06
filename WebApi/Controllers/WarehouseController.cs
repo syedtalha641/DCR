@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -35,7 +32,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Warehouse>> GetWarehouse(int WarehouseId)
+        public async Task<ActionResult<object>> GetWarehouse(int WarehouseId)
         {
             try
             {
@@ -56,7 +53,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Warehouse>> CreateWarehouse([FromBody] WarehouseViewModel model)
+        public async Task<ActionResult<object>> CreateWarehouse([FromBody] WarehouseViewModel model)
         {
             try
             {
@@ -77,7 +74,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Warehouse>> UpdateWarehouse(int WarehouseId, [FromBody] WarehouseViewModel model)
+        public async Task<ActionResult<object>> UpdateWarehouse(int WarehouseId, [FromBody] WarehouseViewModel model)
         {
             try
             {
@@ -106,7 +103,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Warehouse>> DeleteCustomer([FromBody] int WarehouseId)
+        public async Task<ActionResult<object>> DeleteCustomer([FromBody] int WarehouseId)
         {
             try
             {
@@ -114,8 +111,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _warehouseRepos.DeleteWarehouse(WarehouseId);
-                return CreatedAtAction(nameof(GetWarehouse), new { id = CreatedUser.WarehouseId }, CreatedUser);
+                var CreatedWarehouse = await _warehouseRepos.DeleteWarehouse(WarehouseId);
+                return StatusCode(StatusCodes.Status201Created, CreatedWarehouse);
+
             }
             catch (Exception)
             {

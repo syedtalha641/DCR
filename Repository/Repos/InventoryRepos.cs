@@ -1,12 +1,8 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -62,7 +58,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Inventory> DeleteInventory(int InventoryId)
+        public async Task<object> DeleteInventory(int InventoryId)
         {
             var result = await _context.Inventories.Where(a => a.InventoryId == InventoryId).FirstOrDefaultAsync();
             if (result != null)
@@ -74,12 +70,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<IEnumerable<Inventory>> GetInventories()
+        public async Task<IEnumerable<object>> GetInventories()
         {
             return await _context.Inventories.Where(x => x.IsActive == true).ToListAsync();
         }
 
-        public async Task<Inventory> GetInventory(int InventoryId)
+        public async Task<object> GetInventory(int InventoryId)
         {
             return await _context.Inventories.FirstOrDefaultAsync(a => a.InventoryId == InventoryId && a.IsActive == true);
         }

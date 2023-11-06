@@ -1,8 +1,7 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository;
+
 
 namespace DCRWebApi.Controllers
 {
@@ -38,7 +37,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Product>> GetProduct(int ProductId)
+        public async Task<ActionResult<object>> GetProduct(int ProductId)
         {
             try
             {
@@ -61,7 +60,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct([FromBody] ProductViewModel model)
+        public async Task<ActionResult<object>> CreateProduct([FromBody] ProductViewModel model)
         {
             try
             {
@@ -83,7 +82,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Product>> UpdateProduct(int ProductId, [FromBody] ProductViewModel model)
+        public async Task<ActionResult<object>> UpdateProduct(int ProductId, [FromBody] ProductViewModel model)
         {
             try
             {
@@ -113,7 +112,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Product>> DeleteProduct([FromBody] int ProductId)
+        public async Task<ActionResult<object>> DeleteProduct([FromBody] int ProductId)
         {
             try
             {
@@ -121,8 +120,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _productRepos.DeleteProduct(ProductId);
-                return CreatedAtAction(nameof(GetProduct), new { id = CreatedUser.ProductId }, CreatedUser);
+                var CreatedProduct = await _productRepos.DeleteProduct(ProductId);
+                return StatusCode(StatusCodes.Status201Created, CreatedProduct);
+
             }
             catch (Exception)
             {

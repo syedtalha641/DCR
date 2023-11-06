@@ -1,10 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -40,7 +36,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<UserProfile>> GetUserProfile(int UserProfileId)
+        public async Task<ActionResult<object>> GetUserProfile(int UserProfileId)
         {
             try
             {
@@ -63,7 +59,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<UserProfile>> CreateUserProfile([FromBody] UserProfileViewModel model)
+        public async Task<ActionResult<object>> CreateUserProfile([FromBody] UserProfileViewModel model)
         {
             try
             {
@@ -85,7 +81,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<UserProfile>> UpdateUserProfile(int UserProfileId, [FromBody] UserProfileViewModel model)
+        public async Task<ActionResult<object>> UpdateUserProfile(int UserProfileId, [FromBody] UserProfileViewModel model)
         {
             try
             {
@@ -115,7 +111,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<UserProfile>> DeleteUserProfile([FromBody] int UserProfileId)
+        public async Task<ActionResult<object>> DeleteUserProfile([FromBody] int UserProfileId)
         {
             try
             {
@@ -123,8 +119,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _userProfile.DeleteUserProfile(UserProfileId);
-                return CreatedAtAction(nameof(GetUserProfile), new { id = CreatedUser.UserProfileId}, CreatedUser);
+                var CreatedUserProfile = await _userProfile.DeleteUserProfile(UserProfileId);
+                return StatusCode(StatusCodes.Status201Created, CreatedUserProfile);
+
             }
             catch (Exception)
             {

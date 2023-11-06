@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -37,7 +34,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Role>> GetRole(int RoleId)
+        public async Task<ActionResult<object>> GetRole(int RoleId)
         {
             try
             {
@@ -59,7 +56,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Role>> CreateCustomer([FromBody] RoleViewModel model)
+        public async Task<ActionResult<object>> CreateCustomer([FromBody] RoleViewModel model)
         {
             try
             {
@@ -82,7 +79,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Role>> UpdateRole(int RoleId, [FromBody] RoleViewModel model)
+        public async Task<ActionResult<object>> UpdateRole(int RoleId, [FromBody] RoleViewModel model)
         {
             try
             {
@@ -112,7 +109,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Role>> DeleteRole([FromBody] int RoleId)
+        public async Task<ActionResult<object>> DeleteRole([FromBody] int RoleId)
         {
             try
             {
@@ -120,8 +117,10 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _roleRepos.DeleteRole(RoleId);
-                return CreatedAtAction(nameof(GetRole), new { id = CreatedUser.RoleId}, CreatedUser);
+                var CreatedRole = await _roleRepos.DeleteRole(RoleId);
+                return StatusCode(StatusCodes.Status201Created, CreatedRole);
+
+
             }
             catch (Exception)
             {

@@ -1,7 +1,6 @@
-﻿using DAL.EntityModels;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {
@@ -34,7 +33,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Payment>> GetPayment(int PaymentId)
+        public async Task<ActionResult<object>> GetPayment(int PaymentId)
         {
             try
             {
@@ -57,7 +56,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Payment>> CreateInventory([FromBody] PaymentViewModel model)
+        public async Task<ActionResult<object>> CreateInventory([FromBody] PaymentViewModel model)
         {
             try
             {
@@ -79,7 +78,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Payment>> UpdatePayment(int PaymentId, [FromBody] PaymentViewModel model)
+        public async Task<ActionResult<object>> UpdatePayment(int PaymentId, [FromBody] PaymentViewModel model)
         {
             try
             {
@@ -107,7 +106,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Payment>> DeletePayment([FromBody] int PaymentId)
+        public async Task<ActionResult<object>> DeletePayment([FromBody] int PaymentId)
         {
             try
             {
@@ -115,8 +114,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _paymentRepos.DeletePayment(PaymentId);
-                return CreatedAtAction(nameof(GetPayment), new { id = CreatedUser.DistributorId }, CreatedUser);
+                var CreatedPayment = await _paymentRepos.DeletePayment(PaymentId);
+                return StatusCode(StatusCodes.Status201Created, CreatedPayment);
+
             }
             catch (Exception)
             {

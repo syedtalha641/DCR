@@ -1,9 +1,10 @@
 using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
+using DCRWebApi.Seeding;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Repository.IRepos;
 using Repository.Repos;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +18,9 @@ builder.Services.AddSwaggerGen();
 
 var provider = builder.Services.BuildServiceProvider();
 var config = provider.GetService<IConfiguration>();
-builder.Services.AddDbContext<EMS_ITCContext>(item => item.UseSqlServer(config.GetConnectionString("DC")));
+
 builder.Services.AddScoped<IAccountRepos,AccountRepos>();
-builder.Services.AddScoped<IBranchrepos,BranchRepos>();
+builder.Services.AddScoped<IBranchRepos,BranchRepos>();
 builder.Services.AddScoped<IContactPersonRepos,ContactPersonRepos>();
 builder.Services.AddScoped<ICustomerRepos,CustomerRepos>();
 builder.Services.AddScoped<IDistributorRepos,DistributorRepos>();
@@ -43,11 +44,23 @@ builder.Services.AddScoped<IWarehouseRepos,WarehouseRepos>();
 builder.Services.AddScoped<IDistributorIMEIRepos,DistributorImeiRepos>();
 builder.Services.AddScoped<IUserRolesRepos,UserRoleRepos>();
 builder.Services.AddScoped<IProductWarehouseRepos,ProductWarehouseRepos>();
+builder.Services.AddTransient<DataSeeder>();
+builder.Services.AddDbContext<EMS_ITCContext>(item => item.UseSqlServer(config.GetConnectionString("DC")));
+
 var app = builder.Build();
 
+if (args.Length == 1 && args[0].ToLower() == "seeddata")
+    SeedData(app);
 
-
-
+void SeedData(IHost app)
+{
+    var scopedfactory = app.Services.GetService<IServiceScopeFactory>();
+    using (var scope = scopedfactory.CreateScope())
+    { 
+    var service = scope.ServiceProvider.GetService<DataSeeder>();
+        service.Seed();
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

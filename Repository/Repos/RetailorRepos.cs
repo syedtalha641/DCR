@@ -1,8 +1,7 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
 
 
 namespace Repository.Repos
@@ -11,12 +10,9 @@ namespace Repository.Repos
     {
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
-
-        public RetailorRepos(EMS_ITCContext context, IConfiguration configuration)
+        public RetailorRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
 
@@ -53,7 +49,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Retailer> DeleteRetailer(int RetailerId)
+        public async Task<object> DeleteRetailer(int RetailerId)
         {
             var result = await _context.Retailers.Where(a => a.RetailerId == RetailerId).FirstOrDefaultAsync();
             if (result != null)
@@ -65,12 +61,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<Retailer> GetRetailer(int RetailerId)
+        public async Task<object> GetRetailer(int RetailerId)
         {
             return await _context.Retailers.FirstOrDefaultAsync(a => a.RetailerId == RetailerId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Retailer>> GetRetailers()
+        public async Task<IEnumerable<object>> GetRetailers()
         {
             return await _context.Retailers.Where(x => x.IsActive == true).ToListAsync();
         }
