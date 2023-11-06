@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /WebApi/Program.cs
 /WebApi/DCRWebApi.csproj
 /DAL/EntityModels/EMS_ITCContext.cs
+/WebApi/appsettings.json
