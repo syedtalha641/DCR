@@ -11,10 +11,12 @@
                 <div class="button">
                     <button type="button" data-toggle="modal" data-target="#exampleModalCenter"
                             class="btn btn-primary btn-sm">
-                        <i class="fa-solid fa-plus"></i> Add
+                        <i class="fa-solid fa-plus"></i> Add Product
                     </button>
                 </div>
-                @Html.Partial("_ProductModel")
+                <section class="ModalSection">
+                    @Html.Partial("_ProductModel")
+                </section>
             </div>
 
             <!-------------- Table ----------------->
@@ -55,19 +57,20 @@
 
 
 <script>
-    // ----------- GET DataTransfer FROM API -------------
+    // ----------- GET Data FROM API -------------
+
     $(document).ready(function () {
         $('#producttable').DataTable({
             processing: true,
             serverSide: true,
-            paging:true,
+            paging: true,
             filter: true,
             lengthMenu: [
                 [10, 20, 50, 75, 100, -1],
                 [10, 20, 50, 75, 100, "All"]
             ],
             pageLength: 10,
-            scrollX:true,
+            scrollX: true,
             ajax: {
                 url: '/Product/GetProducts',
                 type: "POST"
@@ -87,10 +90,9 @@
                 { data: "series", "name": "Series" },
                 {
                     data: "productId", render: function (data, type, row, meta) {
-                        return "<button class='btn btn-primary'><i class='fa fa-edit'></i></button>" +
-                            "<button class='btn btn-danger'><i class='fa fa-trash'></i></button>"
+                        return "<button class='btn btn-primary btnEdit'  data-productid='" + data + "'><i class='fa fa-edit'></i></button>" +
+                            "<button class='btn btn-danger btnDelete' data-productid='" + data + "'><i class='fa fa-trash'></i></button>"
                     }
-
                 }
             ],
             columnDefs: [
@@ -102,6 +104,62 @@
             ]
         });
     });
+
+
+    // ----------- EDIT AJAX -------------
+
+    $(document).on("click", ".btnEdit", function () {
+        var Id = $(this).attr("data-productid");
+
+        $.ajax({
+            url: '/Product/JsonGetProduct',
+            type: 'POST',
+            data: {productId : Id},
+            success: function (resp) {
+                if (resp.response) {
+                    console.log(resp);
+                    $(".addSection").html(resp);
+                    $("#exampleModalCenter").modal('show');
+                } else {
+                    $("#exampleModalCenter").modal('hide');
+                    toastr.error("Fetching Data Failed");
+                }
+            }
+        });
+
+    });
+
+
+
+    // ----------- DELETE AJAX -------------
+
+    $(document).on("click", ".btnDelete", function () {
+        var id = $(this).attr("data-productid");
+
+        if (confirm("Are you sure you want to delete this record?")) {
+            $.ajax({
+                url: "/Product/JsonDelete",
+                type: "POST",
+                data: { ProductId: id },
+                success: function (resp) {
+                    if (resp.response) {
+                        console.log(resp);
+                        toastr.success("Record Deleted");
+                    } else {
+
+                        toastr.error("Record Deleting Failed");
+
+                    }
+                },
+                error: function () {
+                    toastr.error("Data Not Found");
+                }
+            });
+        }
+    });
+
+
+
 
 
 

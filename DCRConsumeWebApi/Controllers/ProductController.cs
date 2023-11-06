@@ -1,11 +1,7 @@
 ﻿using DCR.Helper.ViewModel;
-using DCR.ViewModel.ViewModel;
 using DCRHelper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Drawing.Drawing2D;
 
 namespace DCRConsumeWebApi.Controllers
 {
@@ -20,6 +16,15 @@ namespace DCRConsumeWebApi.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public IActionResult PartialView(string data)
+        {
+            return PartialView("_ProductModal");
+        }
+
+
+
         [HttpPost]
         public async Task<JsonResult> JSONGetProducts(ProductViewModel model)
         {
@@ -29,6 +34,43 @@ namespace DCRConsumeWebApi.Controllers
 
             return Json(response);
 
+        }
+
+
+        [HttpPost]
+        public async Task<JsonResult> JsonGetProduct(int ProductId)
+        {
+            try
+            {
+                if (ProductId >= 1)
+                {
+                    string data = JsonConvert.SerializeObject(ProductId);
+
+                    string response = await apiCall.consumeapi(data, "/Product/GetProduct");
+
+                    if (response != null)
+                    {
+                        resp.response = response;
+                    }
+                    else
+                    {
+                        resp.response = false;
+                        resp.erorMessage = "Data Not Found";
+                    }
+                }
+                else
+                {
+                    resp.hasError = true;
+                    resp.erorMessage = "Please Fill The Form";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                resp.hasError = true;
+                resp.erorMessage = ex.Message;
+            }
+            return Json(resp);
         }
 
 
@@ -64,7 +106,7 @@ namespace DCRConsumeWebApi.Controllers
                     // Apply sorting based on the selected column and direction
                     if (sortColumnDir.ToLower() == "asc")
                     {
-                        result = result.OrderBy(p => p.MaterialId).ToList();
+                        result = result.OrderBy(p => p.ProductId).ToList();
                     }
                     else
                     {
@@ -114,7 +156,7 @@ namespace DCRConsumeWebApi.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<JsonResult> JsonAddProducts(ProductViewModel model)
         {
             try
@@ -170,7 +212,105 @@ namespace DCRConsumeWebApi.Controllers
 
             return Json(resp);
 
-
         }
+
+
+
+        [HttpPost]
+        public async Task<JsonResult> JsonUpdateProduct(ProductViewModel model)
+        {
+            try
+            {
+                var addproduct = new ProductViewModel
+                {
+
+                    ProductType = model.ProductType,
+                    MaterialId = model.MaterialId,
+                    ProductPrice = model.ProductPrice,
+                    ProductSku = model.ProductSku,
+                    ProductCode = model.ProductCode,
+                    MarketName = model.MarketName,
+                    Brand = model.Brand,
+                    Memory = model.Memory,
+                    Model = model.Model,
+                    Color = model.Color,
+                    Series = model.Series
+
+                };
+
+
+                if (addproduct != null)
+                {
+                    string data = JsonConvert.SerializeObject(addproduct);
+
+                    string response = await apiCall.consumeapi(data, "/Product/UpdateProduct");
+
+                    if (response != null)
+                    {
+                        resp.response = true;
+                        resp.erorMessage = "Record Updated Successfully";
+                    }
+                    else
+                    {
+                        resp.response = false;
+                        resp.erorMessage = "Record Not Updated";
+                    }
+
+                }
+                else
+                {
+                    resp.hasError = true;
+                    resp.erorMessage = "Please Fill The Form";
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+            return Json(model);
+        }
+
+
+
+        public async Task<JsonResult> JsonDelete(int ProductId)
+        {
+            try
+            {
+                if (ProductId >= 1)
+                {
+                    string data = JsonConvert.SerializeObject(ProductId);
+
+                    string response = await apiCall.consumeapi(data, "/Product/DeleteProduct");
+
+                    if (response != null)
+                    {
+                        resp.response = true;
+                        resp.erorMessage = "Record Deleted Successfully";
+                    }
+                    else
+                    {
+                        resp.response = false;
+                        resp.erorMessage = "Data Not Found";
+                    }
+                }
+                else
+                {
+                    resp.hasError = true;
+                    resp.erorMessage = "Somthing Went Wrong";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                resp.hasError = true;
+                resp.erorMessage = ex.Message;
+            }
+            return Json(resp);
+        }
+
+
     }
 }
