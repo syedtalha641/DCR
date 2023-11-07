@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -38,7 +35,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<MenuList>> GetMenuList(int MenuListId)
+        public async Task<ActionResult<object>> GetMenuList(int MenuListId)
         {
             try
             {
@@ -61,7 +58,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<MenuList>> CreateMenuList([FromBody] MenuListViewModel model)
+        public async Task<ActionResult<object>> CreateMenuList([FromBody] MenuListViewModel model)
         {
             try
             {
@@ -83,7 +80,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<MenuList>> UpdateMenuList(int MenuListId, [FromBody] MenuListViewModel model)
+        public async Task<ActionResult<object>> UpdateMenuList(int MenuListId, [FromBody] MenuListViewModel model)
         {
             try
             {
@@ -113,7 +110,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<MenuList>> DeleteMenuList([FromBody] int MenuListId)
+        public async Task<ActionResult<object>> DeleteMenuList([FromBody] int MenuListId)
         {
             try
             {
@@ -121,8 +118,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _menuListRepos.DeleteMenu(MenuListId);
-                return CreatedAtAction(nameof(GetMenuList), new { id = CreatedUser.Title}, CreatedUser);
+                var CreatedMenuList = await _menuListRepos.DeleteMenu(MenuListId);
+                return StatusCode(StatusCodes.Status201Created, CreatedMenuList);
+
             }
             catch (Exception)
             {

@@ -38,8 +38,9 @@ namespace DCRConsumeWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<JsonResult> JsonGetProduct(int ProductId)
+        public async Task<IActionResult> JsonGetProduct(int ProductId)
         {
+            ProductViewModel modal = new ProductViewModel();
             try
             {
                 if (ProductId >= 1)
@@ -50,7 +51,10 @@ namespace DCRConsumeWebApi.Controllers
 
                     if (response != null)
                     {
+                        // Deserialize the JSON content
+                        modal= JsonConvert.DeserializeObject<ProductViewModel>(response.ToString());
                         resp.response = response;
+
                     }
                     else
                     {
@@ -62,7 +66,6 @@ namespace DCRConsumeWebApi.Controllers
                 {
                     resp.hasError = true;
                     resp.erorMessage = "Please Fill The Form";
-
                 }
             }
             catch (Exception ex)
@@ -70,7 +73,7 @@ namespace DCRConsumeWebApi.Controllers
                 resp.hasError = true;
                 resp.erorMessage = ex.Message;
             }
-            return Json(resp);
+            return PartialView("_ProductModel", modal);
         }
 
 

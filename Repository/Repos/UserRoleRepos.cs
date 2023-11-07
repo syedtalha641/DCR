@@ -1,8 +1,9 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
-using Twilio.TwiML.Fax;
+
+
 
 namespace Repository.Repos
 {
@@ -27,8 +28,8 @@ namespace Repository.Repos
 
                     var userRole = new UserRole
                     {
-                        RoleId = userrole.RoleId,
-                        UserId = userrole.UserId,
+                        RoleId = model.RoleId,
+                        UserId = model.UserId,
                         // Map other properties as needed
                     };
                     if (model.RoleId == userRole.RoleId && model.UserId == userRole.UserId)
@@ -53,7 +54,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<UserRole> DeleteUserRole(int UserRoleId)
+        public async Task<object> DeleteUserRole(int UserRoleId)
         {
             var result = await _context.UserRoles.Where(a => a.UserRoleId == UserRoleId).FirstOrDefaultAsync();
             if (result != null)
@@ -65,12 +66,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<UserRole> GetUserRole(int UserRoleId)
+        public async Task<object> GetUserRole(int UserRoleId)
         {
             return await _context.UserRoles.FirstOrDefaultAsync(a => a.UserRoleId == UserRoleId);
         }
 
-        public async Task<IEnumerable<UserRole>> GetUserRoles()
+        public async Task<IEnumerable<object>> GetUserRoles()
         {
             return await _context.UserRoles.ToListAsync();
         }

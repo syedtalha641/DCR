@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -40,7 +37,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrder>> GetSaleOrder(int SaleOrderId)
+        public async Task<ActionResult<object>> GetSaleOrder(int SaleOrderId)
         {
             try
             {
@@ -63,7 +60,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrder>> CreateSaleOrder([FromBody] SaleOrderViewModel model)
+        public async Task<ActionResult<object>> CreateSaleOrder([FromBody] SaleOrderViewModel model)
         {
             try
             {
@@ -85,7 +82,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrder>> UpdateSaleOrder(int SaleOrderId, [FromBody] SaleOrderViewModel model)
+        public async Task<ActionResult<object>> UpdateSaleOrder(int SaleOrderId, [FromBody] SaleOrderViewModel model)
         {
             try
             {
@@ -115,16 +112,17 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<SalesOrder>> DeleteSaleOrder([FromBody] int SaleOrderId)
-        {
+        public async Task<ActionResult<object>> DeleteSaleOrder([FromBody] int SaleOrderId)
+        {   
             try
             {
                 if (SaleOrderId == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _saleOrderRepos.DeleteSaleOrder(SaleOrderId);
-                return CreatedAtAction(nameof(GetSaleOrder), new { id = CreatedUser.SalesOrderId}, CreatedUser);
+                var CreatedSalesOrder = await _saleOrderRepos.DeleteSaleOrder(SaleOrderId);
+                return StatusCode(StatusCodes.Status201Created, CreatedSalesOrder);
+
             }
             catch (Exception)
             {

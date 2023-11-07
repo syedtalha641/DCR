@@ -1,9 +1,6 @@
-﻿using DAL.EntityModels;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -37,7 +34,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<DistributorImei>> GetDistributorIMEI(int DistributorImeiId)
+        public async Task<ActionResult<object>> GetDistributorIMEI(int DistributorImeiId)
         {
             try
             {
@@ -59,7 +56,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<DistributorImei>> CreateDistributorIMEI([FromBody] DistibutorIMEIViewModel model)
+        public async Task<ActionResult<object>> CreateDistributorIMEI([FromBody] DistibutorIMEIViewModel model)
         {
             try
             {
@@ -82,7 +79,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<DistributorImei>> UpdateDistributorIMEI(int DistributorImeiId, [FromBody] DistibutorIMEIViewModel model)
+        public async Task<ActionResult<object>> UpdateDistributorIMEI(int DistributorImeiId, [FromBody] DistibutorIMEIViewModel model)
         {
             try
             {
@@ -111,7 +108,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<DistributorImei>> DeleteDistributorIMEI([FromBody] int DistributorImeiId)
+        public async Task<ActionResult<object>> DeleteDistributorIMEI([FromBody] int DistributorImeiId)
         {
             try
             {
@@ -120,7 +117,7 @@ namespace DCRWebApi.Controllers
                     return BadRequest();
                 }
                 var CreatedDistributorIMEI = await _distributorIMEIRepos.DeleteDistributorImei(DistributorImeiId);
-                return CreatedAtAction(nameof(GetDistributorIMEI), new { id = CreatedDistributorIMEI.DistributorImeiId }, CreatedDistributorIMEI);
+                return StatusCode(StatusCodes.Status201Created, CreatedDistributorIMEI);
             }
             catch (Exception)
             {

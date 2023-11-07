@@ -1,7 +1,7 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
 
 
 namespace Repository.Repos
@@ -62,7 +62,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<SalesOrderDetail> DeleteSalesOrderDetail(int SalesOrderDetailId)
+        public async Task<object> DeleteSalesOrderDetail(int SalesOrderDetailId)
         {
             var result = await _context.SalesOrderDetails.Where(a => a.SalesOrderId == SalesOrderDetailId).FirstOrDefaultAsync();
             if (result != null)
@@ -74,12 +74,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<SalesOrderDetail> GetSalesOrderDetail(int SaleseOrderDetailId)
+        public async Task<object> GetSalesOrderDetail(int SaleseOrderDetailId)
         {
             return await _context.SalesOrderDetails.FirstOrDefaultAsync(a => a.SalesOrderId == SaleseOrderDetailId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<SalesOrderDetail>> GetSalesOrderDetails()
+        public async Task<IEnumerable<object>> GetSalesOrderDetails()
         {
             return await _context.SalesOrderDetails.ToListAsync();
         }

@@ -1,10 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository;
-using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {
@@ -37,7 +33,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Inventory>> GetInventory(int InventoryId)
+        public async Task<ActionResult<object>> GetInventory(int InventoryId)
         {
             try
             {
@@ -58,7 +54,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Inventory>> CreateInventory([FromBody] InventoryViewModel model)
+        public async Task<ActionResult<object>> CreateInventory([FromBody] InventoryViewModel model)
         {
             try
             {
@@ -79,7 +75,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Inventory>> UpdateInventory(int InventoryId, [FromBody] InventoryViewModel model)
+        public async Task<ActionResult<object>> UpdateInventory(int InventoryId, [FromBody] InventoryViewModel model)
         {
             try
             {
@@ -108,7 +104,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Inventory>> DeleteInventory([FromBody] int InventoryId)
+        public async Task<ActionResult<object>> DeleteInventory([FromBody] int InventoryId)
         {
             try
             {
@@ -116,8 +112,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _inventoryRepos.DeleteInventory(InventoryId);
-                return CreatedAtAction(nameof(GetInventory), new { id = CreatedUser.InventoryId }, CreatedUser);
+                var CreatedInventory = await _inventoryRepos.DeleteInventory(InventoryId);
+                return StatusCode(StatusCodes.Status201Created, CreatedInventory);
+
             }
             catch (Exception)
             {

@@ -1,14 +1,8 @@
 ﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Twilio.TwiML.Fax;
+
 
 namespace Repository.Repos
 {
@@ -20,9 +14,6 @@ namespace Repository.Repos
         {
             _context = context;
         }
-
-
-
 
         public async Task<DistibutorIMEIViewModel> AddDistributorImei(DistibutorIMEIViewModel model)
         {
@@ -61,7 +52,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<DistributorImei> DeleteDistributorImei(int DistributorImeiId)
+        public async Task<object> DeleteDistributorImei(int DistributorImeiId)
         {
             var result = await _context.DistributorImeis.Where(a => a.DistributorImeiId == DistributorImeiId).FirstOrDefaultAsync();
             if (result != null)
@@ -73,12 +64,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<IEnumerable<DistributorImei>> GetDistributorImeis()
+        public async Task<object> GetDistributorImeis()
         {
             return await _context.DistributorImeis.ToListAsync();
         }
 
-        public async Task<DistributorImei> GetDistributorImei(int DistributorImeiId)
+        public async Task<object> GetDistributorImei(int DistributorImeiId)
         {
             return await _context.DistributorImeis.FirstOrDefaultAsync(a => a.DistributorImeiId == DistributorImeiId);
         }

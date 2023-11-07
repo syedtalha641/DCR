@@ -1,7 +1,7 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
 
 
 namespace Repository.Repos
@@ -51,7 +51,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Payment> DeletePayment(int Paymentid)
+        public async Task<object> DeletePayment(int Paymentid)
         {
             var result = await _context.Payments.Where(a => a.PaymentId == Paymentid).FirstOrDefaultAsync();
             if (result != null)
@@ -63,12 +63,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<Payment> GetPayment(int Paymentid)
+        public async Task<object> GetPayment(int Paymentid)
         {
             return await _context.Payments.FirstOrDefaultAsync(a => a.PaymentId == Paymentid && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Payment>> GetPayments()
+        public async Task<IEnumerable<object>> GetPayments()
         {
             return await _context.Payments.Where(x => x.IsActive == true).ToListAsync();
         }

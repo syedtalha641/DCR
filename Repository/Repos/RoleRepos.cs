@@ -2,11 +2,7 @@
 using DCR.Helper.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -52,7 +48,7 @@ namespace Repository.Repos
 
 
 
-        public async Task<Role> DeleteRole(int RoleId)
+        public async Task<object> DeleteRole(int RoleId)
         {
             var result = await _context.Roles.Where(a => a.RoleId == RoleId).FirstOrDefaultAsync();
             if (result != null)
@@ -64,12 +60,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<Role> GetRole(int RoleId)
+        public async Task<object> GetRole(int RoleId)
         {
             return await _context.Roles.FirstOrDefaultAsync(a => a.RoleId == RoleId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Role>> GetRoles()
+        public async Task<IEnumerable<object>> GetRoles()
         {
             return await _context.Roles.Where(x => x.IsActive == true).ToListAsync();
         }
@@ -91,10 +87,7 @@ namespace Repository.Repos
                 // Save changes to the database
                 await _context.SaveChangesAsync();
 
-
                 return model;
-
-
             }
             else
             {

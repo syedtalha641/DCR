@@ -1,16 +1,12 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace Repository.Repos
 {
-    public class BranchRepos : IBranchrepos
+    public class BranchRepos : IBranchRepos
     {
         private readonly EMS_ITCContext _context;
 
@@ -49,29 +45,35 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Branch> DeleteBranch(int BranchId)
+        public async Task<bool> DeleteBranch(int BranchId)
         {
-
             var result = await _context.Branches.Where(a => a.BranchId == BranchId).FirstOrDefaultAsync();
             if (result != null)
             {
-                result.IsActive = false;
+                var branch = result;
+                branch.IsActive = false;
                 await _context.SaveChangesAsync();
-                return result;
+                return true;
             }
-            return null;
+            return false;
         }
 
-        public async Task<Branch> GetBranch(int BranchId)
+        public async Task<string> GetBranch(int BranchId)
         {
-            return await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId && a.IsActive == true);
-        }
+            if (BranchId != null)
 
-        public async Task<IEnumerable<Branch>> GetBranches()
+            {
+                var branch = await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId && a.IsActive == true);
+                return branch != null ? JsonSerializer.Serialize(branch) : null;
+            }
+            return null; // If BranchId is null or the branch isn't found
+        }
+        public async Task<string> GetBranches()
         {
-            return await _context.Branches.Where(x => x.IsActive == true).ToListAsync();
-        }
+            var branchNames = await _context.Branches.Where(x => x.IsActive == true).ToListAsync();
 
+            return string.Join(", ", JsonSerializer.Serialize(branchNames));
+        }
         public async Task<BranchViewModel> UpdateBranch(int BranchId, BranchViewModel model)
         {
             var result = await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId);
@@ -87,17 +89,11 @@ namespace Repository.Repos
                 result.BranchCity = model.City;
                 result.BranchState = model.State;
                 result.BranchPostalCode = model.PostalCode;
+                result.UpdatedOn = DateTime.Now; 
 
-
-                // Update other fields if needed, e.g., UpdatedBy and UpdatedOn
-                //result.UpdatedBy = model.CustomerName; // Set the appropriate value
-                result.UpdatedOn = DateTime.Now; // Set the appropriate value
-                                                 // Save changes to the database
                 await _context.SaveChangesAsync();
 
-
                 return model;
-
 
             }
             else
@@ -108,4 +104,4 @@ namespace Repository.Repos
         }
     }
 
-    }
+ }

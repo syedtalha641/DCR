@@ -1,13 +1,8 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -15,12 +10,9 @@ namespace Repository.Repos
     {
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
-
-        public MenuListRepos(EMS_ITCContext context, IConfiguration configuration)
+        public MenuListRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
         public async Task<MenuListViewModel> AddMenu(MenuListViewModel model)
@@ -54,7 +46,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<MenuList> DeleteMenu(int MenuId)
+        public async Task<object> DeleteMenu(int MenuId)
         {
             var result = await _context.MenuLists.Where(a => a.Id == MenuId).FirstOrDefaultAsync();
             if (result != null)
@@ -66,12 +58,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<MenuList> GetMenuList(int MenuId)
+        public async Task<object> GetMenuList(int MenuId)
         {
             return await _context.MenuLists.FirstOrDefaultAsync(a => a.Id == MenuId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<MenuList>> GetMenuLists()
+        public async Task<IEnumerable<object>> GetMenuLists()
         {
            return await _context.MenuLists
         .Where(x => x.IsActive == true) // You can also simplify this to .Where(x => x.IsActive)

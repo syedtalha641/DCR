@@ -8,9 +8,9 @@ namespace DCR.Helper.ViewModel
 {
     public class CustomerViewModel
     {
-        
+
         public string CustomerName { get; set; }
-        //public string CustomerType { get; set; }
+        //public enum CustomerType { Distributor, Retailor, SubDealor, ThirdDealor, Online }
         public string CustomerEmail { get; set; }
         public string CustomerPhone { get; set; }
         public string CustomerAddress { get; set; }

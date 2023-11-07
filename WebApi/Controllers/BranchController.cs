@@ -1,9 +1,8 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
+
+
 
 namespace DCRWebApi.Controllers
 {
@@ -11,9 +10,9 @@ namespace DCRWebApi.Controllers
     [ApiController]
     public class BranchController : ControllerBase
     {
-        private readonly IBranchrepos _branchrepos;
+        private readonly IBranchRepos _branchrepos;
 
-        public BranchController(IBranchrepos branchrepos)
+        public BranchController(IBranchRepos branchrepos)
         {
             _branchrepos = branchrepos;
         }
@@ -37,7 +36,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Branch>> GetBranch(int BranchId)
+        public async Task<ActionResult<object>> GetBranch([FromBody]int BranchId)
         {
             try
             {
@@ -60,29 +59,28 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Branch>> CreateBranch([FromBody] BranchViewModel model)
+        public async Task<ActionResult> CreateBranch([FromBody] BranchViewModel model)
         {
             try
             {
-
                 if (model == null)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _branchrepos.AddBranch(model);
-                return CreatedAtAction(nameof(GetBranch), new { id = CreatedUser.Name }, CreatedUser);
-            }
+
+                var createdBranch = await _branchrepos.AddBranch(model);
+
+                return StatusCode(StatusCodes.Status201Created, createdBranch);
+            } 
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-               "Error in Creating!");
-
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in Creating!");
             }
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateBranch(int BranchId, [FromBody] BranchViewModel model)
+        public async Task<ActionResult> UpdateBranch(int BranchId, [FromBody] BranchViewModel model)
         {
             try
             {
@@ -112,21 +110,24 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Branch>> DeleteBranch([FromBody] int BranchId)
+        public async Task<ActionResult> DeleteBranch([FromBody] int BranchId)
         {
             try
             {
-                if (BranchId == null)
+                if (BranchId <= 0)
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _branchrepos.DeleteBranch(BranchId);
-                return CreatedAtAction(nameof(GetBranch), new { id = CreatedUser.BranchId }, CreatedUser);
+                var deletedBranch = await _branchrepos.DeleteBranch(BranchId);
+                if (deletedBranch == null)
+                {
+                    return NotFound();
+                }
+                return Ok(deletedBranch);
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-               "Error in Creating!");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in Deleting!");
             }
         }
     }

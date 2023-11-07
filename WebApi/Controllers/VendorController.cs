@@ -1,8 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {
@@ -38,7 +36,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost("{VendorId}")]
-        public async Task<ActionResult<Vendor>> GetVendor(int VendorId)
+        public async Task<ActionResult<object>> GetVendor(int VendorId)
         {
             try
             {
@@ -60,7 +58,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost("")]
-        public async Task<ActionResult<Vendor>> CreateVendor([FromBody] VendorViewModel model)
+        public async Task<ActionResult<object>> CreateVendor([FromBody] VendorViewModel model)
         {
             try
             {
@@ -84,7 +82,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost("")]
-        public async Task<ActionResult<Vendor>> UpdateVendor(int VendorId, [FromBody] VendorViewModel model)
+        public async Task<ActionResult<object>> UpdateVendor(int VendorId, [FromBody] VendorViewModel model)
         {
             try
             {
@@ -114,7 +112,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost("")]
-        public async Task<ActionResult<Vendor>> DeleteVendor([FromBody] int VendorId)
+        public async Task<ActionResult<object>> DeleteVendor([FromBody] int VendorId)
         {
             try
             {
@@ -122,8 +120,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _vendorRepos.DeleteVendor(VendorId);
-                return CreatedAtAction(nameof(GetVendor), new { id = CreatedUser.VendorId }, CreatedUser);
+                var CreatedVendor = await _vendorRepos.DeleteVendor(VendorId);
+                return StatusCode(StatusCodes.Status201Created, CreatedVendor);
+
             }
             catch (Exception)
             {

@@ -15,7 +15,6 @@
                     </button>
                 </div>
                 <section class="ModalSection">
-                    @Html.Partial("_ProductModel")
                 </section>
             </div>
 
@@ -72,7 +71,7 @@
             pageLength: 10,
             scrollX: true,
             ajax: {
-                url: '/Product/GetProducts',
+                url: '@Url.Action("GetProducts","Product")',
                 type: "POST"
             },
             columns: [
@@ -114,11 +113,27 @@
         $.ajax({
             url: '/Product/JsonGetProduct',
             type: 'POST',
-            data: {productId : Id},
+            data: { productId: Id },
+            datatype: 'application/json',
             success: function (resp) {
-                if (resp.response) {
-                    console.log(resp);
-                    $(".addSection").html(resp);
+                console.log(resp);
+                if (resp != null) {
+                    // resp = JSON.parse(resp.response);
+                    // $("#productid").val(resp.productId);
+                    // $("#producttype").val(resp.productType);
+                    // $("#materialId").val(resp.materialId);
+                    // $("#productprice").val(resp.productPrice);
+                    // $("#productsku").val(resp.productSku);
+                    // $("#productcode").val(resp.productCode);
+                    // $("#pmarketname").val(resp.marketName);
+                    // $("#pbrand").val(resp.brand);
+                    // $("#pmemory").val(resp.memory);
+                    // $("#pmodel").val(resp.model);
+                    // $("#pcolor").val(resp.color);
+                    // $("#pmodel").val(resp.model);
+                    // $("#pseries").val(resp.series);
+
+                    $(".ModalSection").html(resp);
                     $("#exampleModalCenter").modal('show');
                 } else {
                     $("#exampleModalCenter").modal('hide');

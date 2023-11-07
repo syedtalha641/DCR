@@ -1,8 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {
@@ -39,7 +37,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrder>> GetPurchaeOrder(int PurchaseId)
+        public async Task<ActionResult<object>> GetPurchaeOrder(int PurchaseId)
         {
             try
             {
@@ -62,7 +60,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrder>> CreatePurchaseOrder([FromBody] PurchaseOrderViewModel model)
+        public async Task<ActionResult<object>> CreatePurchaseOrder([FromBody] PurchaseOrderViewModel model)
         {
             try
             {
@@ -84,7 +82,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrder>> UpdatePurchaseOrder(int PurchaseId, [FromBody] PurchaseOrderViewModel model)
+        public async Task<ActionResult<object>> UpdatePurchaseOrder(int PurchaseId, [FromBody] PurchaseOrderViewModel model)
         {
             try
             {
@@ -114,7 +112,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<PurchaseOrder>> DeletePurchaseOrder([FromBody] int PurchaseId)
+        public async Task<ActionResult<object>> DeletePurchaseOrder([FromBody] int PurchaseId)
         {
             try
             {
@@ -122,8 +120,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _purchaseOrderRepos.DeletePurchaseOrder(PurchaseId);
-                return CreatedAtAction(nameof(GetPurchaeOrder), new { id = CreatedUser.PurchaseId }, CreatedUser);
+                var CreatedPurchaseOrder = await _purchaseOrderRepos.DeletePurchaseOrder(PurchaseId);
+                return StatusCode(StatusCodes.Status201Created, CreatedPurchaseOrder);
+
             }
             catch (Exception)
             {

@@ -1,13 +1,7 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Abstractions;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
@@ -63,7 +57,7 @@ namespace Repository
         
         }
 
-        public async Task<Warehouse> DeleteWarehouse(int WarehouseId)
+        public async Task<object> DeleteWarehouse(int WarehouseId)
         {
             var result = await _context.Warehouses.Where(a => a.WarehouseId == WarehouseId).FirstOrDefaultAsync();
             if (result != null)
@@ -75,12 +69,12 @@ namespace Repository
             return null;
         }
 
-        public async Task<Warehouse> GetWarehouse(int WarehouseId)
+        public async Task<object> GetWarehouse(int WarehouseId)
         {
             return await _context.Warehouses.FirstOrDefaultAsync(a => a.WarehouseId == WarehouseId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Warehouse>> GetWarehouses()
+        public async Task<IEnumerable<object>> GetWarehouses()
         {
             return await _context.Warehouses.Where(x => x.IsActive == true).ToListAsync();
         }

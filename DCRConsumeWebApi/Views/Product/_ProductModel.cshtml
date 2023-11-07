@@ -2,27 +2,32 @@
 
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
+
+
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">ADD PRODUCT</h5>
+                <h5 class="modal-title" id="ProductModalTitle">ADD PRODUCT</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <form asp-action="JsonAddProducts" method="post" class="formTopbar">
-                    @Html.AntiForgeryToken()
+                    @* @Html.AntiForgeryToken() *@
                     <div class="row ">
                         <div class="col-md-6">
-                            @*   <div class="input-group input-group-sm mb-3">
+                              <div class="input-group input-group-sm mb-3">
                             <div class="input-group-text col-sm-4 txtSize">
                             PRODUCT ID
                             </div>
-                            <input type="text" id="productid" class="form-control" placeholder="">
-                            </div> *@
+                            <input type="text" id="productid" disabled="disabled" class="form-control" placeholder="">
+                            </div>
 
                             <div class="input-group input-group-sm mb-2">
                                 <div class="input-group-text col-sm-4 txtSize">
@@ -42,8 +47,8 @@
                                     MATERIAL ID
                                 </div>
                                 <input asp-for="MaterialId" type="text" id="materialId" class="form-control" placeholder="">
-                            </div>
-
+                            </div>       
+                           
                             <div class="input-group input-group-sm mb-3">
                                 <div class="input-group-text col-sm-4 txtSize">
                                     PRODUCT PRICE
@@ -116,18 +121,18 @@
 
     function ProductModelfunction() {
         var req = {
-                // "ProductId": $("#productid").val(),
-                ProductType: $("#producttype").val(),
-                MaterialId: $("#materialId").val(),
-                ProductPrice: $("#productprice").val(),
-                ProductSku: $("#productsku").val(),
-                ProductCode: $("#productcode").val(),
-                MarketName: $("#pmarketname").val(),
-                Brand: $("#pbrand").val(),
-                Memory: $("#pmemory").val(),
-                Model: $("#pmodel").val(),
-                Color: $("#pcolor").val(),
-                Series: $("#pseries").val()
+            ProductId: $("#productid").val(),
+            ProductType: $("#producttype").val(),
+            MaterialId: $("#materialId").val(),
+            ProductPrice: $("#productprice").val(),
+            ProductSku: $("#productsku").val(),
+            ProductCode: $("#productcode").val(),
+            MarketName: $("#pmarketname").val(),
+            Brand: $("#pbrand").val(),
+            Memory: $("#pmemory").val(),
+            Model: $("#pmodel").val(),
+            Color: $("#pcolor").val(),
+            Series: $("#pseries").val()
         }
 
 
@@ -135,7 +140,7 @@
         $.ajax({
             "url": "/Product/JsonAddProducts",
             "type": "post",
-            "data": { model: req }, // Convert to JSON and send
+            "data": { model: req },
             "datatype": "json",
             "success": function (data) {
                 console.log(data.ProductViewModel)
@@ -144,8 +149,11 @@
                     toastr.error("Please Fill The Form");
                 }
                 else {
-                    console.log(data.response)
-                    toastr.success("Record Successfully Saved");
+                    toastr.success("Record Successfully Saved", "", {
+                        onHidden: function () {
+                            window.location.reload();
+                        }
+                    });
                 }
             }
         })
@@ -153,6 +161,7 @@
 
     $('#pmodelbtnsubmit').on('click', function () {
         ProductModelfunction();
+
     });
 
 

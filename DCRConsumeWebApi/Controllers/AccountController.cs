@@ -4,15 +4,8 @@ using System.Net.Mail;
 using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authentication;
-using DCR.Helper.ViewModel;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Newtonsoft.Json.Linq;
-using System.Reflection.Metadata;
-using NToastNotify;
-using System.Drawing.Drawing2D;
-using DCR.ViewModel.ViewModel;
 using DCRHelper;
+using DCR.Helper.ViewModel;
 
 namespace DCRConsumeWebApi.Controllers
 {
@@ -21,11 +14,6 @@ namespace DCRConsumeWebApi.Controllers
     {
         ApiCall apiCall = new ApiCall();
         JSONRsponse resp = new JSONRsponse();
-
-     
-
-      
-
 
         [HttpGet]
         public IActionResult Login()
@@ -57,7 +45,7 @@ namespace DCRConsumeWebApi.Controllers
 
 
                
-                if (response != null)
+                if (response != "")
                 {
                     // Redirect to the dashboard
                     return RedirectToAction("Dashboard", "Home");
@@ -171,20 +159,18 @@ namespace DCRConsumeWebApi.Controllers
         //        HttpResponseMessage response = await _httpClient.PostAsync(_httpClient.BaseAddress + "/Account/GetUserEmail", content);
 
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
+        //        if (response.IsSuccessStatusCode)
+        //        {
+        //            string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                        TwilioClient.Init(Sid.Value, Token.Value);
-                        string otp = combinedModel.OTPViewModel.RandomCode;
 
-                    if (!string.IsNullOrEmpty(jsonResponse))
-                    {
-                        combinedModel.OTPViewModel.To = jsonResponse;
-                        combinedModel.OTPViewModel.From = "malikdaniyal681@gmail.com";
-                        combinedModel.OTPViewModel.Password = "bzbw ense qpcr ticq";
-                        combinedModel.OTPViewModel.RandomCode = (new Random()).Next(999999).ToString();
-                        combinedModel.OTPViewModel.MessageBody = "You Are Hacked Please Stay Clam:" + combinedModel.OTPViewModel.RandomCode;
+        //            if (!string.IsNullOrEmpty(jsonResponse))
+        //            {
+        //                combinedModel.OTPViewModel.To = jsonResponse;
+        //                combinedModel.OTPViewModel.From = "malikdaniyal681@gmail.com";
+        //                combinedModel.OTPViewModel.Password = "bzbw ense qpcr ticq";
+        //                combinedModel.OTPViewModel.RandomCode = (new Random()).Next(999999).ToString();
+        //                combinedModel.OTPViewModel.MessageBody = "You Are Hacked Please Stay Clam:" + combinedModel.OTPViewModel.RandomCode;
 
         //                MailMessage mailMessage = new MailMessage();
         //                mailMessage.To.Add(combinedModel.OTPViewModel.To);
@@ -199,36 +185,36 @@ namespace DCRConsumeWebApi.Controllers
         //                smtp.Credentials = new NetworkCredential(combinedModel.OTPViewModel.From, combinedModel.OTPViewModel.Password);
 
 
-                        try
-                        {
-                            await smtp.SendMailAsync(mailMessage);
-                            // Success Toast
-                            _toastNotification.AddSuccessToastMessage("OTP Send Successfully To Your Email");
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("Error: " + ex.Message);
-                        }
-                    }
-                    else
-                    {
-                        // Error Toast
-                        _toastNotification.AddErrorToastMessage("Email address not found in the response.");
-                        return View("Login");
-                    }
-                }
-                else
-                {
-                    // Error Toast
-                    _toastNotification.AddErrorToastMessage("HTTP request was not successful.");
-                    return View("Login");
-                }
-            }
-            catch (Exception ex)
-            {
-                TempData["errorMessage"] = ex.Message;
-                return View("Login");
-            }
+        //                try
+        //                {
+        //                    await smtp.SendMailAsync(mailMessage);
+        //                    // Success Toast
+        //                    _toastNotification.AddSuccessToastMessage("OTP Send Successfully To Your Email");
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    Console.WriteLine("Error: " + ex.Message);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                // Error Toast
+        //                _toastNotification.AddErrorToastMessage("Email address not found in the response.");
+        //                return View("Login");
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // Error Toast
+        //            _toastNotification.AddErrorToastMessage("HTTP request was not successful.");
+        //            return View("Login");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        TempData["errorMessage"] = ex.Message;
+        //        return View("Login");
+        //    }
 
         //    // Store OTP in session
         //    HttpContext.Session.SetString("OTP", combinedModel.OTPViewModel.RandomCode);
@@ -245,9 +231,9 @@ namespace DCRConsumeWebApi.Controllers
 
 
 
-        [HttpPost]
-        public async Task<IActionResult> VerifyOTP(CombinedViewModel model)
-        {
+        //[HttpPost]
+        //public async Task<IActionResult> VerifyOTP(CombinedViewModel model)
+        //{
 
         //    string storedOTP = HttpContext.Session.GetString("OTP");
 

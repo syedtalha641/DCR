@@ -1,13 +1,8 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -16,16 +11,11 @@ namespace Repository.Repos
 
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
 
-        public ContactPersonRepos(EMS_ITCContext context, IConfiguration configuration)
+        public ContactPersonRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
-
-
-
 
         public async Task<ContactPersonViewModel> AddPerson(ContactPersonViewModel model)
         {
@@ -44,11 +34,6 @@ namespace Repository.Repos
 
                 _context.ContactPeople.Add(newPerson);
                 await _context.SaveChangesAsync();
-
-
-
-            
-
 
                 var personid = new Vendor
                 {
@@ -91,7 +76,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<ContactPerson> DeletePerson(int ContactPersonId)
+        public async Task<object> DeletePerson(int ContactPersonId)
         {
             var result = await _context.ContactPeople.Where(a => a.ContactPersonId == ContactPersonId).FirstOrDefaultAsync();
             if (result != null)
@@ -103,12 +88,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<ContactPerson> GetPerson(int ContactPersonId)
+        public async Task<object> GetPerson(int ContactPersonId)
         {
             return await _context.ContactPeople.FirstOrDefaultAsync(a => a.ContactPersonId == ContactPersonId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<ContactPerson>> GetPersons()
+        public async Task<IEnumerable<object>> GetPersons()
         {
             return await _context.ContactPeople.Where(x => x.IsActive == true).ToListAsync();
         }

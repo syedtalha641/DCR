@@ -1,13 +1,8 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Repository.Repos
 {
@@ -15,12 +10,10 @@ namespace Repository.Repos
     {
         private readonly EMS_ITCContext _context;
 
-        private readonly IConfiguration _configuration;
 
-        public SaleOrderRepos(EMS_ITCContext context, IConfiguration configuration)
+        public SaleOrderRepos(EMS_ITCContext context)
         {
             _context = context;
-            _configuration = configuration;
         }
 
 
@@ -63,11 +56,6 @@ namespace Repository.Repos
                         _context.SalesOrders.Add(newSaleOrder);
                         await _context.SaveChangesAsync();
 
-
-
-
-
-
                     }
                 }
 
@@ -82,7 +70,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<SalesOrder> DeleteSaleOrder(int SaleOrderId)
+        public async Task<object> DeleteSaleOrder(int SaleOrderId)
         {
 
             var result = await _context.SalesOrders.Where(a => a.SalesOrderId == SaleOrderId).FirstOrDefaultAsync();
@@ -95,12 +83,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<SalesOrder> GetSaleOrder(int SaleOrderId)
+        public async Task<object> GetSaleOrder(int SaleOrderId)
         {
             return await _context.SalesOrders.FirstOrDefaultAsync(a => a.SalesOrderId == SaleOrderId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<SalesOrder>> GetSaleOrders()
+        public async Task<IEnumerable<object>> GetSaleOrders()
         {
             return await _context.SalesOrders.Where(x => x.IsActive == true).ToListAsync();
         }

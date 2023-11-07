@@ -1,7 +1,7 @@
 ﻿using DAL.EntityModels;
+using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
 
 
 namespace Repository.Repos
@@ -52,7 +52,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<PurchaseOrderDetail> DeletePurchaseOrderDetail(int PurchaseOrderDetailId)
+        public async Task<object> DeletePurchaseOrderDetail(int PurchaseOrderDetailId)
         {
             var result = await _context.PurchaseOrderDetails.Where(a => a.PurchaseOrderDetailId == PurchaseOrderDetailId).FirstOrDefaultAsync();
             if (result != null)
@@ -64,12 +64,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<PurchaseOrderDetail> GetPurchaseOrderDetail(int PurchaseOrderDetailId)
+        public async Task<object> GetPurchaseOrderDetail(int PurchaseOrderDetailId)
         {
             return await _context.PurchaseOrderDetails.FirstOrDefaultAsync(a => a.PurchaseOrderDetailId == PurchaseOrderDetailId);
         }
 
-        public async Task<IEnumerable<PurchaseOrderDetail>> GetPurchaseOrderDetails()
+        public async Task<IEnumerable<object>> GetPurchaseOrderDetails()
         {
             return await _context.PurchaseOrderDetails.ToListAsync();
         }

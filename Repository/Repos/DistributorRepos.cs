@@ -1,12 +1,7 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using Repository.IRepos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository.Repos
 {
@@ -60,7 +55,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<Distributor> DeleteDistributor(int DistributorId)
+        public async Task<object> DeleteDistributor(int DistributorId)
         {
             var result = await _context.Distributors.Where(a => a.DistributorId == DistributorId).FirstOrDefaultAsync();
             if (result != null)
@@ -72,12 +67,12 @@ namespace Repository.Repos
             return null;
         }
 
-        public async Task<Distributor> GetDistributor(int DistributorId)
+        public async Task<object> GetDistributor(int DistributorId)
         {
             return await _context.Distributors.FirstOrDefaultAsync(a => a.DistributorId == DistributorId && a.IsActive == true);
         }
 
-        public async Task<IEnumerable<Distributor>> GetDistributors()
+        public async Task<object> GetDistributors()
         {
             return await _context.Distributors.Where(x => x.IsActive == true).ToListAsync();
         }
@@ -112,5 +107,7 @@ namespace Repository.Repos
                 return null;
             }
         }
+
+     
     }
 }

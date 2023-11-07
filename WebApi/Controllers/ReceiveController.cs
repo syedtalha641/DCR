@@ -1,10 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
+﻿using DCR.ViewModel.IRepos;
 using DCR.ViewModel.ViewModel;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
-using Repository.Repos;
 
 namespace DCRWebApi.Controllers
 {
@@ -38,7 +34,7 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Receive>> GetReceive(int ReceiveId)
+        public async Task<ActionResult<object>> GetReceive(int ReceiveId)
         {
             try
             {
@@ -61,7 +57,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Receive>> CreateReceive([FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<object>> CreateReceive([FromBody] ReceiveViewModel model)
         {
             try
             {
@@ -83,7 +79,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Receive>> UpdateReceive(int ReceiveId, [FromBody] ReceiveViewModel model)
+        public async Task<ActionResult<object>> UpdateReceive(int ReceiveId, [FromBody] ReceiveViewModel model)
         {
             try
             {
@@ -113,7 +109,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Receive>> DeleteReceive([FromBody] int ReceiveId)
+        public async Task<ActionResult<object>> DeleteReceive([FromBody] int ReceiveId)
         {
             try
             {
@@ -121,8 +117,9 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _receiveRepos.DeleteReceive(ReceiveId);
-                return CreatedAtAction(nameof(GetReceive), new { id = CreatedUser.ReceiveId }, CreatedUser);
+                var CreatedRecieve = await _receiveRepos.DeleteReceive(ReceiveId);
+                return StatusCode(StatusCodes.Status201Created, CreatedRecieve);
+
             }
             catch (Exception)
             {

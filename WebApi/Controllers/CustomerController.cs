@@ -1,8 +1,6 @@
-﻿using DAL.EntityModels;
-using DCR.Helper.ViewModel;
-using Microsoft.AspNetCore.Http;
+﻿using DCR.Helper.ViewModel;
+using DCR.ViewModel.IRepos;
 using Microsoft.AspNetCore.Mvc;
-using Repository.IRepos;
 
 namespace DCRWebApi.Controllers
 {
@@ -39,7 +37,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> GetCustomer(int CustomerId)
+        public async Task<ActionResult<object>> GetCustomer(int CustomerId)
         {
             try
             {
@@ -62,7 +60,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> CreateCustomer([FromBody] CustomerViewModel model)
+        public async Task<ActionResult<object>> CreateCustomer([FromBody] CustomerViewModel model)
         {
             try
             {
@@ -84,7 +82,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
+        public async Task<ActionResult<object>> UpdateCustomer(int CustomerId, [FromBody] CustomerViewModel model)
         {
             try
             {
@@ -114,7 +112,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Customer>> DeleteCustomer([FromBody] int CustomerId)
+        public async Task<ActionResult<object>> DeleteCustomer([FromBody] int CustomerId)
         {
             try
             {
@@ -122,8 +120,8 @@ namespace DCRWebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _customerRepos.DeleteCustomer(CustomerId);
-                return CreatedAtAction(nameof(GetCustomer), new { id = CreatedUser.CustomerId }, CreatedUser);
+                var CreatedCustomer = await _customerRepos.DeleteCustomer(CustomerId);
+                return StatusCode(StatusCodes.Status201Created, CreatedCustomer);
             }
             catch (Exception)
             {
