@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿    using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using System.Net;
@@ -143,12 +143,6 @@ namespace DCRConsumeWebApi.Controllers
             return Json(resp);
         }
 
-
-
-
-
-
-
         //[HttpPost]
         //public async Task<IActionResult> SendOTP(CombinedViewModel combinedModel)
         //{
@@ -227,10 +221,6 @@ namespace DCRConsumeWebApi.Controllers
 
 
 
-
-
-
-
         //[HttpPost]
         //public async Task<IActionResult> VerifyOTP(CombinedViewModel model)
         //{
@@ -250,12 +240,7 @@ namespace DCRConsumeWebApi.Controllers
 
         //    return View("Login");
         //} 
-        
-
-
-
-        
-        
+   
         [HttpPost]
         public async Task<JsonResult> JSONVerifyOTP(CombinedViewModel model)
         {
@@ -280,9 +265,6 @@ namespace DCRConsumeWebApi.Controllers
             }
             return Json(resp);
         }
-
-
-
 
         [HttpPost]
         public async Task<JsonResult> JsonMatchPassword(CombinedViewModel combinedModel)
@@ -335,9 +317,6 @@ namespace DCRConsumeWebApi.Controllers
 
             return Json(resp);
         }
-
-
-
 
 
         //[HttpPost]
@@ -400,11 +379,6 @@ namespace DCRConsumeWebApi.Controllers
 
         //    return View("Login");
         //}
-
-
-
-
-   
 
 
         [HttpPost]

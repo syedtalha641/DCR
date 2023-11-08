@@ -1,4 +1,5 @@
 ﻿using DAL.EntityModels;
+using DCR.Helper.ViewModel;
 using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,21 +14,21 @@ namespace Repository.Repos
             _context = context;
         }
 
-        public async Task<object> AddUser(string UserLoginId, string UserName, string UserEmail, string UserPassword, string ConfirmPassword)
+        public async Task<LoginViewModel> AddUser(LoginViewModel model)
         {
             try
             {
                 // Create a new User entity
                 var newUser = new User
                 {
-                    UserLoginId = UserLoginId,
-                    UserName = UserName,
-                    UserEmail = UserEmail
+                    UserLoginId = model.UserLoginId,
+                    UserName = model.UserName,
+                    UserEmail = model.UserEmail
                 };
 
-                if (UserPassword == ConfirmPassword)
+                if (model.UserPassword == model.ConfirmPassword)
                 {
-                    string password = UserPassword; // Get the user's input password
+                    string password = model.UserPassword; // Get the user's input password
                     string salt = BCrypt.Net.BCrypt.GenerateSalt();
                     string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
 
@@ -40,7 +41,7 @@ namespace Repository.Repos
                     _context.Users.Add(newUser);
                     await _context.SaveChangesAsync();
 
-                    return newUser;
+                    return model;
                 }
                 else
                 {
@@ -54,14 +55,50 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<object> GetUsers()
+        public async Task<List<LoginViewModel>> GetUsers()
         {
-            return await _context.Users.Where( x => x.IsActive == true).ToListAsync();
+            var result = await _context.Users.Where(x => x.IsActive == true).Select(x => new LoginViewModel
+                {
+                    UserName = x.UserName,
+                    UserEmail = x.UserEmail,
+                    UserLoginId = x.UserLoginId,
+                    UserPassword = x.UserPassword,
+                    UserContact = x.UserContact
+                })
+                .ToListAsync();
+
+            if (result != null && result.Any())
+            {
+                return result;
+            }
+            else
+            {
+                // Handle the case where no active branches are found
+                return new List<LoginViewModel>(); // Returning an empty list
+            }
+
         }
 
-        public async Task<object> GetUser(string UserLoginId)
+        public async Task<LoginViewModel> GetUser(string UserLoginId)
         {
-            return await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId);
+            var result = await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId && a.IsActive == true);
+
+            if (result != null)
+            {
+                var loginviewmodel = new LoginViewModel
+                {
+                    UserName = result.UserName,
+                    UserEmail = result.UserEmail,
+                    UserLoginId = result.UserLoginId,
+                    UserPassword = result.UserPassword,
+                    UserContact = result.UserContact
+                };
+                return loginviewmodel;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<string> GetUserEmail(string UserLoginId)
@@ -85,14 +122,14 @@ namespace Repository.Repos
             return result.UserContact;
         }
 
-        public async Task<object> LoginUser(string UserLoginId, string UserPassword)
+        public async Task<bool> LoginUser(PasswordUpdateViewModel model)
         {
 
-            var result = await _context.Users.SingleOrDefaultAsync(u => u.UserLoginId == UserLoginId);
+            var result = await _context.Users.SingleOrDefaultAsync(u => u.UserLoginId == model.UserLoginId);
 
             if (result == null)
             {
-                return null; // User not found
+                return false; // User not found
             }
 
 
@@ -104,26 +141,26 @@ namespace Repository.Repos
 
 
             // Verify the input password against the stored hash and salt
-            if (BCrypt.Net.BCrypt.Verify(UserPassword, storedHashedPassword))
+            if (BCrypt.Net.BCrypt.Verify(model.UserPassword, storedHashedPassword))
             {
                 // Passwords match, login successful
-                return result;
+                return true;
             }
             else
             {
                 // Passwords don't match, login failed
-                return null;
+                return false;
             }
         }
 
-        public async Task<object> UpdateUserPassword(string UserLoginId, string UserPassword)
+        public async Task<PasswordUpdateViewModel> UpdateUserPassword(PasswordUpdateViewModel model)
         {
             try
             {
-                var result = await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == UserLoginId);
+                var result = await _context.Users.FirstOrDefaultAsync(a => a.UserLoginId == model.UserLoginId);
                 if (result != null)
                 {
-                    string password = UserPassword; // Get the user's new input password
+                    string password = model.UserPassword; // Get the user's new input password
                     string salt = BCrypt.Net.BCrypt.GenerateSalt();
                     string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password, salt);
 
@@ -136,7 +173,7 @@ namespace Repository.Repos
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
-                    return result; // Return a string indicating success
+                    return model; // Return a string indicating success
                 }
                 else
                 {
@@ -151,16 +188,16 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<object> DeleteUser(string UserLoginId)
+        public async Task<bool> DeleteUser(string UserLoginId)
         {
             var result = await _context.Users.Where(a => a.UserLoginId == UserLoginId).FirstOrDefaultAsync();
             if (result != null)
             {
                 result.IsActive = false; // Mark the customer as inactive
                 await _context.SaveChangesAsync();
-                return result;
+                return true;
             }
-            return null;
+            return false;
         }
     }
 }

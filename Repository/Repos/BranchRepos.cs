@@ -2,7 +2,6 @@
 using DCR.Helper.ViewModel;
 using DCR.ViewModel.IRepos;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 namespace Repository.Repos
 {
@@ -58,22 +57,75 @@ namespace Repository.Repos
             return false;
         }
 
-        public async Task<string> GetBranch(int BranchId)
+        public async Task<BranchViewModel> GetBranch(int BranchId)
         {
-            if (BranchId != null)
+            var result = await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId && a.IsActive == true);
 
+            if (result != null)
             {
-                var branch = await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId && a.IsActive == true);
-                return branch != null ? JsonSerializer.Serialize(branch) : null;
-            }
-            return null; // If BranchId is null or the branch isn't found
-        }
-        public async Task<string> GetBranches()
-        {
-            var branchNames = await _context.Branches.Where(x => x.IsActive == true).ToListAsync();
+                var branchViewModel = new BranchViewModel
+                {
+                   Name  = result.BranchName,
+                   Person = result.BranchPerson,
+                   Email = result.BranchEmail,
+                   Phone = result.BranchPhone,
+                   Address = result.BranchAddress,
+                   Country = result.Country,
+                   City = result.BranchCity,
+                   State = result.BranchState,
+                   PostalCode = result.BranchPostalCode
+                };
 
-            return string.Join(", ", JsonSerializer.Serialize(branchNames));
+                return branchViewModel;
+            }
+            else
+            {
+                return null;
+            }
         }
+        public async Task<List<BranchViewModel>> GetBranches()
+        {
+            IEnumerable<BranchViewModel> branches = _context.Branches
+                .Where(x => x.IsActive == true)
+                .Select(x => new BranchViewModel
+                {
+                    Name = x.BranchName,
+                    Person = x.BranchPerson,
+                    Email = x.BranchEmail,
+                    Phone = x.BranchPhone,
+                    Address = x.BranchAddress,
+                    Country = x.Country,
+                    City = x.BranchCity,
+                    State = x.BranchState,
+                    PostalCode = x.BranchPostalCode
+                });
+
+            if (branches != null && branches.Any())
+            {
+                string sort = string.Empty;
+                if (sort == "productID")
+                {
+                    if (sort.Contains("asc"))
+                    {
+                        branches = branches.OrderBy(x => x.Name);
+                    }
+                    else
+                    {
+                        branches = branches.OrderByDescending(x => x.Name);
+
+                    }
+                }
+
+               var _branch = branches.Skip(0).Take(2).ToList();
+                return _branch;
+            }
+            else
+            {
+                // Handle the case where no active branches are found
+                return new List<BranchViewModel>(); // Returning an empty list
+            }
+        }
+
         public async Task<BranchViewModel> UpdateBranch(int BranchId, BranchViewModel model)
         {
             var result = await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId);

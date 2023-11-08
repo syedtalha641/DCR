@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using System.Net.Http;
+﻿
 using System.Text;
 
 namespace DCRHelper

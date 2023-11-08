@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authentication;
 using DCR.Helper.ViewModel;
 using DCR.ViewModel.IRepos;
 
@@ -35,24 +34,22 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<object>> GetUser([FromBody] string UserLoginId)
+        public async Task<ActionResult<LoginViewModel>> GetUser([FromBody] string UserLoginId)
         {
+            var result = await _accountRepos.GetUser(UserLoginId);
             try
-            {
-                var result = await _accountRepos.GetUser(UserLoginId);
+            {   
                 if (result == null)
                 {
-                    return NotFound();
+                    throw new Exception("UserLoginID Not Found");
                 }
-                return result;
             }
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-               "Error Retrieving Data!");
+                throw new Exception("API Not Respond");
 
             }
-
+            return result;
         }
 
         [HttpPost]
@@ -93,7 +90,7 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<string>> CreateUser([FromBody] LoginViewModel model )
+        public async Task<ActionResult> CreateUser([FromBody] LoginViewModel model )
         {
             try
             {
@@ -102,7 +99,7 @@ namespace WebApi.Controllers
                 {
                     return BadRequest();
                 }
-                var CreatedUser = await _accountRepos.AddUser(model.UserLoginId, model.UserName, model.UserEmail,model.UserPassword,model.ConfirmPassword);
+                var CreatedUser = await _accountRepos.AddUser(model);
                 return StatusCode(StatusCodes.Status201Created, CreatedUser);
             }
             catch (Exception)
@@ -115,29 +112,27 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<object>> LoginUser([FromBody] PasswordUpdateViewModel model)
+        public async Task<ActionResult<bool>> LoginUser([FromBody] PasswordUpdateViewModel model)
         {
 
             try
             {
                 if (User == null)
                 {
-                    return BadRequest("Invalid input"); // Return a BadRequest with a message
+                   throw new Exception("Object Cannot be Null!"); // Return a BadRequest with a message
                 }
 
-                var loggedInUser = await _accountRepos.LoginUser(model.UserLoginId,model.UserPassword);
+                var loggedInUser = await _accountRepos.LoginUser(model);
 
                 if (loggedInUser != null)
                 {
                     // Login successful, return a success message along with the user object
-
-                   
-                    return Ok(new { Message = "Login successful", User = loggedInUser,});
+                    throw new Exception("Values Cannot be Null!");
                 }
                 else
                 {
                     // Login failed, return a 401 Unauthorized status with a message
-                    return Unauthorized("Invalid username or password");
+                    throw new Exception("Invalid input");
                 }
             }
             catch (Exception)
@@ -150,14 +145,14 @@ namespace WebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<string>> UpdateUserPassword([FromBody] PasswordUpdateViewModel updateViewModel)
+        public async Task<ActionResult> UpdateUserPassword([FromBody] PasswordUpdateViewModel model)
         {
-            if (updateViewModel == null || string.IsNullOrWhiteSpace(updateViewModel.UserLoginId) || string.IsNullOrWhiteSpace(updateViewModel.UserPassword))
+            if (model == null || string.IsNullOrWhiteSpace(model.UserLoginId) || string.IsNullOrWhiteSpace(model.UserPassword))
             {
                 return BadRequest("Invalid request");
             }
 
-            var passwordUpdated = await _accountRepos.UpdateUserPassword(updateViewModel.UserLoginId, updateViewModel.UserPassword);
+            var passwordUpdated = await _accountRepos.UpdateUserPassword(model);
 
             if (passwordUpdated != null)
             {
@@ -172,7 +167,7 @@ namespace WebApi.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<object>> DeleteUser([FromBody] string UserLoginId)
+        public async Task<ActionResult<bool>> DeleteUser([FromHeader] string UserLoginId)
         {
             try
             {
@@ -182,7 +177,7 @@ namespace WebApi.Controllers
                 {
                     return NotFound($"User Id ={UserLoginId} not found!");
                 }
-                return await _accountRepos.DeleteUser(UserLoginId);
+                return Ok(await _accountRepos.DeleteUser(UserLoginId));
 
             }
             catch (Exception)

@@ -36,7 +36,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<object>> GetBranch([FromBody]int BranchId)
+        public async Task<ActionResult<BranchViewModel>> GetBranch([FromBody]int BranchId)
         {
             try
             {
@@ -55,8 +55,6 @@ namespace DCRWebApi.Controllers
             }
 
         }
-
-
 
         [HttpPost]
         public async Task<ActionResult> CreateBranch([FromBody] BranchViewModel model)

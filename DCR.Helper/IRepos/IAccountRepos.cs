@@ -1,16 +1,18 @@
 ﻿
 
+using DCR.Helper.ViewModel;
+
 namespace DCR.ViewModel.IRepos
 {
     public interface IAccountRepos
     {
-        Task<object> GetUsers();
-        Task<object> GetUser(string UserLoginId);
-        Task<object> AddUser(string UserLoginId, string UserName, string UserEmail, string UserPassword, string ConfirmPassword);
-        Task<object> LoginUser(string UserLoginId, string UserPassword);
-        Task<object> UpdateUserPassword(string UserLoginId, string UserPassword);
+        Task<List<LoginViewModel>> GetUsers();
+        Task<LoginViewModel> GetUser(string UserLoginId);
+        Task<LoginViewModel> AddUser(LoginViewModel model);
+        Task<bool> LoginUser(PasswordUpdateViewModel model);
+        Task<PasswordUpdateViewModel> UpdateUserPassword(PasswordUpdateViewModel model);
         Task<string> GetUserEmail(string UserLoginId);
         Task<string> GetUserPhoneNumber(string UserLoginId);
-        Task<object> DeleteUser(string UserLoginId);
+        Task<bool> DeleteUser(string UserLoginId);
     }
 }
