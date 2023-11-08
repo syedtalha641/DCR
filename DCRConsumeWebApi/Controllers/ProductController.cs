@@ -17,14 +17,6 @@ namespace DCRConsumeWebApi.Controllers
         }
 
 
-        [HttpGet]
-        public IActionResult PartialView(string data)
-        {
-            return PartialView("_ProductModal");
-        }
-
-
-
         [HttpPost]
         public async Task<JsonResult> JSONGetProducts(ProductViewModel model)
         {
@@ -52,7 +44,7 @@ namespace DCRConsumeWebApi.Controllers
                     if (response != null)
                     {
                         // Deserialize the JSON content
-                        modal= JsonConvert.DeserializeObject<ProductViewModel>(response.ToString());
+                        modal = JsonConvert.DeserializeObject<ProductViewModel>(response.ToString());
                         resp.response = response;
 
                     }
@@ -73,10 +65,8 @@ namespace DCRConsumeWebApi.Controllers
                 resp.hasError = true;
                 resp.erorMessage = ex.Message;
             }
-            return PartialView("_ProductModel", modal);
+            return PartialView("_EditProductModel", modal);
         }
-
-
 
 
         [HttpPost]
@@ -156,31 +146,14 @@ namespace DCRConsumeWebApi.Controllers
         }
 
 
-
-
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<JsonResult> JsonAddProducts(ProductViewModel model)
+        public async Task<IActionResult> JsonAddProducts(ProductViewModel model)
         {
             try
             {
 
-                var addproduct = new ProductViewModel
-                {
-
-                    ProductType = model.ProductType,
-                    MaterialId = model.MaterialId,
-                    ProductPrice = model.ProductPrice,
-                    ProductSku = model.ProductSku,
-                    ProductCode = model.ProductCode,
-                    MarketName = model.MarketName,
-                    Brand = model.Brand,
-                    Memory = model.Memory,
-                    Model = model.Model,
-                    Color = model.Color,
-                    Series = model.Series
-
-                };
+                ProductViewModel addproduct = new ProductViewModel();
 
 
                 if (addproduct != null)
@@ -213,10 +186,9 @@ namespace DCRConsumeWebApi.Controllers
                 resp.erorMessage = ex.Message;
             }
 
-            return Json(resp);
+            return PartialView("_AddProductModel");
 
         }
-
 
 
         [HttpPost]
@@ -224,22 +196,8 @@ namespace DCRConsumeWebApi.Controllers
         {
             try
             {
-                var addproduct = new ProductViewModel
-                {
-
-                    ProductType = model.ProductType,
-                    MaterialId = model.MaterialId,
-                    ProductPrice = model.ProductPrice,
-                    ProductSku = model.ProductSku,
-                    ProductCode = model.ProductCode,
-                    MarketName = model.MarketName,
-                    Brand = model.Brand,
-                    Memory = model.Memory,
-                    Model = model.Model,
-                    Color = model.Color,
-                    Series = model.Series
-
-                };
+                ProductViewModel addproduct = new ProductViewModel();
+                
 
 
                 if (addproduct != null)
@@ -248,7 +206,7 @@ namespace DCRConsumeWebApi.Controllers
 
                     string response = await apiCall.consumeapi(data, "/Product/UpdateProduct");
 
-                    if (response != null)
+                    if (response == "")
                     {
                         resp.response = true;
                         resp.erorMessage = "Record Updated Successfully";
@@ -275,7 +233,6 @@ namespace DCRConsumeWebApi.Controllers
 
             return Json(model);
         }
-
 
 
         public async Task<JsonResult> JsonDelete(int ProductId)

@@ -84,6 +84,10 @@
                 </div>
 
             </nav>
+
+
+         
+
             <div class="container">
                 <main role="main" class="pb-3">
                     @RenderBody()
@@ -107,28 +111,28 @@
                     for (var i = 0; i < resp.length; i++) {
                         if (!resp[i].hasChildren && resp[i].parentId == null) {
                             tempMenu += `
-                                                                                                                                                        <li class="sid-item">
-                                                                                    <a href="${resp[i].navigationUrl}" class="sidebar-link"><i class="${resp[i].iconClass} pe-2"></i>
-                                                                                                                                                                            ${resp[i].title}
-                                                                                                                                                            </a>
-                                                                                                                                                        </li>`;
+                                                                                                                                                                <li class="sid-item">
+                                                                                            <a href="${resp[i].navigationUrl}" class="sidebar-link"><i class="${resp[i].iconClass} pe-2"></i>
+                                                                                                                                                                                    ${resp[i].title}
+                                                                                                                                                                    </a>
+                                                                                                                                                                </li>`;
                         }
                         else if (resp[i].hasChildren && resp[i].parentId == null) {
                             tempMenu += `
-                                                                                                                                                        <li class="sidebar-item">
-                                                                                    <a href="${resp[i].navigationUrl}" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#pages-${resp[i].id}"
-                                                                                                                                                        aria-expanded="false" aria-controls="pages-${resp[i].id}">
-                                                                                                                                                        <i class="${resp[i].iconClass} pe-2""></i>
-                                                                                                                                                                        ${resp[i].title}
-                                                                                                                                                        </a>
-                                                                                                                                                        <ul id="pages-${resp[i].id}" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">`;
+                                                                                                                                                                <li class="sidebar-item">
+                                                                                            <a href="${resp[i].navigationUrl}" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#pages-${resp[i].id}"
+                                                                                                                                                                aria-expanded="false" aria-controls="pages-${resp[i].id}">
+                                                                                                                                                                <i class="${resp[i].iconClass} pe-2""></i>
+                                                                                                                                                                                ${resp[i].title}
+                                                                                                                                                                </a>
+                                                                                                                                                                <ul id="pages-${resp[i].id}" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">`;
                             for (let index = 0; index < resp.length; index++) {
                                 // console.log(index);
                                 if (!resp[index].hasChildren && resp[index].parentId == resp[i].id) {
                                     tempMenu += `
-                                                                                                                                                                    <li class="sidebar-item nest-item">
-                                                                                                    <a href="${resp[index].navigationUrl}" class="sidebar-link">${resp[index].title}</a>
-                                                                                                                                                                    </li>`;
+                                                                                                                                                                            <li class="sidebar-item nest-item">
+                                                                                                            <a href="${resp[index].navigationUrl}" class="sidebar-link">${resp[index].title}</a>
+                                                                                                                                                                            </li>`;
                                 }
 
                             }
@@ -165,8 +169,8 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
             crossorigin="anonymous"></script>
 
- 
-    @* <script src="~/js/datatablescript.js"></script> 
+
+    @* <script src="~/js/datatablescript.js"></script>
     <script src="~/js/datatables.bootstrap.buttons.js"></script> *@
     <script src="~/js/bootstrap.bundle.min-5.js"></script>
 
