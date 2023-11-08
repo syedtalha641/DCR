@@ -37,7 +37,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<object>> GetProduct(int ProductId)
+        public async Task<ActionResult<object>> GetProduct([FromBody] int ProductId)
         {
             try
             {
@@ -64,7 +64,6 @@ namespace DCRWebApi.Controllers
         {
             try
             {
-
                 if (model == null)
                 {
                     return BadRequest();

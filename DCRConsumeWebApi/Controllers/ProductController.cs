@@ -17,8 +17,8 @@ namespace DCRConsumeWebApi.Controllers
         }
 
 
-        [HttpPost]
-        public IActionResult PartialView() 
+        [HttpGet]
+        public IActionResult PartialView(string data)
         {
             return PartialView("_ProductModal");
         }
@@ -38,13 +38,42 @@ namespace DCRConsumeWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<JsonResult> JsonGetProduct(int ProductId)
+        public async Task<IActionResult> JsonGetProduct(int ProductId)
         {
-            string data = JsonConvert.SerializeObject(ProductId);
+            ProductViewModel modal = new ProductViewModel();
+            try
+            {
+                if (ProductId >= 1)
+                {
+                    string data = JsonConvert.SerializeObject(ProductId);
 
-            string response = await apiCall.consumeapi(data, "/Product/GetProduct");
+                    string response = await apiCall.consumeapi(data, "/Product/GetProduct");
 
-            return Json(response);
+                    if (response != null)
+                    {
+                        // Deserialize the JSON content
+                        modal= JsonConvert.DeserializeObject<ProductViewModel>(response.ToString());
+                        resp.response = response;
+
+                    }
+                    else
+                    {
+                        resp.response = false;
+                        resp.erorMessage = "Data Not Found";
+                    }
+                }
+                else
+                {
+                    resp.hasError = true;
+                    resp.erorMessage = "Please Fill The Form";
+                }
+            }
+            catch (Exception ex)
+            {
+                resp.hasError = true;
+                resp.erorMessage = ex.Message;
+            }
+            return PartialView("_ProductModel", modal);
         }
 
 
@@ -80,7 +109,7 @@ namespace DCRConsumeWebApi.Controllers
                     // Apply sorting based on the selected column and direction
                     if (sortColumnDir.ToLower() == "asc")
                     {
-                        result = result.OrderBy(p => p.MaterialId).ToList();
+                        result = result.OrderBy(p => p.ProductId).ToList();
                     }
                     else
                     {
@@ -245,6 +274,44 @@ namespace DCRConsumeWebApi.Controllers
 
 
             return Json(model);
+        }
+
+
+
+        public async Task<JsonResult> JsonDelete(int ProductId)
+        {
+            try
+            {
+                if (ProductId >= 1)
+                {
+                    string data = JsonConvert.SerializeObject(ProductId);
+
+                    string response = await apiCall.consumeapi(data, "/Product/DeleteProduct");
+
+                    if (response != null)
+                    {
+                        resp.response = true;
+                        resp.erorMessage = "Record Deleted Successfully";
+                    }
+                    else
+                    {
+                        resp.response = false;
+                        resp.erorMessage = "Data Not Found";
+                    }
+                }
+                else
+                {
+                    resp.hasError = true;
+                    resp.erorMessage = "Somthing Went Wrong";
+
+                }
+            }
+            catch (Exception ex)
+            {
+                resp.hasError = true;
+                resp.erorMessage = ex.Message;
+            }
+            return Json(resp);
         }
 
 

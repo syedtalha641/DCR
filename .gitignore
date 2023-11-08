@@ -366,3 +366,8 @@ FodyWeavers.xsd
 /WebApi/DCRWebApi.csproj
 /DAL/EntityModels/EMS_ITCContext.cs
 /WebApi/appsettings.json
+/WebApi/DCRWebApi.csproj
+/WebApi/Controllers/ProductController.cs
+/WebApi/Controllers/AccountController.cs
+/DCRConsumeWebApi/Controllers/ProductController.cs
+/DCRConsumeWebApi/Controllers/AccountController.cs

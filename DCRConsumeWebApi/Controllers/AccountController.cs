@@ -45,7 +45,7 @@ namespace DCRConsumeWebApi.Controllers
 
 
                
-                if (response != null)
+                if (response != "")
                 {
                     // Redirect to the dashboard
                     return RedirectToAction("Dashboard", "Home");

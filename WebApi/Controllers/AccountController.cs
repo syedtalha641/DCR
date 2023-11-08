@@ -123,16 +123,18 @@ namespace WebApi.Controllers
                 }
 
                 var loggedInUser = await _accountRepos.LoginUser(model);
-
                 if (loggedInUser != null)
                 {
                     // Login successful, return a success message along with the user object
                     throw new Exception("Values Cannot be Null!");
+
+
                 }
                 else
                 {
                     // Login failed, return a 401 Unauthorized status with a message
                     throw new Exception("Invalid input");
+                    //return Unauthorized("Invalid username or password");
                 }
             }
             catch (Exception)
