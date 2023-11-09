@@ -81,7 +81,7 @@ namespace DCRWebApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<object>> UpdateProduct(int ProductId, [FromBody] ProductViewModel model)
+        public async Task<ActionResult<object>> UpdateProduct([FromBody] ProductViewModel model)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace DCRWebApi.Controllers
                 }
 
                 // Assuming you have a method like UpdateCustomer in your _customerRepos
-                var updatedProduct = await _productRepos.UpdateProduct(ProductId, model);
+                var updatedProduct = await _productRepos.UpdateProduct( model);
 
                 if (updatedProduct != null)
                 {

@@ -76,9 +76,9 @@ namespace Repository.Repos
             return await _context.Products.Where(x => x.IsActive == true).ToListAsync();
         }
 
-    public async Task<ProductViewModel> UpdateProduct(int ProductId, ProductViewModel model)
+    public async Task<ProductViewModel> UpdateProduct(ProductViewModel model)
     {
-            var result = await _context.Products.FirstOrDefaultAsync(a => a.ProductId == ProductId);
+            var result = await _context.Products.FirstOrDefaultAsync(a => a.ProductId == model.ProductId);
             if (result != null)
             {
 
