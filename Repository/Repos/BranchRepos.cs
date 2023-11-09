@@ -1,6 +1,7 @@
 ﻿using DAL.EntityModels;
 using DCR.Helper.ViewModel;
 using DCR.ViewModel.IRepos;
+using DCR.ViewModel.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Repos
@@ -13,7 +14,7 @@ namespace Repository.Repos
         {
             _context = context;
         }
-        public async Task<BranchViewModel> AddBranch(BranchViewModel model)
+        public async Task<bool> AddBranch(BranchViewModel model)
         {
             try
             {
@@ -35,12 +36,12 @@ namespace Repository.Repos
                 _context.Branches.Add(newBranch);
                 await _context.SaveChangesAsync();
 
-                return model;
+                return true;
             }
             catch (Exception)
             {
 
-                return null;
+                return false;
             }
         }
 
@@ -83,7 +84,7 @@ namespace Repository.Repos
                 return null;
             }
         }
-        public async Task<List<BranchViewModel>> GetBranches()
+        public async Task<List<BranchViewModel>> GetBranches(DataTableViewModel model)
         {
             IEnumerable<BranchViewModel> branches = _context.Branches
                 .Where(x => x.IsActive == true)
@@ -103,9 +104,10 @@ namespace Repository.Repos
             if (branches != null && branches.Any())
             {
                 string sort = string.Empty;
-                if (sort == "productID")
+                
+                if (sort == model.sortColum)
                 {
-                    if (sort.Contains("asc"))
+                    if (sort.Contains(model.sortColumDir))
                     {
                         branches = branches.OrderBy(x => x.Name);
                     }
@@ -116,7 +118,8 @@ namespace Repository.Repos
                     }
                 }
 
-               var _branch = branches.Skip(0).Take(2).ToList();
+               var _branch = branches.Skip(model.skip).Take(model.length
+                   ).ToList();
                 return _branch;
             }
             else
@@ -126,7 +129,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<BranchViewModel> UpdateBranch(int BranchId, BranchViewModel model)
+        public async Task<bool> UpdateBranch(int BranchId, BranchViewModel model)
         {
             var result = await _context.Branches.FirstOrDefaultAsync(a => a.BranchId == BranchId);
             if (result != null)
@@ -145,13 +148,13 @@ namespace Repository.Repos
 
                 await _context.SaveChangesAsync();
 
-                return model;
+                return true;
 
             }
             else
             {
                 // User not found
-                return null;
+                return false;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DCR.ViewModel.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace DCR.Helper.ViewModel
 {
     public class BranchViewModel
     {
+
         public string Name { get; set; }
         public string  Person { get; set; }
 
@@ -20,5 +22,7 @@ namespace DCR.Helper.ViewModel
         public string  State { get; set; }
 
         public string PostalCode { get; set; }
+
+
     }
 }

@@ -1,8 +1,8 @@
 ﻿using DCR.Helper.ViewModel;
 using DCR.ViewModel.IRepos;
+using DCR.ViewModel.ViewModel;
 using Microsoft.AspNetCore.Mvc;
-
-
+using System.Data;
 
 namespace DCRWebApi.Controllers
 {
@@ -18,12 +18,12 @@ namespace DCRWebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> GetBranches()
+        public async Task<ActionResult> GetBranches(DataTableViewModel model)
         {
 
             try
             {
-                return Ok(await _branchrepos.GetBranches());
+                return Ok(await _branchrepos.GetBranches(model));
             }
             catch (Exception)
             {

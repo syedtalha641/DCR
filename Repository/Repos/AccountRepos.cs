@@ -14,7 +14,7 @@ namespace Repository.Repos
             _context = context;
         }
 
-        public async Task<LoginViewModel> AddUser(LoginViewModel model)
+        public async Task<bool> AddUser(LoginViewModel model)
         {
             try
             {
@@ -41,17 +41,17 @@ namespace Repository.Repos
                     _context.Users.Add(newUser);
                     await _context.SaveChangesAsync();
 
-                    return model;
+                    return true;
                 }
                 else
                 {
-                    return null;
+                    return false;
                 }
             }
             catch (Exception)
             {
 
-                return null;
+                return false;
             }
         }
 
@@ -153,7 +153,7 @@ namespace Repository.Repos
             }
         }
 
-        public async Task<PasswordUpdateViewModel> UpdateUserPassword(PasswordUpdateViewModel model)
+        public async Task<bool> UpdateUserPassword(PasswordUpdateViewModel model)
         {
             try
             {
@@ -173,18 +173,18 @@ namespace Repository.Repos
                     // Save changes to the database
                     await _context.SaveChangesAsync();
 
-                    return model; // Return a string indicating success
+                    return true; // Return a string indicating success
                 }
                 else
                 {
                     // User not found
-                    return null;
+                    return false;
                 }
             }
             catch (Exception)
             {
                 // Handle any exceptions, such as database errors
-                return null; // Return an error message
+                return false; // Return an error message
             }
         }
 
